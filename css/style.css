@@ -2,19 +2,6 @@ ul {
   list-style-type: none;
 }
 
-.event {
-  padding: 10px;
-  max-width: 500px;
-  border-radius: 10px;
-  white-space: nowrap;
-  box-shadow: 3px 3px 2px #BBB;
-  border-left: 10px solid green;
-}
-
-.event:not(first-child) {
-  margin-top: 7px;
-}
-
 .modal {
   display: block; 
   position: fixed; 
@@ -37,9 +24,22 @@ ul {
   margin: auto;
 }
 
+.event {
+  padding: 10px;
+  max-width: 500px;
+  border-radius: 10px;
+  white-space: nowrap;
+  box-shadow: 3px 3px 2px #BBBBBB;
+  border-left: 10px solid green;
+}
+
+.event:not(first-child) {
+  margin-top: 7px;
+}
+
 /* The Close Button */
 .close {
-  color: #aaaaaa;
+  color: #666666;
   float: right;
   font-size: 28px;
   font-weight: bold;
@@ -47,7 +47,7 @@ ul {
 
 .close:hover,
 .close:focus {
-  color: #000;
+  color: green;
   text-decoration: none;
   cursor: pointer;
 }
@@ -55,3 +55,4 @@ ul {
 .event-label {
   font-weight: 600;
 }
+

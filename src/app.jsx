@@ -84,11 +84,11 @@ initialEvents.sort(function(a, b) {
 
 
 
-//console.log(db);
 
 localStorage.setItem("default_user", JSON.stringify(initialEvents));
 
-console.log(JSON.parse(localStorage.getItem("default_user")));
+
+
 
 
 
