@@ -1,15 +1,19 @@
+var webpack = require("webpack");
+
 module.exports = {
   entry: [
-    './src/app.jsx'
+    "./src/app.jsx"
   ],
   output: {
-    path: __dirname,
-    filename: "./js/bundle.js"
+    path: "./js",
+    filename: "bundle.js"
   },
   module: {
-    loaders: [{
-      test: /\.jsx?$/,
-      loader: 'babel-loader'
-    }]
-  }
+    loaders: [
+      { test: /\.jsx?$/, loader: "babel-loader", },
+    ]
+  },
+  plugins: [
+    //new webpack.optimize.UglifyJsPlugin(),
+  ]
 };
