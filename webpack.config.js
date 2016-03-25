@@ -10,10 +10,18 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.jsx?$/, loader: "babel-loader", },
+      { test: /\.jsx?$/, loader: "babel", query: {presets: ["es2015", "react"]}},
     ]
   },
   plugins: [
-    //new webpack.optimize.UglifyJsPlugin(),
-  ]
+    //new webpack.optimize.UglifyJsPlugin({
+    //  sourceMap: false,
+    //}),
+  ],
+  resolve: {
+    root: ["/opt/npm/lib/node_modules"]
+  },
+  resolveLoader: {
+    modulesDirectories: ["/opt/npm/lib/node_modules"]
+  }
 };

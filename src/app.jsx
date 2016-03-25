@@ -96,4 +96,4 @@ localStorage.setItem("default_user", JSON.stringify(initialEvents));
 var React = require("react");
 var EventListContainer = require("./EventListContainer.jsx");
 
-React.render(<EventListContainer/>, document.getElementById("root"));
+React.render(<EventListContainer />, document.getElementById("root"));

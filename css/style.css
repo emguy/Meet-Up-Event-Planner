@@ -28,7 +28,6 @@ ul {
   padding: 10px;
   max-width: 500px;
   border-radius: 10px;
-  white-space: nowrap;
   box-shadow: 3px 3px 2px #BBBBBB;
   border-left: 10px solid green;
 }
@@ -36,6 +35,18 @@ ul {
 .event:not(first-child) {
   margin-top: 7px;
 }
+
+.event-name {
+  white-space: nowrap;
+  display: inline-block;
+  margin-right: 100px;
+  font-weight: 800;
+}
+.event-time {
+  display: inline-block;
+  font-style: italic;
+}
+
 
 /* The Close Button */
 .close {
