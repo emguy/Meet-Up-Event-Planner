@@ -5,8 +5,7 @@ module.exports = {
     "./src/app.jsx"
   ],
   output: {
-    path: "./js",
-    filename: "bundle.js"
+    filename: "./js/bundle.js"
   },
   module: {
     loaders: [
