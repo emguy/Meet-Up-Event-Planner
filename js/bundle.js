@@ -138,9 +138,9 @@
 
 	var React = __webpack_require__(2);
 	var ReactDOM = __webpack_require__(159);
-	var EventListContainer = __webpack_require__(160);
+	var MainContainer = __webpack_require__(160);
 
-	ReactDOM.render(React.createElement(EventListContainer, null), document.getElementById("root"));
+	ReactDOM.render(React.createElement(MainContainer, null), document.getElementById("root"));
 
 /***/ },
 /* 2 */
@@ -19750,11 +19750,49 @@
 	"use strict";
 
 	var React = __webpack_require__(2);
-	var update = __webpack_require__(161);
+	var EventListContainer = __webpack_require__(161);
 
-	// this class keeps the state of all event entries
+	var MainContainer = React.createClass({
+	  displayName: "MainContainer",
+
+	  render: function render() {
+	    return React.createElement(
+	      "div",
+	      { className: "container-fluid" },
+	      React.createElement(
+	        "header",
+	        { className: "row" },
+	        " this is my header "
+	      ),
+	      React.createElement(EventListContainer, null),
+	      React.createElement(
+	        "footer",
+	        { className: "row" },
+	        " this is my footer "
+	      )
+	    );
+	  }
+	});
+
+	module.exports = MainContainer;
+
+/***/ },
+/* 161 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var React = __webpack_require__(2);
+	var update = __webpack_require__(162);
+
+	/** 
+	 * this class keeps the state of all event entries
+	 *
+	 * currently it does not accepts any props
+	 */
 	var EventListContainer = React.createClass({
 	  displayName: "EventListContainer",
+
 
 	  // initalize all event data
 	  getInitialState: function getInitialState() {
@@ -19767,17 +19805,25 @@
 	    this.setState({ data: _data });
 	  },
 	  render: function render() {
-	    return React.createElement(EventList, { data: this.state.data });
+	    return React.createElement(
+	      "div",
+	      { className: "row" },
+	      React.createElement(EventList, { data: this.state.data })
+	    );
 	  }
 	});
 
-	// this class renders a list of event entries
+	/** 
+	 * this class renders a list of event entries
+	 *
+	 * @prop data {array} - an array of event objects
+	 */
 	var EventList = React.createClass({
 	  displayName: "EventList",
 
 	  // it only accepts one prop
 	  propTypes: {
-	    data: React.PropTypes.array.isRequired
+	    data: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
 	  },
 	  render: function render() {
 	    var parsedEvents = this.props.data.slice(0, 5).map(function (item, index) {
@@ -19785,19 +19831,24 @@
 	    });
 	    return React.createElement(
 	      "ul",
-	      { className: "event-list" },
+	      { className: "event-list col-md-6 col-md-offset-3" },
 	      parsedEvents
 	    );
 	  }
 	});
 
-	// this class renders individual entry on the event list
+	/** 
+	 * this class renders individual entry on the event list
+	 *
+	 * @prop key {string} - the respective key for each event entry (required by virtual dom)
+	 * @prop event {object} - the event object
+	 */
 	var EventEntry = React.createClass({
 	  displayName: "EventEntry",
 
 	  // it accepts two props
 	  propTypes: {
-	    key: React.PropTypes.string,
+	    //key: React.PropTypes.string.isRequired,
 	    event: React.PropTypes.object.isRequired
 	  },
 
@@ -19828,15 +19879,15 @@
 	    };
 	    return React.createElement(
 	      "li",
-	      { className: "event", onClick: this.displayEventDetail },
+	      { className: "event row", onClick: this.displayEventDetail },
 	      React.createElement(
 	        "p",
-	        { className: "event-name" },
+	        { className: "event-name col-md-8" },
 	        this.props.event.name
 	      ),
 	      React.createElement(
 	        "p",
-	        { className: "event-time" },
+	        { className: "event-time col-md-4" },
 	        new Date(this.props.event.startTime).toLocaleString()
 	      ),
 	      eventDetail
@@ -19844,7 +19895,12 @@
 	  }
 	});
 
-	// a modal dialog showing all event details
+	/** 
+	 * this class renders a modal dialog showing the event details
+	 *
+	 * @prop closeMe {function} - the handler for the close button
+	 * @prop event {object} - the event object
+	 */
 	var EventDetail = React.createClass({
 	  displayName: "EventDetail",
 
@@ -19861,7 +19917,7 @@
 	      { className: "modal" },
 	      React.createElement(
 	        "div",
-	        { className: "event event-details modal-content" },
+	        { className: "modal-content" },
 	        React.createElement(
 	          "div",
 	          { className: "close" },
@@ -19970,16 +20026,17 @@
 	  }
 	});
 
+	// we only export the top most conponent
 	module.exports = EventListContainer;
 
 /***/ },
-/* 161 */
+/* 162 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(162);
+	module.exports = __webpack_require__(163);
 
 /***/ },
-/* 162 */
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**

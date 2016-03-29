@@ -83,8 +83,8 @@ localStorage.setItem("default_user", JSON.stringify(initialEvents));
 
 var React = require("react");
 var ReactDOM = require("react-dom");
-var MainContainer = require("./MainContainer.jsx");
+var EventListContainer = require("./EventListContainer.jsx");
 
 ReactDOM.render(
-  <MainContainer />, document.getElementById("root")
+  <EventListContainer />, document.getElementById("root")
 );

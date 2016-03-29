@@ -4,7 +4,7 @@ var update = require("react-addons-update");
 /** 
  * this class keeps the state of all event entries
  *
- * it does not accepts any props
+ * currently it does not accepts any props
  */
 var EventListContainer = React.createClass({
 
@@ -20,7 +20,9 @@ var EventListContainer = React.createClass({
   },
   render: function() {
     return (
-      <EventList data={this.state.data}/>
+      <div className="row">
+        <EventList data={this.state.data}/>
+      </div>
     );
   },
 });
@@ -42,7 +44,7 @@ var EventList = React.createClass({
       );
     });
     return (
-      <ul className="event-list">
+      <ul className="event-list col-md-6 col-md-offset-3">
         {parsedEvents}
       </ul>
     );
@@ -58,7 +60,7 @@ var EventList = React.createClass({
 var EventEntry = React.createClass({
   // it accepts two props
   propTypes: {
-    key: React.PropTypes.string.isRequired,
+    //key: React.PropTypes.string.isRequired,
     event: React.PropTypes.object.isRequired,
   },
 
@@ -90,11 +92,11 @@ var EventEntry = React.createClass({
       );
     };
     return (
-      <li className="event" onClick={this.displayEventDetail}>
-        <p className="event-name"> 
+      <li className="event row" onClick={this.displayEventDetail}>
+        <p className="event-name col-md-8"> 
           {this.props.event.name} 
         </p>
-        <p className="event-time"> 
+        <p className="event-time col-md-4"> 
           {new Date(this.props.event.startTime).toLocaleString()} 
         </p>
         {eventDetail}
@@ -122,8 +124,9 @@ var EventDetail = React.createClass({
     return (
       <div className="modal">
 
-        <div className={"event event-details modal-content"}>
-          <div className="close">
+        <div className={"modal-content"}>
+
+          <div className="close"> 
             <span className="glyphicon glyphicon-remove" aria-hidden="true" onClick={this.props.closeMe}> </span>
           </div>
 
