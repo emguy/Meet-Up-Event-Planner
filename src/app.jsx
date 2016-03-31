@@ -1,3 +1,5 @@
+var css = require("../scss/style.scss");
+
 /** 
  * The array events contain a list of dummy event entries. 
  */

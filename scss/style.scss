@@ -1,0 +1,29 @@
+$root-bg: #FFFFFF;
+
+$primary-bg: #15B5EA;
+$primary-fg: $root-bg;
+
+$header-bg: #1091BC;
+$footer-bg: $header-bg;
+
+header {
+  background: $header-bg;
+}
+
+footer {
+  background: $footer-bg;
+}
+
+@mixin rounded-all($radius: 10px) {
+  border-radius: $radius;
+  -moz-border-radius: $radius;
+  -webkit-border-radius: $radius;
+}
+
+.event {
+  @include rounded-all;
+  background: $primary-bg;
+  color: $primary-fg;
+  margin-bottom: 12px;
+}
+

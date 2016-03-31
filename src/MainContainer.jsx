@@ -5,7 +5,7 @@ var MainContainer = React.createClass({
   render: function() {
     return (
     <div className="container-fluid">
-      <header className="row"> this is my header </header>
+      <header className="row"> this is my header blah blah blah </header>
       <EventListContainer /> 
       <footer className="row"> this is my footer </footer>
     </div>

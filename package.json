@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/app.jsx",
   "scripts": {
-    "start": "webpack-dev-server --inline --content-base ."
+    "start": "webpack-dev-server --host '192.168.1.3' --inline"
   },
   "author": "Yu Zhang",
   "license": "ISC",
