@@ -1,29 +1,171 @@
-$root-bg: #FFFFFF;
+@import "_bootstrap-grid";
 
+$root-bg: #FFFFFF;
 $primary-bg: #15B5EA;
 $primary-fg: $root-bg;
-
 $header-bg: #1091BC;
 $footer-bg: $header-bg;
+$modal-bg: white;
+$modal-fg: black;
+$button-bg: $footer-bg;
 
-header {
-  background: $header-bg;
-}
+$my-sans-font: "Open Sans", sans-serif;
 
-footer {
-  background: $footer-bg;
-}
-
-@mixin rounded-all($radius: 10px) {
+@mixin rounded-corner-all($radius: 10px) {
   border-radius: $radius;
   -moz-border-radius: $radius;
   -webkit-border-radius: $radius;
 }
 
-.event {
-  @include rounded-all;
-  background: $primary-bg;
-  color: $primary-fg;
-  margin-bottom: 12px;
+@mixin box-full-screen() {
+  position: fixed;
+  top:0;
+  right:0;
+  width: 100%;
+  height: 100%;
+}
+
+@mixin box-center() {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font: 100%  $my-sans-font;
+}
+
+header {
+  background-color: $header-bg;
+  height: 60px;
+}
+
+footer {
+  background-color: $footer-bg;
+  height: 60px;
+}
+
+.event-list {
+  margin-top: 30px;
+  margin-bottom: 30px;
+
+  .event {
+    @include rounded-corner-all;
+    font-size: 1.6rem;
+    background-color: $primary-bg;
+    color: $primary-fg;
+    margin: 0px 5px 5px 0px;
+
+    &:not(:last-child) {
+      margin-bottom: 20px;
+    }
+
+    &:hover {
+      background-color: lighten($primary-bg, 20%);
+    }
+
+    .event-name {
+      margin-top: 0;
+      font-weight: 700;
+    }
+
+    .event-time {
+      margin-top: 0;
+      font-size: 1.5rem;
+    }
+  }
+}
+
+.modal {
+  @include box-full-screen();
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: block;
+
+  .modal-body {
+    @include rounded-corner-all(10px);
+    @include box-center;
+    background-color: $primary-bg;
+    padding: 0px;
+    margin: auto;
+    width: 100%;
+
+    @media (min-width: 920px) {
+      & {
+        width: 500px;
+      }
+    }
+
+    .modal-close {
+      font-size: 3rem;
+      position: absolute;
+      right: 26px;
+      top: 16px;
+      color: darken($primary-fg, 20%);
+      &:hover {
+      color: $primary-fg;
+      }
+    }
+
+    .modal-header {
+      padding: 20px;
+      .event-name {
+        margin-top: 0;
+      }
+      .event-time {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+    }
+
+    .modal-footer {
+      position: relative;
+      min-height: 80px;
+      ul {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        .event-button {
+          display: inline-block;
+          width: 90px;
+          text-align: center;
+          padding: 5px 20px 5px 20px;
+          margin-left: 20px;
+          @include rounded-corner-all(5px);
+          color: $primary-fg;
+          border: 1px $primary-fg solid;
+          //background-color: $button-bg;
+          &:hover {
+            background-color: lighten($primary-bg, 20%);
+          }
+        }
+      }
+    }
+
+    .modal-content {
+      @include rounded-corner-all(0px);
+      padding: 10px 20px 10px 20px;
+      margin: 0;
+      background-color: $modal-bg;
+      color: $modal-fg;
+    }
+
+    .event-attribute {
+      &:not(:first-child) {
+        margin-top: 16px;
+      }
+      .event-label {
+        font-weight: 700;
+      }
+    }
+  }
 }
 

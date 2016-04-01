@@ -25,9 +25,9 @@ module.exports = {
   },
 
   plugins: [
-    //new webpack.optimize.UglifyJsPlugin({
-    //  sourceMap: false,
-    //}),
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: false,
+    }),
   ],
 
   resolve: {
