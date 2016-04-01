@@ -4,10 +4,10 @@ var EventListContainer = require("./EventListContainer.jsx");
 var MainContainer = React.createClass({
   render: function() {
     return (
-    <div className="container-fluid">
-      <header className="row"> this is my header blah blah blah </header>
-      <EventListContainer /> 
-      <footer className="row"> this is my footer </footer>
+    <div class="container">
+      <header> this is my header blah blah blah </header>
+      <main> <EventListContainer /> </main>
+      <footer> this is my footer </footer>
     </div>
     );
   },

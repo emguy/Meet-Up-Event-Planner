@@ -21,9 +21,7 @@ var EventListContainer = React.createClass({
   },
   render: function() {
     return (
-      <div className="row">
-        <EventList data={this.state.data}/>
-      </div>
+      <EventList data={this.state.data}/>
     );
   },
 });
@@ -45,7 +43,7 @@ var EventList = React.createClass({
       );
     });
     return (
-      <ul className="event-list col-md-6 col-md-offset-3">
+      <ul className="event-list">
         {parsedEvents}
       </ul>
     );
@@ -93,11 +91,11 @@ var EventEntry = React.createClass({
       );
     };
     return (
-      <li className="event row" onClick={this.displayEventDetail}>
-        <p className="event-name col-md-8"> 
+      <li className="event" onClick={this.displayEventDetail}>
+        <p className="event-name"> 
           {this.props.event.name} 
         </p>
-        <p className="event-time col-md-4"> 
+        <p className="event-time"> 
           {new Date(this.props.event.startTime).toLocaleString()} 
         </p>
         {eventDetail}
@@ -172,8 +170,8 @@ var ModalFooter = React.createClass({
     return (
       <div className="modal-footer">
         <ul>
-          <a type="button" className="event-button" href="#">Delete</a>
-          <a type="button" className="event-button" href="#">Edit</a>
+          <a type="button" className="event-button" href="#"> <i className="fa fa-trash-o"></i> </a>
+          <a type="button" className="event-button" href="#"> <i className="fa fa-pencil"></i></a>
         </ul>
       </div>
     );

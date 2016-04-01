@@ -24,11 +24,11 @@ module.exports = {
     ],
   },
 
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: false,
-    }),
-  ],
+  //plugins: [
+  //  new webpack.optimize.UglifyJsPlugin({
+  //    sourceMap: false,
+  //  }),
+  //],
 
   resolve: {
     root: ["/opt/npm/lib/node_modules"]
