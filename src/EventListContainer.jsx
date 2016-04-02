@@ -1,6 +1,7 @@
 var React = require("react");
 var update = require("react-addons-update");
 var utils = require("./utils");
+var Button = require("./Button.jsx");
 
 /** 
  * this class keeps the state of all event entries
@@ -170,8 +171,8 @@ var ModalFooter = React.createClass({
     return (
       <div className="modal-footer">
         <ul>
-          <a type="button" className="event-button" href="#"> <i className="fa fa-trash-o"></i> </a>
-          <a type="button" className="event-button" href="#"> <i className="fa fa-pencil"></i></a>
+          <Button tooltip="Delete" action="#"> <i className="fa fa-trash-o"></i> </Button>
+          <Button tooltip="Edit" action="#"> <i className="fa fa-pencil"></i> </Button>
         </ul>
       </div>
     );
@@ -196,27 +197,27 @@ var ModalContent = React.createClass({
       <div className="modal-content">
         <div className="event-attribute"> 
           <p className="event-label"> Location: </p>
-          <p className="event-value"> {this.props.event.location} </p>
+          <p className="event-value"> {this.props.event.location || "N/A"} </p>
         </div>
 
         <div className="event-attribute"> 
           <p className="event-label"> End time: </p>
-          <p className="event-value"> {new Date(this.props.event.endTime).toLocaleString()} </p>
+          <p className="event-value"> {new Date(this.props.event.endTime).toLocaleString() || "N/A"} </p>
         </div>
 
         <div className="event-attribute"> 
           <p className="event-label"> Host: </p>
-          <p className="event-value"> {this.props.event.host} </p>
+          <p className="event-value"> {this.props.event.host || "N/A"} </p>
         </div>
 
         <div className="event-attribute"> 
           <p className="event-label"> Type: </p>
-          <p className="event-value"> {this.props.event.type} </p>
+          <p className="event-value"> {this.props.event.type || "N/A"} </p>
         </div>
 
         <div className="event-attribute"> 
           <p className="event-label"> Guests: </p>
-          <p className="event-value"> {this.props.event.guest} </p>
+          <p className="event-value"> {this.props.event.guest || "N/A"} </p>
         </div>
       </div>
     );
