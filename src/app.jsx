@@ -77,9 +77,30 @@ initialEvents.push({
   notes: "N/A",
 });
 
+
+
+
+
+
 initialEvents.sort(function(a, b) {
     return new Date(a.startTime).getTime() - new Date(b.startTime).getTime();
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 localStorage.setItem("default_user", JSON.stringify(initialEvents));
 
