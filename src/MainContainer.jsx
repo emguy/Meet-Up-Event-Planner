@@ -1,6 +1,9 @@
 var React = require("react");
 var EventListContainer = require("./EventListContainer.jsx");
 var Button = require("./ui.jsx").Button;
+var Link = require("react-router").Link;
+var sessionManager = require("./sessionManager.js");
+
 
 /** 
  * this class renders the main frame of this web application
@@ -17,7 +20,12 @@ var MainContainer = React.createClass({
   getInitialState: function() {
     return {
       navMenuIsVisible: false,
+      isLoggedIn: false,
     };
+  },
+
+  componentWillMount: function() {
+    this.setState({isLoggedIn: sessionManager.isLoggedIn()});
   },
 
   /* a setter for the state `navMenuIsVisible` */
@@ -38,14 +46,18 @@ var MainContainer = React.createClass({
   render: function() {
     return (
       <div className="container" onClick={this.hideNavMenu}>
+        <Button id="menu-button" tooltip="Options" 
+          action={this.unhideNavMenu}>&#9776;</Button>
         <NavMenu visible={this.state.navMenuIsVisible}/>
         <HeaderContainer menuButtonAction={this.unhideNavMenu} />
-        <main> <EventListContainer /> </main>
+        <main> {/* content is here */} {this.props.children} </main>
         <FooterContainer />
       </div>
     );
   },
 });
+
+
 
 /** 
  * this class renders the header part of this web application
@@ -62,8 +74,6 @@ var HeaderContainer = React.createClass({
   render: function() {
     return (
       <header>
-        <Button className="menu-button" tooltip="Options" 
-          action={this.props.menuButtonAction}>&#9776;</Button>
         <h1>
           Meet-Up Event Planner
         </h1>
@@ -71,6 +81,8 @@ var HeaderContainer = React.createClass({
     );
   },
 });
+
+
 
 /**
  * this class renders the navigation panel
@@ -93,23 +105,21 @@ var NavMenu = React.createClass({
 
   /* the render method */
   render: function() {
-    if (this.props.visible) {
-      return (
-        <nav style={this.defaultStyle}>
-          <ul>
-            <li className="nav-button"><a href="#">Add new event</a></li>
-            <li className="nav-button"><a href="#">View all events</a></li>
-            <li className="nav-button"><a href="#">logout</a></li>
-          </ul>
-        </nav>
-      );
-    } else {
-      return (
-        <nav></nav>
-      );
-    };
+    if (!this.props.visible) {
+      return false;
+    }
+    return (
+      <nav style={this.defaultStyle}>
+        <ul role="nav">
+          <li className="nav-button"><Link to="/events">View all events</Link></li>
+          <li className="nav-button"><Link to="/new_event">Add new event</Link></li>
+        </ul>
+      </nav>
+    );
   },
 });
+
+
 
 /** 
  * this class renders the footer part of this web application
@@ -146,5 +156,8 @@ var FooterContainer = React.createClass({
   },
 });
 
+
+
 /* we only export the top most component */
 module.exports = MainContainer;
+

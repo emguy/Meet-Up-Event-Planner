@@ -4,12 +4,16 @@ var utils = require("./utils.js");
 /** 
  * this class renders a button with desired functions
  *
+ * @prop className {string} - additional class names
+ * @prop id {string} - the id name
  * @prop tooltip {string} - the tooltip text
  * @prop action {function/string} - the on-click handler
  */
 var Button = React.createClass({
   /* it takes two props, none of them are required */
   prototypes: {
+    className: React.PropTypes.string,
+    id: React.PropTypes.string,
     tooltip: React.PropTypes.string,
     action: React.PropTypes.oneOfType([React.PropTypes.string,, React.PropTypes.func]),
   },
@@ -51,6 +55,7 @@ var Button = React.createClass({
     };
     return (
       <div className={"button " + this.props.className} 
+        id = {this.props.id}
         onMouseEnter={this.unhideTooltip} 
         onMouseLeave={this.hideTooltip} 
         onClick={this.handleClick}>

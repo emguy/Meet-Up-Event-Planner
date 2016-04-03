@@ -86,8 +86,15 @@ html, body {
 }
 
 .container {
-  min-height: 100%;
   position: relative;
+  min-height: 100%;
+}
+
+#menu-button {
+  position: absolute;
+  left: 20px;
+  top: 56px;
+  z-index:1;
 }
 
 header {
@@ -109,11 +116,6 @@ header {
     }
   }
 
-  .menu-button {
-    position: absolute;
-    left: 20px;
-    bottom: 22px;
-  }
 }
 
 nav {

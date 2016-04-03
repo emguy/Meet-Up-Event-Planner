@@ -11,13 +11,13 @@ var EventListContainer = React.createClass({
 
   /* initalize all event data */
   getInitialState: function() {
-    return {data: null};
+    return {data: []};
 
     /* retrive the data from the localStorage */
   },
   componentWillMount: function() {
-    var _data = JSON.parse(localStorage.getItem("default_user"));
-    this.setState({data: _data});
+    //var _data = JSON.parse(sessionStorage.getItem("default_user"));
+    //this.setState({data: _data});
   },
   render: function() {
     return (
