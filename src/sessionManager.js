@@ -5,7 +5,7 @@ var sessionManager = {
 
 sessionManager.init = function(preloadedEvents) {
   sessionStorage.setItem(this.prefix, "active");
-  sessionStorage.setItem(this.prefix + "loggedIn", "true");
+  sessionStorage.setItem(this.prefix + "loggedIn", "true"); //<--------- we are loggedin
   sessionStorage.setItem(this.prefix + "preloadedEvents", JSON.stringify(preloadedEvents));
 };
 

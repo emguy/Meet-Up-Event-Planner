@@ -1,6 +1,8 @@
+var ReactRedux = require("react-redux");
 var React = require("react");
 var update = require("react-addons-update");
 var EventCard = require("./EventCard.jsx");
+var preloadedEvents = require("../preloadedEvents.js");
 
 /** 
  * this class keeps the state of all event entries
@@ -11,7 +13,7 @@ var EventListContainer = React.createClass({
 
   /* initalize all event data */
   getInitialState: function() {
-    return {data: []};
+    return {data: preloadedEvents};
 
     /* retrive the data from the localStorage */
   },
@@ -25,6 +27,14 @@ var EventListContainer = React.createClass({
     );
   },
 });
+
+var mapStateToProps = function(state) {
+  return {
+    data = state.eventList;
+  };
+};
+
+var EventListContainer = ReactRedux.connect(mapStateToProps)(EventList);
 
 /** 
  * this class renders a list of event entries
@@ -49,6 +59,8 @@ var EventList = React.createClass({
     );
   },
 });
+
+
 
 /** 
  * this class renders individual entry on the event list
@@ -99,6 +111,8 @@ var EventEntry = React.createClass({
     );
   },
 });
+
+
 
 /* we only export the top most conponent */
 module.exports = EventListContainer;

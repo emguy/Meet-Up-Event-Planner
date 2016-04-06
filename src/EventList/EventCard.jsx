@@ -1,6 +1,6 @@
 var React = require("react");
-var Modal = require("./ui.jsx").Modal;
-var Button = require("./ui.jsx").Button;
+var Modal = require("../ui.jsx").Modal;
+var Button = require("../ui.jsx").Button;
 
 /** 
  * this class renders a modal box showing the event details

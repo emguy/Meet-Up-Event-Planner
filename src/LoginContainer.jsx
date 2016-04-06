@@ -1,6 +1,7 @@
 var sessionManager = require("./sessionManager.js");
 var React = require("react");
 var Router = require("react-router");
+var Button = require("./ui.jsx").Button;
 
 var LoginContainer = React.createClass({
 

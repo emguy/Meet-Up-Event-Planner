@@ -1,8 +1,9 @@
 var React = require("react");
-var EventListContainer = require("./EventListContainer.jsx");
+var EventListContainer = require("./EventList/EventListContainer.js");
 var Button = require("./ui.jsx").Button;
 var Link = require("react-router").Link;
 var sessionManager = require("./sessionManager.js");
+
 
 
 /** 
