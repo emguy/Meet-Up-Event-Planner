@@ -2,7 +2,7 @@
   "name": "meet-up-event-planner",
   "version": "0.0.3",
   "description": "",
-  "main": "src/app.jsx",
+  "main": "src/index.jsx",
   "scripts": {
     "start": "webpack-dev-server --host '192.168.1.3' --inline --history-api-fallback"
   },

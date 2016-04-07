@@ -1,7 +1,8 @@
 var React = require("react");
 var ReactRedux = require("react-redux");
 var EventCard = require("./EventCard.jsx");
-var EventListActions = require("./EventListActions.js");
+var setActiveEvent = require("../../actions/actionsUI.js").setActiveEvent;
+var unsetActiveEvent = require("../../actions/actionsUI.js").unsetActiveEvent;
 
 
 
@@ -49,17 +50,17 @@ var EventEntry = React.createClass({
  */
 var mapStateToProps = function(state, ownProps) {
   return {
-    EventCardIsVisible: state.currentVisibleEvent === ownProps.event.key,
+    EventCardIsVisible: state.ui.activeEvent === ownProps.event.key,
   };
 };
 var mapDispatchToProps = function(dispatch, ownProps) {
   return {
     unhideEventCard: function() {
-      return dispatch(EventListActions.setActiveEvent(ownProps.event.key));
+      return dispatch(setActiveEvent(ownProps.event.key));
     },
     hideEventCard: function(e) {
       e.stopPropagation();
-      return dispatch(EventListActions.unsetActiveEvent());
+      return dispatch(unsetActiveEvent());
     }
   };
 };

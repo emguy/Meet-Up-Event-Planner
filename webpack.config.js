@@ -5,7 +5,7 @@ module.exports = {
   context: __dirname,
 
   entry: [
-    "./src/app.jsx"
+    "./src/index.jsx"
   ],
 
   output: {

@@ -1,6 +1,6 @@
 var React = require("react");
 var EventListContainer = require("./EventList/EventListContainer.jsx");
-var Button = require("./ui.jsx").Button;
+var Button = require("./ui/Button.jsx");
 var Link = require("react-router").Link;
 var sessionManager = require("./sessionManager.js");
 
@@ -12,7 +12,7 @@ var sessionManager = require("./sessionManager.js");
  * no props is required for this component
  *
  */
-var MainContainer = React.createClass({
+var App = React.createClass({
   /* it does not take any props */
   Prototypes: {
   },

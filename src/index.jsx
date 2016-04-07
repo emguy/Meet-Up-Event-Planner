@@ -1,20 +1,20 @@
 require("../scss/style.scss");
 
-var sessionManager = require("./sessionManager.js");
-var preloadedEvents = require("./preloadedEvents.js") || [];
+var sessionManager = require("./utils/sessionManager.js");
+var preloadedEvents = require("./misc/preloadedEvents.js") || [];
 
 var React = require("react");
 var ReactDOM = require("react-dom");
-var MainContainer = require("./MainContainer.jsx");
+var MainContainer = require("./components/MainContainer.jsx");
 var Router = require("react-router").Router;
 var Route = require("react-router").Route;
 var browserHistory = require("react-router").browserHistory;
 var hashHistory = require("react-router").hashHistory;
 var IndexRoute = require("react-router").IndexRoute;
 
-var LoginContainer = require("./LoginContainer.jsx");
-var EventListContainer = require("./EventList/EventListContainer.jsx");
-var EventCreatorContainer = require("./EventCreatorContainer.jsx");
+var LoginContainer = require("./components/LoginContainer.jsx");
+var EventListContainer = require("./components/EventList/EventListContainer.jsx");
+var EventCreatorContainer = require("./components/EventCreatorContainer.jsx");
 
 /*
  * store layout
@@ -25,13 +25,10 @@ var EventCreatorContainer = require("./EventCreatorContainer.jsx");
  *
  */
 var Redux = require("redux");
-var reducerEventList = require("./EventList/reducer.js");
-
-//var reducerApp = Redux.combineReducers({eventList: reducerEventList});
-var store = Redux.createStore(reducerEventList);
+var reducer = require("./reducers/reducer.js");
+var store = Redux.createStore(reducer);
 var Provider = require("react-redux").Provider;
-
-var resetEventList = require("./EventList/EventListActions.js").resetEventList;
+var resetEventList = require("./actions/actionsEventList.js").resetEventList;
 
 store.dispatch(resetEventList(preloadedEvents));
 console.log(store.getState());
