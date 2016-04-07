@@ -2,6 +2,8 @@ var React = require("react");
 var Modal = require("../ui.jsx").Modal;
 var Button = require("../ui.jsx").Button;
 
+
+
 /** 
  * this class renders a modal box showing the event details
  *
@@ -34,6 +36,8 @@ var EventCard = React.createClass({
   },
 });
 
+
+
 /** 
  * this class renders the header part of the event  modal box
  *
@@ -62,6 +66,8 @@ var ModalHeader = React.createClass({
   },
 });
 
+
+
 /** 
  * this class renders the footer part of the event modal box
  */
@@ -84,6 +90,8 @@ var ModalFooter = React.createClass({
     );
   },
 });
+
+
 
 /**
  * this class renders the main content of the event modal box
@@ -139,6 +147,8 @@ var ModalContent = React.createClass({
     );
   },
 })
+
+
 
 /* we only export the top most conponent */
 module.exports = EventCard;

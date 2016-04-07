@@ -13,7 +13,7 @@ var hashHistory = require("react-router").hashHistory;
 var IndexRoute = require("react-router").IndexRoute;
 
 var LoginContainer = require("./LoginContainer.jsx");
-var EventListContainer = require("./EventList/EventListContainer.js");
+var EventListContainer = require("./EventList/EventListContainer.jsx");
 var EventCreatorContainer = require("./EventCreatorContainer.jsx");
 
 /*
@@ -27,8 +27,8 @@ var EventCreatorContainer = require("./EventCreatorContainer.jsx");
 var Redux = require("redux");
 var reducerEventList = require("./EventList/reducer.js");
 
-var reducerApp = Redux.combineReducers({eventList: reducerEventList});
-var store = Redux.createStore(reducerApp);
+//var reducerApp = Redux.combineReducers({eventList: reducerEventList});
+var store = Redux.createStore(reducerEventList);
 var Provider = require("react-redux").Provider;
 
 var resetEventList = require("./EventList/EventListActions.js").resetEventList;
