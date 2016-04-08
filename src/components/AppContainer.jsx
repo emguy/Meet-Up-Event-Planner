@@ -1,8 +1,9 @@
 var React = require("react");
-var EventListContainer = require("./EventList/EventListContainer.jsx");
-var Button = require("./ui/Button.jsx");
+var ReactRedux = require("react-redux");
+var Button = require("../ui/Button.jsx");
 var Link = require("react-router").Link;
-var sessionManager = require("./sessionManager.js");
+var EventListContainer = require("./EventList/EventListContainer.jsx");
+var actionsUI = require("../actions/actionsUI.js");
 
 
 
@@ -17,46 +18,63 @@ var App = React.createClass({
   Prototypes: {
   },
 
-  /* we we define initial states */
-  getInitialState: function() {
-    return {
-      navMenuIsVisible: false,
-      isLoggedIn: false,
-    };
-  },
-
-  componentWillMount: function() {
-    this.setState({isLoggedIn: sessionManager.isLoggedIn()});
-  },
-
-  /* a setter for the state `navMenuIsVisible` */
-  unhideNavMenu: function() {
-    if (!this.state.navMenuIsVisible) {
-      this.setState({navMenuIsVisible: true});
-    }
-  },
-
-  /* another setter for the state `navMenuIsVisible` */
-  hideNavMenu: function() {
-    if (this.state.navMenuIsVisible) {
-      this.setState({navMenuIsVisible: false});
-    }
-  },
-
   /* the render method */
   render: function() {
     return (
-      <div className="container" onClick={this.hideNavMenu}>
+      <div className="container">
+
         <Button id="menu-button" tooltip="Options" 
-          action={this.unhideNavMenu}>&#9776;</Button>
-        <NavMenu visible={this.state.navMenuIsVisible}/>
-        <HeaderContainer menuButtonAction={this.unhideNavMenu} />
-        <main> {/* content is here */} {this.props.children} </main>
-        <FooterContainer />
+          action={this.props.unhideNavMenu}>&#9776;</Button>
+
+        <nav onClick={this.props.hideNavMenu}>
+          <NavMenu visible={this.props.navMenuIsVisible} />
+        </nav>
+
+        <header onClick={this.props.hideNavMenu}> 
+          <HeaderContent menuButtonAction={this.props.unhideNavMenu} />
+        </header>
+
+        <main onClick={this.props.hideNavMenu}> 
+          {/* content is here */} {this.props.children} 
+        </main>
+
+        <footer onClick={this.props.hideNavMenu}>
+          <FooterContent />
+        </footer>
+
       </div>
     );
   },
 });
+
+
+
+/**
+ * This is the container for the component App
+ * (generated using the react-redux through mappings)
+ *
+ * @prop event {object} - the event object
+ *
+ */
+var mapStateToProps = function(state, ownProps) {
+  return {
+    navMenuIsVisible: state.ui.showNavMenu,
+  };
+};
+var mapDispatchToProps = function(dispatch, ownProps) {
+  return {
+    unhideNavMenu: function(e) {
+      console.log(e);
+      return dispatch(actionsUI.unhideNavMenu());
+    },
+    hideNavMenu: function(e) {
+      e.stopPropagation();
+      return dispatch(actionsUI.hideNavMenu());
+    },
+  };
+};
+var AppContainer = ReactRedux.connect(mapStateToProps, 
+                                             mapDispatchToProps)(App);
 
 
 
@@ -66,7 +84,7 @@ var App = React.createClass({
  * no props is required for this component
  *
  */
-var HeaderContainer = React.createClass({
+var HeaderContent= React.createClass({
   /* it does not take any props */
   Prototypes: {
   },
@@ -74,11 +92,11 @@ var HeaderContainer = React.createClass({
   /* the render method */
   render: function() {
     return (
-      <header>
+      <div id="header-content">
         <h1>
           Meet-Up Event Planner
         </h1>
-      </header>
+      </div>
     );
   },
 });
@@ -110,12 +128,12 @@ var NavMenu = React.createClass({
       return false;
     }
     return (
-      <nav style={this.defaultStyle}>
+      <div id="nav-content" style={this.defaultStyle}>
         <ul role="nav">
           <li className="nav-button"><Link to="/events">View all events</Link></li>
           <li className="nav-button"><Link to="/new_event">Add new event</Link></li>
         </ul>
-      </nav>
+      </div>
     );
   },
 });
@@ -128,7 +146,7 @@ var NavMenu = React.createClass({
  * no props is required for this component
  *
  */
-var FooterContainer = React.createClass({
+var FooterContent = React.createClass({
   /* it does not take any props */
   Prototypes: {
   },
@@ -136,7 +154,7 @@ var FooterContainer = React.createClass({
   /* the render method */
   render: function() {
     return (
-      <footer>
+      <div id="footer-content">
         <div id="react-logo">
           <img src="img/react_logo.png" alt="react logo"/>
           <p className="react-text">React.js</p>
@@ -152,13 +170,13 @@ var FooterContainer = React.createClass({
 
           Created by Yu Zhang | All right reserved {new Date().getFullYear()}
         </p>
-      </footer>
+      </div>
     );
   },
 });
 
 
 
-/* we only export the top most component */
-module.exports = MainContainer;
+/* we only export the top most container */
+module.exports = AppContainer;
 

@@ -1,39 +1,34 @@
+var preloadedEvents = require("../misc/preloadedEvents.js");
+
+var prefix = "meet_up_event_planner-";
+
 var sessionManager = {
-  prefix: "meet_up_event_planner-",
-  preloadedEvents: [],
+  prefix: prefix,
+};
+
+var defaultUserData = {
+  uid: "default",
+  userName: "tom",
+  password: "123456789",
+  eventList: preloadedEvents
 };
 
 sessionManager.init = function(preloadedEvents) {
-  sessionStorage.setItem(this.prefix, "active");
-  sessionStorage.setItem(this.prefix + "loggedIn", "true"); //<--------- we are loggedin
-  sessionStorage.setItem(this.prefix + "preloadedEvents", JSON.stringify(preloadedEvents));
+  localStorage.setItem(prefix + defaultUserData.uid, JSON.stringify(defaultUserData));
 };
 
-sessionManager.isLoggedIn = function() {
-  return sessionStorage.getItem(this.prefix + "loggedIn") === "true";
+sessionManager.getUserData = function(uid) {
+  var key = prefix + uid;
+  var rawData = localStorage.getItem(key); 
+  if (rawData) {
+    return JSON.parse(rawData);
+  }
 };
 
-sessionManager.logout = function() {
-  console.out("logged out");
-  sessionStorage.setItem(this.prefix + "loggedIn", "true");
-}
-
-/*
-//session.setItem("default_user", JSON.stringify(preloadedEvents));
-//
-//
-//sessionStorage.setItem("default_user", JSON.stringify(preloadedEvents));
-//
-//
-//
-//
-//
-//
-//
-//preloadedEvents.sort(function(a, b) {
-//    return new Date(a.startTime).getTime() - new Date(b.startTime).getTime();
-//});
-*/
+sessionManager.setUserData = function(userData) {
+  var key = prefix + userData;
+  localStorage.setItem(key, JSON.stringify(userData));
+};
 
 module.exports = sessionManager;
 

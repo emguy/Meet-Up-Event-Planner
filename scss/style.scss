@@ -40,6 +40,16 @@ $my-sans-font: "Open Sans", sans-serif;
   //border: 1px red dotted;
 }
 
+main {
+  padding: 30px 0 270px 0; // footer hack
+
+  @media (min-width: $mobile-size) {
+    & {
+      padding-bottom: 150px;
+    }
+  }
+}
+
 .button {
   @include rounded-corner-all(5px);
   display: inline-block;
@@ -97,7 +107,11 @@ html, body {
   z-index:1;
 }
 
-header {
+#login-button {
+  background-color: $primary-bg;
+}
+
+#header-content {
   position: relative;
   width: 100%;
   background-color: $header-bg;
@@ -118,7 +132,7 @@ header {
 
 }
 
-nav {
+#nav-content {
   background-color: darken($primary-bg, 15%);
   width: 200px;
   color: $primary-fg;
@@ -136,17 +150,7 @@ nav {
   }
 }
 
-main {
-  padding: 30px 0 270px 0; // footer hack
-
-  @media (min-width: $mobile-size) {
-    & {
-      padding-bottom: 150px;
-    }
-  }
-}
-
-footer {
+#footer-content {
   position: absolute; // footer hack
   bottom: 0; // footer hack
   width: 100%;

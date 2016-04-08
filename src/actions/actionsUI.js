@@ -1,7 +1,7 @@
 var SET_ACTIVE_EVENT = "SET_ACTIVE_EVENT";
 var UNSET_ACTIVE_EVENT = "UNSET_ACTIVE_EVENT";
-var UNHIDE_NAV = "UNHIDE_NAV";
-var HIDE_NAV = "HIDE_NAV";
+var UNHIDE_NAVMENU = "UNHIDE_NAVMENU";
+var HIDE_NAVMENU = "HIDE_NAVMENU";
 
 /** 
  * display the specified event card using his key value 
@@ -24,26 +24,26 @@ var unsetActiveEvent = function(key) {
 /** 
  * show the navigation menu
  */
-var unhideNav = function() {
-  return { type: UNHIDE_NAV, operand: undefined };
+var unhideNavMenu = function() {
+  return { type: UNHIDE_NAVMENU, operand: undefined };
 };
 
 /** 
  * hide the navigation menu
  */
-var hideNav = function() {
-  return { type: HIDE_NAV, operand: undefined };
+var hideNavMenu = function() {
+  return { type: HIDE_NAVMENU, operand: undefined };
 };
 
 /* export the action names */
 module.exports.SET_ACTIVE_EVENT = SET_ACTIVE_EVENT;
 module.exports.UNSET_ACTIVE_EVENT = UNSET_ACTIVE_EVENT;
-module.exports.UNHIDE_NAV = UNHIDE_NAV; 
-module.exports.HIDE_NAV = HIDE_NAV;
+module.exports.UNHIDE_NAVMENU = UNHIDE_NAVMENU; 
+module.exports.HIDE_NAVMENU = HIDE_NAVMENU;
 
 /* export the action creation functions */
 module.exports.setActiveEvent = setActiveEvent;
 module.exports.unsetActiveEvent = unsetActiveEvent;
-module.exports.unhideNav = unhideNav;
-module.exports.hideNav = hideNav;
+module.exports.unhideNavMenu = unhideNavMenu;
+module.exports.hideNavMenu = hideNavMenu;
 

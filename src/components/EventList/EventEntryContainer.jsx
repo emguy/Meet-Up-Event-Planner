@@ -55,7 +55,8 @@ var mapStateToProps = function(state, ownProps) {
 };
 var mapDispatchToProps = function(dispatch, ownProps) {
   return {
-    unhideEventCard: function() {
+    unhideEventCard: function(e) {
+      e.stopPropagation();
       return dispatch(setActiveEvent(ownProps.event.key));
     },
     hideEventCard: function(e) {

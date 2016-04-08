@@ -2,6 +2,7 @@ var Redux = require("redux");
 
 var reducerEventList = require("./reducerEventList.js")
 var reducerUI = require("./reducerUI.js")
+var reducerSession = require("./reducerSession.js")
 
 /*
  * Layout of the store (for a reference)
@@ -30,7 +31,8 @@ var reducerUI = require("./reducerUI.js")
 /* generate the combined reducer */
 var reducer = Redux.combineReducers({
     eventList: reducerEventList, 
-    ui: reducerUI
+    ui: reducerUI,
+    session:  reducerSession
   });
 
 /* export the resultant reducer */
