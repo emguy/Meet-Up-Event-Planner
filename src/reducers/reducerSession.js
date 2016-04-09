@@ -1,6 +1,9 @@
 var actionsSession = require("../actions/actionsSession.js")
-var SET_LOGIN_STATUS = actionsSession.SET_LOGIN_STATUS;
-var UNSET_LOGIN_STATUS = actionsSession.UNSET_LOGIN_STATUS;
+var SET_LOGIN = actionsSession.SET_LOGIN;
+var UNSET_LOGIN = actionsSession.UNSET_LOGIN;
+var RESET_SESSION = actionsSession.RESET_SESSION;
+
+var storageManager = require("../utils/storageManager.js");
 
 /*
  * Layout of the store (for a reference)
@@ -9,13 +12,15 @@ var UNSET_LOGIN_STATUS = actionsSession.UNSET_LOGIN_STATUS;
  *   |
  *   |--session
  *   |   |
- *   |   |--loginStatus
+ *   |   |--loginStatus (number)
  *   |   |
- *   |   |--uid
+ *   |   |--uid (string)
  *   |   |
- *   |   |--userName
+ *   |   |--userName (string)
+ *   |   |
+ *   |   |--eventList (array of event objects)
  *   |
- *   |--eventList (array)
+ *   |--eventList (array of event objects)
  *   |
  *   |--ui
  *       |
@@ -27,18 +32,35 @@ var UNSET_LOGIN_STATUS = actionsSession.UNSET_LOGIN_STATUS;
 
 var reducerSession = function(state, action) {
   switch (action.type) {
-    case SET_LOGIN_STATUS: 
-      if (!state.loginStatus || state.loginStatus === 0) {
-        return Object.assign({}, state, {loginStatus: 1, uid: action.operand});
+    case RESET_SESSION:
+      if (action.operand) {
+        return action.operand;
       }
       return state;
-    case UNSET_LOGIN_STATUS:
+    case SET_LOGIN: 
+      if (!state.loginStatus || state.loginStatus !== 1) {
+        try {
+          var userData = storageManager.getUserData(action.operand);
+        } catch(err) {
+          console.error("[ERROR] cannot retrive user data from the local storage.");
+        }
+        var newState = Object.assign({}, state, {loginStatus: 1, 
+                             uid: userData.uid, 
+                             userName: userData.userName, 
+                             eventList: userData.eventList});
+        newState.eventList.forEach(function(item, index) {
+          item.key = Date.now() - index * 3;
+        });
+        return newState;
+      }
+      return state;
+    case UNSET_LOGIN:
       if (state.loginStatus && state.loginStatus === 1) {
-        return Object.assign({}, {loginStatus: 0, uid: undefined, userName: undefined});
+        return Object.assign({}, {loginStatus: 0, uid: null, userName: null, eventList: null});
       }
       return state;
     default:
-      return state || Object.assign({}, {loginStatus: 0}, {uid: "default", userName: "Tom"});
+      return state || Object.assign({}, {loginStatus: 0, uid: null, userName: null, eventList: null});
   }
 };
 

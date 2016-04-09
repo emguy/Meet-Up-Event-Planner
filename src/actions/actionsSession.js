@@ -1,27 +1,38 @@
-var SET_LOGIN_STATUS = "SET_LOGIN_STATUS";
-var UNSET_LOGIN_STATUS = "UNSET_LOGIN_STATUS";
+var SET_LOGIN = "SET_LOGIN";
+var UNSET_LOGIN = "UNSET_LOGIN";
+var RESET_SESSION = "RESET_SESSION";
 
 /** 
  * set the login status to be true 
  *
  * @arg uid{string} is the user id
  */
-var setLoginStatus = function(uid) {
-  return { type: SET_LOGIN_STATUS, operand: uid };
+var setLogin = function(uid) {
+  return { type: SET_LOGIN, operand: uid };
 };
 
 /** 
  * unset the login status
  */
-var unsetLoginStatus = function() {
-  return { type: UNSET_LOGIN_STATUS, operand: undefined };
+var unsetLogin = function() {
+  return { type: UNSET_LOGIN, operand: undefined };
+};
+
+/** 
+ * reset the current session using the provided data
+ */
+var resetSession = function(data) {
+  return { type: UNSET_LOGIN, operand: data };
 };
 
 /* export the action names */
-module.exports.SET_LOGIN_STATUS = SET_LOGIN_STATUS;
-module.exports.UNSET_LOGIN_STATUS = UNSET_LOGIN_STATUS;
+module.exports.SET_LOGIN = SET_LOGIN;
+module.exports.UNSET_LOGIN = UNSET_LOGIN;
+module.exports.RESET_SESSION = RESET_SESSION;
 
 /* export the action creation functions */
-module.exports.setLoginStatus = setLoginStatus;
-module.exports.unsetLoginStatus = unsetLoginStatus;
+module.exports.setLogin = setLogin;
+module.exports.unsetLogin = unsetLogin;
+module.exports.resetSession = resetSession;
+
 

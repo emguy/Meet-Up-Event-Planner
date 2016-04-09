@@ -48,8 +48,8 @@ var mapStateToProps = function(state, ownProps) {
 var mapDispatchToProps = function(dispatch, ownProps) {
   return {
     handleLogin: function() {
-      console.log("button clicked");
-      return dispatch(actionsSession.setLoginStatus("default"));
+      console.log("try to login as default ...");
+      return dispatch(actionsSession.setLogin("default"));
     },
   };
 };

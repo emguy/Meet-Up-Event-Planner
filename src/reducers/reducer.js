@@ -1,6 +1,7 @@
 var Redux = require("redux");
+//var routerReducer = require("react-router-redux").routerReducer;
 
-var reducerEventList = require("./reducerEventList.js")
+//var reducerEventList = require("./reducerEventList.js")
 var reducerUI = require("./reducerUI.js")
 var reducerSession = require("./reducerSession.js")
 
@@ -11,13 +12,15 @@ var reducerSession = require("./reducerSession.js")
  *   |
  *   |--session
  *   |   |
- *   |   |--loginStatus
+ *   |   |--loginStatus (number)
  *   |   |
- *   |   |--uid
+ *   |   |--uid (string)
  *   |   |
- *   |   |--userName
+ *   |   |--userName (string)
+ *   |   |
+ *   |   |--eventList (array of event objects)
  *   |
- *   |--eventList (array)
+ *   |--eventList (array of event objects)
  *   |
  *   |--ui
  *       |
@@ -28,11 +31,15 @@ var reducerSession = require("./reducerSession.js")
  */
 
 
+var reducerKey = function(state) {
+  return "meet-up-event-planner-key";
+}
+
 /* generate the combined reducer */
 var reducer = Redux.combineReducers({
-    eventList: reducerEventList, 
     ui: reducerUI,
-    session:  reducerSession
+    session: reducerSession,
+    key: reducerKey
   });
 
 /* export the resultant reducer */

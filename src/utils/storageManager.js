@@ -2,7 +2,7 @@ var preloadedEvents = require("../misc/preloadedEvents.js");
 
 var prefix = "meet_up_event_planner-";
 
-var sessionManager = {
+var storageManager = {
   prefix: prefix,
 };
 
@@ -13,11 +13,11 @@ var defaultUserData = {
   eventList: preloadedEvents
 };
 
-sessionManager.init = function(preloadedEvents) {
+storageManager.init = function(preloadedEvents) {
   localStorage.setItem(prefix + defaultUserData.uid, JSON.stringify(defaultUserData));
 };
 
-sessionManager.getUserData = function(uid) {
+storageManager.getUserData = function(uid) {
   var key = prefix + uid;
   var rawData = localStorage.getItem(key); 
   if (rawData) {
@@ -25,10 +25,10 @@ sessionManager.getUserData = function(uid) {
   }
 };
 
-sessionManager.setUserData = function(userData) {
+storageManager.setUserData = function(userData) {
   var key = prefix + userData;
   localStorage.setItem(key, JSON.stringify(userData));
 };
 
-module.exports = sessionManager;
+module.exports = storageManager;
 

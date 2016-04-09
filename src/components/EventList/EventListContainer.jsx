@@ -18,6 +18,7 @@ var EventList = React.createClass({
   },
   componentWillMount: function() {
     if (!this.props.isLoggedIn) {
+      console.log("okay->");
       Router.browserHistory.push("/");
     }
   },
@@ -46,7 +47,7 @@ var EventList = React.createClass({
  */
 var mapStateToProps = function(state, ownProps) {
   return {
-    data: state.eventList,
+    data: state.session.eventList || [],
     isLoggedIn: state.session.loginStatus === 1
   };
 };
