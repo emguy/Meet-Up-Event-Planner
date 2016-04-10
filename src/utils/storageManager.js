@@ -3,7 +3,7 @@ var preloadedEvents = require("../misc/preloadedEvents.js");
 var prefix = "meet_up_event_planner-";
 
 var storageManager = {
-  prefix: prefix,
+  prefix: prefix
 };
 
 var defaultUserData = {

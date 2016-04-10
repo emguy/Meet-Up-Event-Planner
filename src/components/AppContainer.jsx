@@ -68,7 +68,7 @@ var App = React.createClass({
 
       </div>
     );
-  },
+  }
 });
 
 
@@ -125,7 +125,7 @@ var HeaderContent= React.createClass({
         </h1>
       </div>
     );
-  },
+  }
 });
 
 
@@ -164,7 +164,7 @@ var NavMenu = React.createClass({
         </ul>
       </div>
     );
-  },
+  }
 });
 
 
@@ -201,7 +201,7 @@ var FooterContent = React.createClass({
         </p>
       </div>
     );
-  },
+  }
 });
 
 

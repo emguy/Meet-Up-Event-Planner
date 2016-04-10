@@ -10,7 +10,7 @@ var Modal = React.createClass({
   /* it accepts two props */
   propTypes: {
     visible: React.PropTypes.bool.isRequired,
-    closeMe: React.PropTypes.func,
+    closeMe: React.PropTypes.func
   },
 
   /* the default style settings for the modal background */
@@ -20,7 +20,7 @@ var Modal = React.createClass({
     top: 0,
     right: 0,
     width: "100%",
-    height: "100%",
+    height: "100%"
   },
 
   /* the render method */

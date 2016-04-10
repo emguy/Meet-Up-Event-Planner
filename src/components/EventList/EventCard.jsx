@@ -16,7 +16,7 @@ var EventCard = React.createClass({
   propTypes: {
     visible: React.PropTypes.bool.isRequired,
     event: React.PropTypes.object.isRequired,
-    closeMe: React.PropTypes.func.isRequired,
+    closeMe: React.PropTypes.func.isRequired
   },
 
   /* the render method */
@@ -33,7 +33,7 @@ var EventCard = React.createClass({
         <ModalFooter />
       </Modal>
     );
-  },
+  }
 });
 
 
@@ -48,7 +48,7 @@ var ModalHeader = React.createClass({
   /* it accepts two props */
   propTypes: {
     eventName: React.PropTypes.string.isRequired,
-    eventTime: React.PropTypes.string.isRequired,
+    eventTime: React.PropTypes.string.isRequired
   },
 
   /* the render method */
@@ -63,7 +63,7 @@ var ModalHeader = React.createClass({
         </p>
       </div>
     );
-  },
+  }
 });
 
 
@@ -88,7 +88,7 @@ var ModalFooter = React.createClass({
         </ul>
       </div>
     );
-  },
+  }
 });
 
 
@@ -102,7 +102,7 @@ var ModalFooter = React.createClass({
 var ModalContent = React.createClass({
   /* it accepts only one prop */
   propTypes: {
-    event: React.PropTypes.object.isRequired,
+    event: React.PropTypes.object.isRequired
   },
 
   /* the render method */
@@ -145,7 +145,7 @@ var ModalContent = React.createClass({
         </div>
       </div>
     );
-  },
+  }
 })
 
 

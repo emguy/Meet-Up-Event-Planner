@@ -14,7 +14,7 @@ var EventList = React.createClass({
   /* it only accepts one prop */
   propTypes: {
     data: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-    isLoggedIn: React.PropTypes.bool.isRequired,
+    isLoggedIn: React.PropTypes.bool.isRequired
   },
   componentWillMount: function() {
     if (!this.props.isLoggedIn) {
@@ -33,7 +33,7 @@ var EventList = React.createClass({
         {parsedEvents}
       </ul>
     );
-  },
+  }
 });
 
 

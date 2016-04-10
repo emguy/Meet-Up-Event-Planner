@@ -10,7 +10,7 @@ module.exports = {
 
   output: {
     filename: "bundle.js",
-    path: path.resolve(__dirname , "public/"),
+    path: path.resolve(__dirname , "public/")
   },
 
   devServer: {
@@ -20,8 +20,8 @@ module.exports = {
   module: {
     loaders: [
       { test: /\.jsx?$/, exclude: /node_modules/, loader: "babel", query: {presets: ["es2015", "react"]} },
-      { test: /\.scss$/, loaders: ["style", "css", "sass"] },
-    ],
+      { test: /\.scss$/, loaders: ["style", "css", "sass"] }
+    ]
   },
 
   //plugins: [

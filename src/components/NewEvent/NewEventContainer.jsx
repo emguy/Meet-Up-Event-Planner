@@ -8,7 +8,7 @@ var EventCreatorContainer = React.createClass({
         New event form goes here.
       </div>
     );
-  },
+  }
 });
 
 /* we only export the top most conponent */

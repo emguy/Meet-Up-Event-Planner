@@ -36,7 +36,7 @@ var EventEntry = React.createClass({
           closeMe={this.props.hideEventCard} />
       </li>
     );
-  },
+  }
 });
 
 
