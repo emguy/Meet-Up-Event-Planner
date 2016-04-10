@@ -22,7 +22,7 @@ var unsetLogin = function() {
  * reset the current session using the provided data
  */
 var resetSession = function(data) {
-  return { type: UNSET_LOGIN, operand: data };
+  return { type: RESET_LOGIN, operand: data };
 };
 
 /* export the action names */

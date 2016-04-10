@@ -9,11 +9,6 @@ var Login = React.createClass({
     isLoggedIn: React.PropTypes.bool.isRequired,
     handleLogin: React.PropTypes.func.isRequired
   },
-  componentWillMount: function() {
-    if (this.props.isLoggedIn) {
-      Router.browserHistory.push("/events");
-    }
-  },
   render: function() {
       var result;
       if (this.props.isLoggedIn) {

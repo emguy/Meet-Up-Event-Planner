@@ -55,6 +55,7 @@ var reducerSession = function(state, action) {
       }
       return state;
     case UNSET_LOGIN:
+      console.log("-------");
       if (state.loginStatus && state.loginStatus === 1) {
         return Object.assign({}, {loginStatus: 0, uid: null, userName: null, eventList: null});
       }

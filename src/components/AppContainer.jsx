@@ -1,9 +1,11 @@
 var React = require("react");
 var ReactRedux = require("react-redux");
+var Router = require("react-router");
 var Button = require("../ui/Button.jsx");
 var Link = require("react-router").Link;
 var EventListContainer = require("./EventList/EventListContainer.jsx");
 var actionsUI = require("../actions/actionsUI.js");
+var actionsSession = require("../actions/actionsSession.js");
 
 
 
@@ -14,20 +16,42 @@ var actionsUI = require("../actions/actionsUI.js");
  *
  */
 var App = React.createClass({
-  /* it does not take any props */
+  /* it takes three props */
   Prototypes: {
+    isLoggedIn: React.PropTypes.bool.isRequired,
+    doLogout: React.PropTypes.func.isRequired,
+    hideNavMenu: React.PropTypes.func.isRequired,
+    unhideNavMenu: React.PropTypes.func.isRequired
+  },
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.isLoggedIn && nextProps.isLoggedIn) {
+      Router.browserHistory.push("/events");
+    }
+    if (this.props.isLoggedIn && !nextProps.isLoggedIn) {
+      Router.browserHistory.push("/");
+    }
   },
 
   /* the render method */
   render: function() {
+    var menuButton;
+
+    if (this.props.isLoggedIn) {
+      menuButton = (
+        <Button id="menu-button" tooltip="Options" 
+          action={this.props.unhideNavMenu}>
+          &#9776;
+        </Button>
+      );
+    }
     return (
       <div className="container">
 
-        <Button id="menu-button" tooltip="Options" 
-          action={this.props.unhideNavMenu}>&#9776;</Button>
+        {menuButton /* it is visible only when logged in */}
 
         <nav onClick={this.props.hideNavMenu}>
-          <NavMenu visible={this.props.navMenuIsVisible} />
+          <NavMenu visible={this.props.navMenuIsVisible} doLogout={this.props.doLogout} />
         </nav>
 
         <header onClick={this.props.hideNavMenu}> 
@@ -58,18 +82,21 @@ var App = React.createClass({
  */
 var mapStateToProps = function(state, ownProps) {
   return {
-    navMenuIsVisible: state.ui.showNavMenu,
+    isLoggedIn: state.session.loginStatus == 1,
+    navMenuIsVisible: state.ui.showNavMenu
   };
 };
 var mapDispatchToProps = function(dispatch, ownProps) {
   return {
     unhideNavMenu: function(e) {
-      console.log(e);
       return dispatch(actionsUI.unhideNavMenu());
     },
     hideNavMenu: function(e) {
       e.stopPropagation();
       return dispatch(actionsUI.hideNavMenu());
+    },
+    doLogout: function() {
+      return dispatch(actionsSession.unsetLogin());
     },
   };
 };
@@ -109,9 +136,10 @@ var HeaderContent= React.createClass({
  * @prop visible {boolean} to show or hide this nav menu
  */
 var NavMenu = React.createClass({
-  /* it takes only one prop */
+  /* it takes two props */
   Prototypes: {
-    visible: React.PropTypes.bool.isRequired,
+    doLogout: React.PropTypes.func.isRequired,
+    visible: React.PropTypes.bool.isRequired
   },
 
   defaultStyle: {
@@ -119,7 +147,7 @@ var NavMenu = React.createClass({
     left: 0,
     top: 0,
     bottom: 0,
-    zIndex: 2,
+    zIndex: 2
   },
 
   /* the render method */
@@ -132,6 +160,7 @@ var NavMenu = React.createClass({
         <ul role="nav">
           <li className="nav-button"><Link to="/events">View all events</Link></li>
           <li className="nav-button"><Link to="/new_event">Add new event</Link></li>
+          <li className="nav-button"><a onClick={this.props.doLogout}>Logout</a></li>
         </ul>
       </div>
     );
