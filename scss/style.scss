@@ -1,6 +1,8 @@
 $root-bg: #FFFFFF;
 $primary-bg: #15B5EA;
 $primary-fg: $root-bg;
+$secondary-bg: $root-bg;
+$secondary-fg: #222222;
 $header-bg: #1091BC;
 $footer-bg: $header-bg;
 $modal-bg: white;
@@ -85,9 +87,77 @@ ul {
   list-style-type: none;
 }
 
+form {
+  margin: auto;
+  max-width: 600px;
+  border: 1px $primary-bg solid;
+  box-shadow: 3px 3px 0px #BBB;
+  padding: 20px 30px 50px 30px;
+
+  #system-message {
+    color: red;
+    height: 20px;
+  }
+
+  label {
+    margin: auto;
+    color: $secondary-fg;
+
+    span {
+      display: inline-block;
+      width: 20%;
+      min-width: 120px;
+      margin-bottom: 5px;
+    }
+
+    input {
+      display: inline-block;
+      min-width: 300px;
+      width: 75%;
+      max-width: 350px;
+      margin-bottom: 10px;
+    }
+  }
+
+  p, .small-text {
+    margin-top: 20px;
+
+    .dummy-button {
+      border-radius: 2px 2px 2px;
+      width: 6px;
+      background-color: $primary-bg;
+      color: $primary-fg;
+    }
+  }
+}
+
 html, body {
   height: 100%;
   color: $primary-fg;
+}
+
+.bg-reversed {
+  background-color: $primary-bg;
+}
+
+.color-reversed {
+  color: $secondary-fg;
+}
+
+.small-text {
+  font-size: 0.8rem;
+}
+
+.form-button-list {
+  width: 300px;
+  margin: auto;
+  margin-top: 20px;
+  .form-button {
+    font-size: 0.8rem;
+    width: 65px;
+    height: 40px;
+    line-height: 40px;
+  }
 }
 
 #root {
@@ -105,10 +175,6 @@ html, body {
   left: 20px;
   top: 56px;
   z-index:1;
-}
-
-#login-button {
-  background-color: $primary-bg;
 }
 
 #header-content {

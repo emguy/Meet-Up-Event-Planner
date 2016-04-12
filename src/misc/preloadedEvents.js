@@ -7,7 +7,7 @@ var preloadedEvents = [
     endTime: "March 22, 2016 20:45:00",
     guests: "",
     location: "Meridian Centre, St Catharines, ON",
-    notes: "N/A",
+    notes: "N/A"
   },
   {
     name: "Rugby Canada vs. Italy",
@@ -17,7 +17,7 @@ var preloadedEvents = [
     endTime: "June 26, 2016 14:00:00",
     guests: "",
     location: "BMO Field, Toronto, ON",
-    notes: "N/A",
+    notes: "N/A"
   },
   {
     name: "Stars on Ice",
@@ -27,7 +27,7 @@ var preloadedEvents = [
     endTime: "May 6, 2016 21:30:00",
     guests: "",
     location: "Air Canada Center, Toronto, ON",
-    notes: "N/A",
+    notes: "N/A"
   },
   {
     name: "The Imagine Tour",
@@ -37,7 +37,7 @@ var preloadedEvents = [
     endTime: "March 23, 2016 21:30:00",
     guests: "",
     location: "Eastdale C. V. I. Secondary School, Oshawa, ON",
-    notes: "N/A",
+    notes: "N/A"
   },
   {
     name: "Taste of Toronto",
@@ -47,7 +47,7 @@ var preloadedEvents = [
     endTime: "June 24, 2016 22:30:00",
     guests: "",
     location: "Fort York National Historic Site, Toronto, ON",
-    notes: "N/A",
+    notes: "N/A"
   },
   {
     name: "April Fools",
@@ -57,8 +57,8 @@ var preloadedEvents = [
     endTime: "April 1, 2016 22:00:00",
     guests: "",
     location: "Massey Hall, Toronto, ON",
-    notes: "N/A",
-  },
+    notes: "N/A"
+  }
 ];
 
 module.exports = preloadedEvents;

@@ -48,6 +48,17 @@ var Button = React.createClass({
 
   /* the render method */
   render: function() {
+    if (!this.props.tooltip) {
+      return (
+        <div className={"button " + this.props.className} 
+          id = {this.props.id}
+          onClick={this.handleClick}>
+          <div>
+            {this.props.children}
+          </div>
+        </div>
+      );
+    };
     var tooltip = <span>&nbsp;</span>;
     if (this.state.showToolTip) {
       tooltip = this.props.tooltip;

@@ -1,33 +1,48 @@
-var preloadedEvents = require("../misc/preloadedEvents.js");
+var key = "meet_up_event_planner";
 
 var prefix = "meet_up_event_planner-";
+var userProfilesKey = prefix + "user-profiles";
 
-var storageManager = {
-  prefix: prefix
-};
+var storageManager = {};
 
-var defaultUserData = {
-  uid: "default",
-  userName: "tom",
+var trialUserData = {
+  uid: "trial",
+  name: "Trial User",
   password: "123456789",
-  eventList: preloadedEvents
+  eventList: require("../misc/preloadedEvents.js")
 };
 
-storageManager.init = function(preloadedEvents) {
-  localStorage.setItem(prefix + defaultUserData.uid, JSON.stringify(defaultUserData));
-};
-
-storageManager.getUserData = function(uid) {
-  var key = prefix + uid;
-  var rawData = localStorage.getItem(key); 
-  if (rawData) {
-    return JSON.parse(rawData);
-  }
+var templateUserData = {
+  uid: "",
+  name: "",
+  password: "",
+  eventList: []
 };
 
 storageManager.setUserData = function(userData) {
-  var key = prefix + userData;
-  localStorage.setItem(key, JSON.stringify(userData));
+  var data = {};
+  var rawData = localStorage.getItem(key); 
+  if (rawData) {
+    data = JSON.parse(rawData);
+  }
+  data[userData.uid] = Object.assign({}, templateUserData, userData);
+  localStorage.setItem(key, JSON.stringify(data));
+};
+
+storageManager.getUserData = function(uid) {
+  var rawData = localStorage.getItem(key); 
+  if (!rawData) {
+    return;
+  }
+  var data = JSON.parse(rawData);
+  return data[uid];
+};
+
+storageManager.init = function(preloadedEvents) {
+  storageManager.setUserData(trialUserData);
+  storageManager.getUserData(trialUserData.uid);
+  storageManager.setUserData({uid: "administrator", password: "111"});
+  storageManager.getUserData("administrator");
 };
 
 module.exports = storageManager;
