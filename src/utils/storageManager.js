@@ -40,9 +40,7 @@ storageManager.getUserData = function(uid) {
 
 storageManager.init = function(preloadedEvents) {
   storageManager.setUserData(trialUserData);
-  storageManager.getUserData(trialUserData.uid);
-  storageManager.setUserData({uid: "administrator", password: "111"});
-  storageManager.getUserData("administrator");
+  storageManager.setUserData({uid: "root", password: "1111"});
 };
 
 module.exports = storageManager;

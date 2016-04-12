@@ -2,33 +2,9 @@ var actionsSession = require("../actions/actionsSession.js")
 var SET_LOGIN = actionsSession.SET_LOGIN;
 var UNSET_LOGIN = actionsSession.UNSET_LOGIN;
 var RESET_SESSION = actionsSession.RESET_SESSION;
+var HANDLE_LOGIN = actionsSession.HANDLE_LOGIN;
 
 var storageManager = require("../utils/storageManager.js");
-
-/*
- * Layout of the store (for a reference)
- *
- * Store
- *   |
- *   |--session
- *   |   |
- *   |   |--loginStatus (number)
- *   |   |
- *   |   |--uid (string)
- *   |   |
- *   |   |--userName (string)
- *   |   |
- *   |   |--eventList (array of event objects)
- *   |
- *   |--eventList (array of event objects)
- *   |
- *   |--ui
- *       |
- *       |--activeEvent (number)
- *       |
- *       |--showNavMenu (boolean)
- *
- */
 
 var reducerSession = function(state, action) {
   switch (action.type) {
@@ -53,6 +29,8 @@ var reducerSession = function(state, action) {
         });
         return newState;
       }
+      return state;
+    case HANDLE_LOGIN:
       return state;
     case UNSET_LOGIN:
       console.log("-------");

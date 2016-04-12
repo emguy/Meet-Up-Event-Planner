@@ -17,6 +17,7 @@ var actionsInputLogin = require("../../actions/actionsInputLogin.js");
 var Login = React.createClass({
   Prototypes: {
     enteredUserName: React.PropTypes.string.isRequired,
+    enteredPassword: React.PropTypes.string.isRequired,
     isLoggedIn: React.PropTypes.bool.isRequired,
     handleTry: React.PropTypes.func.isRequired,
     handleLogin: React.PropTypes.func.isRequired,
@@ -24,13 +25,12 @@ var Login = React.createClass({
     capturePassword: React.PropTypes.func.isRequired
   },
   render: function() {
-    var systemMessage = "";
     return (
       <div>
         <form>
 
           <div id="system-message" className="small-text">
-            {systemMessage}
+            {this.props.response}
           </div>
 
           <label for="user-id"> 
@@ -46,7 +46,7 @@ var Login = React.createClass({
           </label>
 
           <div className="form-button-list">
-            <Button className="bg-reversed form-button"> login </Button>
+            <Button className="bg-reversed form-button" action={this.props.processUserInputs}> login </Button>
             <Button className="bg-reversed form-button"> Register </Button>
             <Button className="bg-reversed form-button" action={this.props.handleTry}> Try </Button>
           </div>
@@ -71,8 +71,10 @@ var Login = React.createClass({
  */
 var mapStateToProps = function(state, ownProps) {
   return {
+    response: state.inputs.login.response,
     isLoggedIn: state.session.loginStatus === 1,
     enteredUserName: state.inputs.login.uid,
+    enteredPassword: state.inputs.login.password
   };
 };
 var mapDispatchToProps = function(dispatch, ownProps) {
@@ -81,9 +83,8 @@ var mapDispatchToProps = function(dispatch, ownProps) {
       console.log("try to login as the trial user ...");
       return dispatch(actionsSession.setLogin("trial"));
     },
-    handleLogin: function() {
-      console.log("try to login as the normal user ...");
-      return dispatch(actionsSession.setLogin("default"));
+    processUserInputs: function() {
+      return dispatch(actionsInputLogin.processUserInput());
     },
     captureUserName: function(e) {
       return dispatch(actionsInputLogin.setInputUserName(e.target.value));

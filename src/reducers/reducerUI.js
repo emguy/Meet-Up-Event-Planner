@@ -5,29 +5,6 @@ var UNSET_ACTIVE_EVENT = actionsUI.UNSET_ACTIVE_EVENT;
 var HIDE_NAVMENU = actionsUI.HIDE_NAVMENU;
 var UNHIDE_NAVMENU = actionsUI.UNHIDE_NAVMENU;
 
-/*
- * Layout of the store (for a reference)
- *
- * Store
- *   |
- *   |--session
- *   |   |
- *   |   |--loginStatus
- *   |   |
- *   |   |--uid
- *   |   |
- *   |   |--userName
- *   |
- *   |--eventList (array)
- *   |
- *   |--ui
- *       |
- *       |--activeEvent (number)
- *       |
- *       |--showNavMenu (boolean)
- *
- */
-
 /**
  * This is the reducer function
  */

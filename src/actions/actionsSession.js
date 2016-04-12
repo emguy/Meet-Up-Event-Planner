@@ -35,4 +35,3 @@ module.exports.setLogin = setLogin;
 module.exports.unsetLogin = unsetLogin;
 module.exports.resetSession = resetSession;
 
-
