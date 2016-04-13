@@ -1,6 +1,9 @@
 var authenticationManager = require("../utils/authenticationManager.js");
 var storageManager = require("../utils/storageManager.js");
 
+/* this is equivalent to Object.assign() in ES6  */
+var objectAssign = require("../utils/utils.js").objectAssign;
+
 /*
  * Layout of the store (for a reference)
  *
@@ -50,7 +53,7 @@ var defaultState = {
   loginResponse: ""
 };
 
-Object.assign(defaultState, defaultInputs);
+defaultState = objectAssign(defaultState, defaultInputs);
 
 var mask = {
   inputResponse: "",
@@ -60,12 +63,13 @@ var mask = {
 var doLogin = function(uid) {
   try {
     var userData = storageManager.getUserData(uid);
+    console.log("user data is", userData);
   } catch(err) {
     throw "Cannot retrive user data from the local storage.";
   }
   var eventList = userData.eventList;
   delete userData.eventList;
-  var newState = Object.assign({}, defaultState, {loginStatus: 1, userProfile: userData,  eventList: eventList});
+  var newState = objectAssign({}, defaultState, {loginStatus: 1, userProfile: userData,  eventList: eventList});
   /* here we index each event entry */
   newState.eventList.forEach(function(item, index) {
     item.key = Date.now() - index * 3;
@@ -79,7 +83,7 @@ var reducer = function(state, action) {
 
     case "RESET_SESSION":
       if (action.operand) {
-        Object.assign(action.operand, mask); // unset system response
+        objectAssign(action.operand, mask); // unset system response
         return action.operand;
       }
       return state;
@@ -97,49 +101,49 @@ var reducer = function(state, action) {
       return state;
 
     case "CAPTURE_LOGIN_UID":
-      return Object.assign({}, state, {inputUid: action.operand});
+      return objectAssign({}, state, {inputUid: action.operand});
 
     case "CAPTURE_LOGIN_PASSWORD":
-      return Object.assign({}, state, {inputPassword: action.operand});
+      return objectAssign({}, state, {inputPassword: action.operand});
 
     case "CAPTURE_EVENT_NAME":
       console.log(action.operand);
-      return Object.assign({}, state, {inputEventName: action.operand});
+      return objectAssign({}, state, {inputEventName: action.operand});
 
     case "CAPTURE_EVENT_LOCATION":
-      return Object.assign({}, state, {inputEventLocation: action.operand});
+      return objectAssign({}, state, {inputEventLocation: action.operand});
 
     case "CAPTURE_EVENT_TYPE":
-      return Object.assign({}, state, {inputEventType: action.operand});
+      return objectAssign({}, state, {inputEventType: action.operand});
 
     case "CAPTURE_EVENT_STARTTIME":
-      return Object.assign({}, state, {inputEventStartTime: action.operand});
+      return objectAssign({}, state, {inputEventStartTime: action.operand});
 
     case "CAPTURE_EVENT_ENDTIME":
-      return Object.assign({}, state, {inputEventEndTime: action.operand});
+      return objectAssign({}, state, {inputEventEndTime: action.operand});
 
     case "CAPTURE_EVENT_HOST":
-      return Object.assign({}, state, {inputEventHost: action.operand});
+      return objectAssign({}, state, {inputEventHost: action.operand});
 
     case "CAPTURE_EVENT_GUESTS":
-      return Object.assign({}, state, {inputEventGuests: action.operand});
+      return objectAssign({}, state, {inputEventGuests: action.operand});
 
     case "CAPTURE_EVENT_MEMO":
-      return Object.assign({}, state, {inputEventMemo: action.operand});
+      return objectAssign({}, state, {inputEventMemo: action.operand});
 
     case "CLEAR_EVENT_FORM":
-      return Object.assign({}, state, defaultInputs);
+      return objectAssign({}, state, defaultInputs);
 
     case "PROCESS_INPUT_LOGIN":
       var result = authenticationManager.authenticate(state.inputUid, state.inputPassword);
       if (result !== 0) {
-        return Object.assign({}, state, {loginResponse: authenticationManager.messages[result]});
+        return objectAssign({}, state, {loginResponse: authenticationManager.messages[result]});
       }
       return doLogin(state.inputUid);
 
     case "PROCESS_NEW_EVENT":
       console.log(state);
-      return Object.assign({}, state, {inputResponse: state.inputEventName});
+      return objectAssign({}, state, {inputResponse: state.inputEventName});
 
     default:
       return state || defaultState;

@@ -29,8 +29,9 @@ var reducer = require("./reducers/reducer.js");
 var storageManager = require("./utils/storageManager.js");
 
 /* create the Redux store with middleware */
-var pushToSessionStorage = require("./middleware/pushToSessionStorage.js");
+//var pushToSessionStorage = require("./middleware/pushToSessionStorage.js");
 var store = Redux.createStore(reducer, applyMiddleware(pushToSessionStorage));
+var store = Redux.createStore(reducer);
 
 // this is the initialization script
 var init = function() {

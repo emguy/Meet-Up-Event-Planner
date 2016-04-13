@@ -7,6 +7,9 @@
 /* this the key for accessing application data from the local storage */
 var key = "meet_up_event_planner";
 
+/* this is equivalent to Object.assign() in ES6  */
+var objectAssign = require("../utils/utils.js").objectAssign;
+
 /* initialize this module  */
 var storageManager = {};
 
@@ -33,7 +36,7 @@ storageManager.setUserData = function(userData) {
   if (rawData) {
     data = JSON.parse(rawData);
   }
-  data[userData.uid] = Object.assign({}, templateUserData, userData);
+  data[userData.uid] = objectAssign({}, templateUserData, userData);
   localStorage.setItem(key, JSON.stringify(data));
 };
 
