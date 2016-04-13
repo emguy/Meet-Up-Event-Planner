@@ -1,0 +1,98 @@
+main {
+  padding: 30px 0 270px 0; // footer hack
+  @media (min-width: $mobile-size) {
+    &{
+      padding-bottom: 150px;
+    }
+  }
+}
+
+#header-content {
+  position: relative;
+  width: 100%;
+  background-color: $header-bg;
+  height: 120px;
+
+  h1 {
+    width: 400px;
+    position: absolute;
+    left: 20px;
+    bottom: 25px;
+    text-shadow:#E0E0E0 1px 1px 0;
+    opacity: 0.9;
+    @media (max-width: $mobile-size) {
+      left: 10px;
+      font-size: 1.4rem;
+    }
+  }
+
+}
+
+#menu-button {
+  position: absolute;
+  right: 20px;
+  top: 56px;
+  z-index:1;
+}
+
+#nav-content {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  z-index: 2;
+  background-color: darken($primary-bg, 15%);
+  width: 200px;
+  color: $primary-fg;
+  .nav-list {
+    margin-top: 31px;
+    .nav-button {
+      cursor: pointer;
+      display: block;
+      line-height: 50px;
+      font-size: 1.1rem;
+      height: 50px;
+      padding-left: 15px;
+      &:hover {
+        background-color: lighten($primary-bg, 5%);
+      }
+    }
+  }
+}
+
+#footer-content {
+  position: absolute; // footer hack
+  bottom: 0; // footer hack
+  width: 100%;
+  background-color: $footer-bg;
+  min-height: 220px;
+  padding: 20px 5px 20px 20px;
+
+  @media (min-width: $mobile-size) {
+    & {
+      min-height: 120px;
+    }
+  }
+
+  &>p {
+    padding-left: 10px;
+    margin-left: 75px;
+    border-left: 1px $primary-fg solid;
+    font-size: .8rem;
+  }
+
+  #react-logo {
+    float: left;
+    img {
+      width: 60px;
+    }
+    .react-text {
+      visibility: hidden;
+      text-align: center;
+      font-size: 0.8rem;
+    }
+    &:hover .react-text {
+      visibility: visible;
+    }
+  }
+}

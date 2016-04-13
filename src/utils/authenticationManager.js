@@ -1,3 +1,9 @@
+/**
+ * This is a simple client side authentication manager. It verifies
+ * the user inputs with the respective information stored on the local
+ * storage.
+ */
+
 var storageManager = require("./storageManager.js");
 
 /* module initialization */
@@ -17,7 +23,7 @@ authenticationManager.authenticate = function(uid, password) {
 
 /* the are the interpretations of the returned value */
 authenticationManager.messages = [
-  "Login successful.",
+  "Passed the authentication.",
   "Bad user name.",
   "Bad password."
 ];

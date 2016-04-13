@@ -1,0 +1,75 @@
+.event-card {
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.4);
+
+  .modal-body {
+    @include box-center;
+    @include rounded-corner-all(10px);
+    background-color: $primary-bg;
+    padding: 0px;
+    margin: auto;
+    width: $mobile-size;
+    @media (max-width: $mobile-size) {
+      & {
+        width: 100%;
+      }
+    }
+
+    .modal-close {
+      font-size: 2rem;
+      position: absolute;
+      right: 26px;
+      top: 16px;
+      color: darken($primary-fg, 20%);
+      &:hover {
+      color: $primary-fg;
+      }
+    }
+
+    .event-header {
+      padding: 15px 20px 15px 20px;
+      height: 90px;
+
+      .event-name {
+        margin-bottom: 5px;
+        @media (max-width: $mobile-size) {
+          & {
+            overflow: hidden;
+            max-width: 300px;
+          }
+        }
+      }
+      .event-time {
+      }
+    }
+
+    .event-footer {
+      height: 90px;
+      ul {
+        display: flex;
+        margin-top: 20px;
+        justify-content: flex-end;
+      }
+    }
+
+    .event-content {
+      font-size: 1.1rem;
+      padding: 10px 20px 10px 20px;
+      margin: 0;
+      background-color: $modal-bg;
+    }
+
+    .event-attribute {
+      &:not(:first-child) {
+        margin-top: 16px;
+      }
+      p {
+        color: $modal-fg;
+      }
+      .event-label {
+        font-weight: 700;
+      }
+    }
+  }
+}
+

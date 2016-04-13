@@ -1,0 +1,29 @@
+$root-bg: #FFFFFF;
+
+$primary-bg: #15B5EA;
+$primary-fg: $root-bg;
+
+$header-bg: #1091BC;
+$footer-bg: $header-bg;
+
+$modal-bg: white;
+$modal-fg: black;
+
+$button-bg: $primary-bg;
+
+$mobile-size: 800px;
+
+$my-sans-font: "Open Sans", sans-serif;
+
+
+@import "mixins.scss";
+@import "defaults.scss";
+
+@import "main-frame.scss";
+
+@import "ui.scss";
+@import "form.scss";
+
+@import "event-list.scss";
+@import "event-card.scss";
+

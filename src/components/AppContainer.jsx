@@ -12,7 +12,8 @@ var actionsSession = require("../actions/actionsSession.js");
 /** 
  * this class renders the main frame of this web application
  *
- * no props is required for this component
+ * @prop isLoggedIn {boolean} the current login status
+ * @prop doLogout {boolean} handle the logout process
  *
  */
 var App = React.createClass({
@@ -24,10 +25,15 @@ var App = React.createClass({
     unhideNavMenu: React.PropTypes.func.isRequired
   },
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.isLoggedIn && nextProps.isLoggedIn) {
+  componentWillMount() {
+    /* if the user is logged in, it redirects to the event list. */
+    if (this.props.isLoggedIn) {
       Router.browserHistory.push("/events");
     }
+  },
+
+  componentWillReceiveProps(nextProps) {
+    /* when user logout from the application, it returns to the login page. */
     if (this.props.isLoggedIn && !nextProps.isLoggedIn) {
       Router.browserHistory.push("/");
     }
@@ -96,7 +102,7 @@ var mapDispatchToProps = function(dispatch, ownProps) {
       return dispatch(actionsUI.hideNavMenu());
     },
     doLogout: function() {
-      return dispatch(actionsSession.unsetLogin());
+      return dispatch(actionsSession.doLogout());
     },
   };
 };
@@ -142,26 +148,18 @@ var NavMenu = React.createClass({
     visible: React.PropTypes.bool.isRequired
   },
 
-  defaultStyle: {
-    position: "fixed",
-    left: 0,
-    top: 0,
-    bottom: 0,
-    zIndex: 2
-  },
-
   /* the render method */
   render: function() {
     if (!this.props.visible) {
       return false;
     }
     return (
-      <div id="nav-content" style={this.defaultStyle}>
-        <ul role="nav">
-          <li className="nav-button"><Link to="/events">View all events</Link></li>
-          <li className="nav-button"><Link to="/new_event">Add new event</Link></li>
-          <li className="nav-button"><a onClick={this.props.doLogout}>Logout</a></li>
-        </ul>
+      <div id="nav-content">
+        <div className="nav-list">
+          <Link className="nav-button" to="/events">All events</Link>
+          <Link className="nav-button" to="/new_event">Add new event</Link>
+          <div className="nav-button" onClick={this.props.doLogout}>Logout</div>
+        </div>
       </div>
     );
   }
@@ -192,7 +190,7 @@ var FooterContent = React.createClass({
           This is the first project of Udacity's nano degree program for senior
           web developer. It emphasizes on the design of the HTML forms. All
           user event data is stored locally by the browser. The
-          complete source files can be downloaded from
+          complete source files can be downloaded from&nbsp;
           <a href="http://github.com/emguy/Meet-Up-Event-Planner">my github</a>.
 
           <br/> <br/> 

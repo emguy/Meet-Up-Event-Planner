@@ -1,48 +1,112 @@
-var actionsSession = require("../actions/actionsSession.js")
-var SET_LOGIN = actionsSession.SET_LOGIN;
-var UNSET_LOGIN = actionsSession.UNSET_LOGIN;
-var RESET_SESSION = actionsSession.RESET_SESSION;
-var HANDLE_LOGIN = actionsSession.HANDLE_LOGIN;
-
+var authenticationManager = require("../utils/authenticationManager.js");
 var storageManager = require("../utils/storageManager.js");
 
-var reducerSession = function(state, action) {
+/*
+ * Layout of the store (for a reference)
+ *
+ * Store
+ *   |
+ *   |--session
+ *   |   |
+ *   |   |--loginStatus
+ *   |   |
+ *   |   |--userProfile
+ *   |   |
+ *   |   |--eventList[]
+ *   |   |
+ *   |   |--loginResponse
+ *   |   |
+ *   |   |--inputUid
+ *   |   |  
+ *   |   |--inputPassword  
+ *   |    
+ *   |
+ *   |--ui
+ *   |   |
+ *   |   |--activeEvent (number)
+ *   |   |
+ *   |   |--showNavMenu (boolean)
+ *   |
+ */
+
+var defaultState = {
+  loginStatus: 0, 
+  userProfile: null, 
+  eventList: [],
+  loginResponse: "",
+  inputUid: "",
+  inputPassword: ""
+};
+
+var mask = {
+  loginResponse: "",
+};
+
+var doLogin = function(uid) {
+  try {
+    var userData = storageManager.getUserData(uid);
+  } catch(err) {
+    throw "Cannot retrive user data from the local storage.";
+  }
+  var eventList = userData.eventList;
+  delete userData.eventList;
+  var newState = Object.assign({}, defaultState, {loginStatus: 1, userProfile: userData,  eventList: eventList});
+  /* here we index each event entry */
+  newState.eventList.forEach(function(item, index) {
+    item.key = Date.now() - index * 3;
+  });
+  return newState;
+};
+
+var reducer = function(state, action) {
+
   switch (action.type) {
-    case RESET_SESSION:
+
+    case "RESET_SESSION":
       if (action.operand) {
+        Object.assign(action.operand, mask); // unset system response
         return action.operand;
       }
       return state;
-    case SET_LOGIN: 
+
+
+    case "LOGIN_AS_TRIAL_USER": 
       if (!state.loginStatus || state.loginStatus !== 1) {
-        try {
-          var userData = storageManager.getUserData(action.operand);
-        } catch(err) {
-          console.error("[ERROR] cannot retrive user data from the local storage.");
-        }
-        var newState = Object.assign({}, state, {loginStatus: 1, 
-                             uid: userData.uid, 
-                             userName: userData.userName, 
-                             eventList: userData.eventList});
-        newState.eventList.forEach(function(item, index) {
-          item.key = Date.now() - index * 3;
-        });
-        return newState;
+        return doLogin("trial");
       }
       return state;
-    case HANDLE_LOGIN:
-      return state;
-    case UNSET_LOGIN:
-      console.log("-------");
+
+
+    case "DO_LOGOUT":
       if (state.loginStatus && state.loginStatus === 1) {
-        return Object.assign({}, {loginStatus: 0, uid: null, userName: null, eventList: null});
+        return defaultState;
       }
       return state;
+
+
+    case "CAPTURE_LOGIN_UID":
+      return Object.assign({}, state, {inputUid: action.operand});
+
+
+    case "CAPTURE_LOGIN_PASSWORD":
+      return Object.assign({}, state, {inputPassword: action.operand});
+
+
+    case "PROCESS_INPUT_LOGIN":
+      var result = authenticationManager.authenticate(state.inputUid, state.inputPassword);
+      if (result !== 0) {
+        return Object.assign({}, state, {loginResponse: authenticationManager.messages[result]});
+      }
+      return doLogin(state.inputUid);
+
+
     default:
-      return state || Object.assign({}, {loginStatus: 0, uid: null, userName: null, eventList: null});
+      return state || defaultState;
+
   }
 };
 
 /* export the resultant reducer */
-module.exports = reducerSession;
+module.exports = reducer;
+
 

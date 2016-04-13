@@ -1,3 +1,8 @@
+/*
+ * Here are some functions that might be useful.
+ *
+ */
+
 var utils = {};
 
 utils.doNothing = function(event) {

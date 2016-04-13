@@ -1,0 +1,24 @@
+.button {
+  @include rounded-corner-all(5px);
+  cursor: pointer;
+  display: inline-block;
+  color: $primary-fg;
+  border: 1px $primary-fg solid;
+  text-align: center;
+  width: 50px;
+  height: 40px;
+  line-height: 36px; // vertically center the icon in the button
+  font-size: 1.2rem;
+  margin-right: 20px;
+  &:hover {
+    background-color: lighten($button-bg, 20%); 
+  }
+  .tooltip-text {
+    padding: 0;
+    line-height: 30px;
+    font-size: 0.8rem;
+  }
+}
+
+
+

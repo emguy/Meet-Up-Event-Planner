@@ -1,0 +1,39 @@
+.event-list {
+  width: 100%;
+  @media (min-width: $mobile-size) {
+    & {
+      width: $mobile-size;
+      margin: auto;
+    }
+  }
+
+  .event {
+    @include rounded-corner-all;
+    cursor: pointer;
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 20px 30px 20px 30px;
+    background-color: $primary-bg;
+
+    &:not(:last-child) {
+      margin-bottom: 20px;
+    }
+
+    &:hover {
+      background-color: lighten($primary-bg, 20%);
+    }
+
+    .event-name {
+      white-space: nowrap;
+      overflow: hidden;
+      margin: 0 0 10px 0;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .event-time {
+      font-size: 1.1rem;
+    }
+  }
+}
+

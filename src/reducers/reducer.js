@@ -1,10 +1,6 @@
 var Redux = require("redux");
-//var routerReducer = require("react-router-redux").routerReducer;
-
-//var reducerEventList = require("./reducerEventList.js")
 var reducerUI = require("./reducerUI.js")
 var reducerSession = require("./reducerSession.js")
-var reducerInputLogin = require("./reducerInputLogin.js")
 
 /*
  * Layout of the store (for a reference)
@@ -37,22 +33,16 @@ var reducerInputLogin = require("./reducerInputLogin.js")
  *   |   |
  */
 
+/* this is required by the middleware */
 var reducerKey = function(state) {
   return "meet-up-event-planner-key";
 }
-
-/* generate the combined reducer for inputs */
-var reducerInputs = Redux.combineReducers({
-    login: reducerInputLogin,
-  });
-
 
 /* generate the combined reducer */
 var reducer = Redux.combineReducers({
     ui: reducerUI,
     session: reducerSession,
     key: reducerKey,
-    inputs: reducerInputs
   });
 
 /* export the resultant reducer */

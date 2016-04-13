@@ -1,0 +1,44 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  //border: 1px red dotted;
+}
+
+a {
+  text-decoration: none;
+  &:visited {
+    color: $primary-fg;
+  }
+  &:hover {
+  text-decoration: underline;
+  }
+}
+
+ul {
+  list-style-type: none;
+}
+
+html, body {
+  height: 100%;
+  color: $primary-fg;
+}
+
+#root {
+  height: 100%;
+  font: 100%  $my-sans-font;
+}
+
+.container {
+  position: relative;
+  min-height: 100%;
+}
+
+.small-text {
+  font-size: 0.8rem;
+}
+
+input {
+  height: 22px;
+}
+

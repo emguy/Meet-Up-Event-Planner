@@ -1,5 +1,5 @@
 /* import the style file */
-require("../scss/style.scss");
+require("./scss/style.scss");
 
 /* import the core react library */
 var React = require("react");
@@ -23,16 +23,17 @@ var NewEventContainer = require("./components/NewEvent/NewEventContainer.jsx");
 var Redux = require("redux");
 var applyMiddleware = require("redux").applyMiddleware;
 var Provider = require("react-redux").Provider;
-
-var storageManager = require("./utils/storageManager.js");
 var reducer = require("./reducers/reducer.js");
-var pushToSessionStorage = require("./middleware/pushToSessionStorage.js");
 
-//var store = Redux.createStore(reducer);
+/* this module handles all interactions with the local storage */
+var storageManager = require("./utils/storageManager.js");
+
+/* create the Redux store with middleware */
+var pushToSessionStorage = require("./middleware/pushToSessionStorage.js");
 var store = Redux.createStore(reducer, applyMiddleware(pushToSessionStorage));
 
 // this is the initialization script
-function init(store) {
+var init = function() {
   var key = store.getState().key;
   var raw = sessionStorage.getItem(key);
   if (!raw) {
@@ -40,16 +41,17 @@ function init(store) {
   }
   var storedState = JSON.parse(raw);
   store.dispatch({type: "RESET_SESSION", operand: storedState.session});
-}(store)
+  storageManager.init();
+  //store.dispatch({type: "LOGIN_AS_TRIAL_USER", operand: null});
+};
 
-init(store);
+/* it must be called before the rendering */
+init();
 
-storageManager.init();
-var history = browserHistory;
-
+/* render the whole web application */
 ReactDOM.render((
   <Provider store={store}>
-    <Router history={history}>
+    <Router history={browserHistory}>
       <Route path="/" component={AppContainer}>
         <IndexRoute component={LoginContainer} />
         <Route path="/events" component={EventListContainer} />

@@ -1,0 +1,76 @@
+form {
+  @include rounded-corner-all(5px);
+  background-color: $primary-bg;
+  margin: auto;
+  max-width: 600px;
+  border: 1px $primary-bg solid;
+  padding: 20px 30px 51px 30px;
+  z-index: 1;
+
+  h4 {
+    text-align: center;
+  }
+
+  #head-system-message {
+    color: red;
+    height: 20px;
+  }
+
+  label {
+    margin: auto;
+    color: $primary-fg;
+
+    span {
+      display: inline-block;
+      width: 20%;
+      min-width: 120px;
+      margin-bottom: 5px;
+    }
+
+    input {
+      display: inline-block;
+      min-width: 300px;
+      width: 75%;
+      max-width: 350px;
+      margin-bottom: 25px;
+    }
+  }
+
+  p, .small-text {
+    margin-top: 20px;
+
+    .dummy-button {
+      width: 6px;
+      background-color: lighten($primary-bg, 21%);
+    }
+  }
+}
+
+.form-button-list {
+  display: flex;
+  margin-top: 20px;
+  justify-content: center;
+  .form-button {
+    font-size: 0.8rem;
+    width: 65px;
+    height: 40px;
+    line-height: 40px;
+  }
+}
+
+#show-advanced-checkbox {
+  font-size: 0.8rem;
+  input {
+    position: relative;
+    top:2px;
+    width: auto;
+    min-width: auto;
+    height: auto;
+    margin-right: 5px;
+  }
+  span {
+    width: auto;
+    min-width: auto;
+    height: auto;
+  }
+}

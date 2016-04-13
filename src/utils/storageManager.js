@@ -1,17 +1,24 @@
+/**
+ * This module bridges the application to the local storage. It provides
+ * several convenient APIs to access or set the user data on the local
+ * storage.
+ */
+
+/* this the key for accessing application data from the local storage */
 var key = "meet_up_event_planner";
 
-var prefix = "meet_up_event_planner-";
-var userProfilesKey = prefix + "user-profiles";
-
+/* initialize this module  */
 var storageManager = {};
 
+/* this is the data for trail user */
 var trialUserData = {
   uid: "trial",
   name: "Trial User",
-  password: "123456789",
+  password: "",
   eventList: require("../misc/preloadedEvents.js")
 };
 
+/* this is the template for user data */
 var templateUserData = {
   uid: "",
   name: "",
@@ -19,6 +26,7 @@ var templateUserData = {
   eventList: []
 };
 
+/* this is the user data setter */
 storageManager.setUserData = function(userData) {
   var data = {};
   var rawData = localStorage.getItem(key); 
@@ -29,6 +37,7 @@ storageManager.setUserData = function(userData) {
   localStorage.setItem(key, JSON.stringify(data));
 };
 
+/* this is the user data getter */
 storageManager.getUserData = function(uid) {
   var rawData = localStorage.getItem(key); 
   if (!rawData) {
@@ -38,10 +47,12 @@ storageManager.getUserData = function(uid) {
   return data[uid];
 };
 
+/* initalize the application data on the local storage */
 storageManager.init = function(preloadedEvents) {
   storageManager.setUserData(trialUserData);
   storageManager.setUserData({uid: "root", password: "1111"});
 };
 
+/* export the module */
 module.exports = storageManager;
 

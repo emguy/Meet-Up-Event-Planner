@@ -1,0 +1,22 @@
+@mixin rounded-corner-all($radius: 10px) {
+  border-radius: $radius;
+  -moz-border-radius: $radius;
+  -webkit-border-radius: $radius;
+}
+
+@mixin box-full-screen() {
+  position: fixed;
+  top:0;
+  right:0;
+  width: 100%;
+  height: 100%;
+}
+
+@mixin box-center() {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+}
