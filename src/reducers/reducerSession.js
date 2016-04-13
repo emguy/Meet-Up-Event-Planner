@@ -29,17 +29,32 @@ var storageManager = require("../utils/storageManager.js");
  *   |
  */
 
+var defaultInputs = {
+  inputUid: "",
+  inputPassword: "",
+  inputEventName: "",
+  inputEventLocation: "",
+  inputEventType: "",
+  inputEventStartTime: "",
+  inputEventEndTime: "",
+  inputEventHost: "",
+  inputEventGuests: "",
+  inputEventMemo: ""
+};
+
 var defaultState = {
   loginStatus: 0, 
   userProfile: null, 
   eventList: [],
-  loginResponse: "",
-  inputUid: "",
-  inputPassword: ""
+  inputResponse: "",
+  loginResponse: ""
 };
 
+Object.assign(defaultState, defaultInputs);
+
 var mask = {
-  loginResponse: "",
+  inputResponse: "",
+  loginResponse: ""
 };
 
 var doLogin = function(uid) {
@@ -69,13 +84,11 @@ var reducer = function(state, action) {
       }
       return state;
 
-
     case "LOGIN_AS_TRIAL_USER": 
       if (!state.loginStatus || state.loginStatus !== 1) {
         return doLogin("trial");
       }
       return state;
-
 
     case "DO_LOGOUT":
       if (state.loginStatus && state.loginStatus === 1) {
@@ -83,14 +96,39 @@ var reducer = function(state, action) {
       }
       return state;
 
-
     case "CAPTURE_LOGIN_UID":
       return Object.assign({}, state, {inputUid: action.operand});
-
 
     case "CAPTURE_LOGIN_PASSWORD":
       return Object.assign({}, state, {inputPassword: action.operand});
 
+    case "CAPTURE_EVENT_NAME":
+      console.log(action.operand);
+      return Object.assign({}, state, {inputEventName: action.operand});
+
+    case "CAPTURE_EVENT_LOCATION":
+      return Object.assign({}, state, {inputEventLocation: action.operand});
+
+    case "CAPTURE_EVENT_TYPE":
+      return Object.assign({}, state, {inputEventType: action.operand});
+
+    case "CAPTURE_EVENT_STARTTIME":
+      return Object.assign({}, state, {inputEventStartTime: action.operand});
+
+    case "CAPTURE_EVENT_ENDTIME":
+      return Object.assign({}, state, {inputEventEndTime: action.operand});
+
+    case "CAPTURE_EVENT_HOST":
+      return Object.assign({}, state, {inputEventHost: action.operand});
+
+    case "CAPTURE_EVENT_GUESTS":
+      return Object.assign({}, state, {inputEventGuests: action.operand});
+
+    case "CAPTURE_EVENT_MEMO":
+      return Object.assign({}, state, {inputEventMemo: action.operand});
+
+    case "CLEAR_EVENT_FORM":
+      return Object.assign({}, state, defaultInputs);
 
     case "PROCESS_INPUT_LOGIN":
       var result = authenticationManager.authenticate(state.inputUid, state.inputPassword);
@@ -99,6 +137,9 @@ var reducer = function(state, action) {
       }
       return doLogin(state.inputUid);
 
+    case "PROCESS_NEW_EVENT":
+      console.log(state);
+      return Object.assign({}, state, {inputResponse: state.inputEventName});
 
     default:
       return state || defaultState;

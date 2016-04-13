@@ -22,14 +22,8 @@ var reducerSession = require("./reducerSession.js")
  *   |   |--activeEvent (number)
  *   |   |
  *   |   |--showNavMenu (boolean)
- *   |
- *   |-inputs
  *   |   |
- *   |   |-login
- *   |   |  |
- *   |   |  |--uid
- *   |   |  |
- *   |   |  |--passWord
+ *   |   |--showAdvancedEventForm (boolean)
  *   |   |
  */
 

@@ -30,9 +30,18 @@ var hideNavMenu = function() {
   return { type: "HIDE_NAVMENU", operand: undefined };
 };
 
+/** 
+ * toggle the advanced event form
+ */
+var toggleAdvancedEventForm = function() {
+  return { type: "TOGGLE_ADVANCED_EVENT_FORM", operand: undefined };
+};
+
+
 /* export the action creation functions */
 module.exports.setActiveEvent = setActiveEvent;
 module.exports.unsetActiveEvent = unsetActiveEvent;
 module.exports.unhideNavMenu = unhideNavMenu;
 module.exports.hideNavMenu = hideNavMenu;
+module.exports.toggleAdvancedEventForm = toggleAdvancedEventForm;
 

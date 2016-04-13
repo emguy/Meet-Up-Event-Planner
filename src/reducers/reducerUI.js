@@ -1,8 +1,13 @@
-var actionsUI = require("../actions/actionsUI.js")
-
 /**
  * This is the reducer function
  */
+
+var defaultState = {
+  activeEvent: -1,
+  showNavMenu: false,
+  showAdvancedEventForm: false
+};
+
 var reducerUI = function(state, action) {
   switch (action.type) {
 
@@ -33,8 +38,16 @@ var reducerUI = function(state, action) {
         return Object.assign({}, state, {activeEvent: -1});
       }
       return state;
+
+    /* toggle the advanced event form  */
+    case "TOGGLE_ADVANCED_EVENT_FORM":
+      if (state.showAdvancedEventForm) {
+        return Object.assign({}, state, {showAdvancedEventForm: false});
+      } else {
+        return Object.assign({}, state, {showAdvancedEventForm: true});
+      }
     default: 
-      return state || Object.assign({}, state, {activeEvent: -1}, {showNavMenu: false});
+      return state || defaultState;
   }
 }
 

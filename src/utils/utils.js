@@ -1,6 +1,5 @@
 /*
  * Here are some functions that might be useful.
- *
  */
 
 var utils = {};
