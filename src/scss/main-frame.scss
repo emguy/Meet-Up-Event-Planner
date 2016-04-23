@@ -14,7 +14,6 @@ main {
   height: 120px;
 
   h1 {
-    width: 400px;
     position: absolute;
     left: 20px;
     bottom: 25px;
@@ -29,9 +28,10 @@ main {
 }
 
 #menu-button {
-  position: absolute;
-  right: 20px;
-  top: 56px;
+  position: fixed;
+  background-color: $header-bg;
+  right: 0px;
+  top: 10px;
   z-index:1;
 }
 
