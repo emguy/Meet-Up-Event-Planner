@@ -26,13 +26,12 @@ html, body {
 
 #root {
   font: 100%  $my-sans-font;
-  border: 1px red dashed;
+  height: 100%;
 }
 
 .container {
   position: relative;
-  min-height: 100% !important;
-  border: 3px red dotted;
+  min-height: 100%;
 }
 
 .small-text {

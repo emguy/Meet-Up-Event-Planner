@@ -7,6 +7,11 @@ main {
   }
 }
 
+footer {
+  position: absolute; // footer hack
+  bottom: 0; // footer hack
+}
+
 #header-content {
   position: relative;
   width: 100%;
@@ -60,16 +65,8 @@ main {
   }
 }
 
-footer {
-  //position: absolute; // footer hack
-  //bottom: 0; // footer hack
-  //width: 100%;
-}
 
 #footer-content {
-  //position: absolute; // footer hack
-  //bottom: 0; // footer hack
-  //width: 100%;
   background-color: $footer-bg;
   min-height: 220px;
   padding: 20px 5px 20px 20px;
