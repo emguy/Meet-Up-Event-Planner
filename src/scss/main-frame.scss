@@ -60,10 +60,16 @@ main {
   }
 }
 
+footer {
+  //position: absolute; // footer hack
+  //bottom: 0; // footer hack
+  //width: 100%;
+}
+
 #footer-content {
-  position: absolute; // footer hack
-  bottom: 0; // footer hack
-  width: 100%;
+  //position: absolute; // footer hack
+  //bottom: 0; // footer hack
+  //width: 100%;
   background-color: $footer-bg;
   min-height: 220px;
   padding: 20px 5px 20px 20px;
@@ -96,3 +102,4 @@ main {
     }
   }
 }
+

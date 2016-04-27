@@ -21,15 +21,18 @@ ul {
 
 html, body {
   color: $primary-fg;
+  height: 100%;
 }
 
 #root {
   font: 100%  $my-sans-font;
+  border: 1px red dashed;
 }
 
 .container {
   position: relative;
-  min-height: 100%;
+  min-height: 100% !important;
+  border: 3px red dotted;
 }
 
 .small-text {
