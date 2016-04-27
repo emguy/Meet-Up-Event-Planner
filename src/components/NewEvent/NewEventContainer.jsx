@@ -13,8 +13,10 @@ var Button = require("../../ui/Button.jsx");
  */
 var EventCreator = React.createClass({
   Prototypes: {
+    formPageNumber: React.PropTypes.number.isRequired,
+    incFormPageNumber: React.PropTypes.func.isRequired,
+    decFormPageNumber: React.PropTypes.func.isRequired,
     inputResponse: React.PropTypes.string.isRequired,
-    showAdvancedEventForm: React.PropTypes.bool.isRequired,
     isLoggedIn: React.PropTypes.bool.isRequired,
     captureEventName: React.PropTypes.func.isRequired,
     captureEventLocation: React.PropTypes.func.isRequired,
@@ -37,7 +39,15 @@ var EventCreator = React.createClass({
   /* the render method */
   render: function() {
     var currentTime = new Date().toISOString().slice(0, -1);
-    var essential = (
+
+    var formTitle = [];
+    formTitle[0] = "New Event (Title)";
+    formTitle[1] = "New Event (Date and Time)";
+    formTitle[2] = "New Event (Host and Guests)";
+    formTitle[3] = "New Event (Additional Infomation)";
+
+    var page = [];
+    page[0] = (
       <div>
         <label for="input-event-name">
           <span> Event name:</span>
@@ -54,6 +64,10 @@ var EventCreator = React.createClass({
           <input id="input-event-location" type="text" placeholder="113 Cherry St., Seattle, WA 98104"
             onChange={this.props.captureEventLocation} />
         </label>
+      </div>
+    );
+    page[1] = (
+      <div>
         <label for="input-event-date">
           <span> Date:</span>
           <input id="input-event-date" type="date"
@@ -61,64 +75,87 @@ var EventCreator = React.createClass({
         </label>
         <label for="input-event-starttime" className="label-time">
           <span> Start time:</span>
-          <input id="start-time" className="input-time" type="time"
+          <input id="input-event-starttime" className="input-time" type="time"
             onChange={this.props.captureEventStartTime} />
-          <input id="end-time" className="input-time" type="time"
+        </label>
+        <label for="input-event-endtime" className="label-time">
+          <span> End time:</span>
+          <input id="input-event-endtime" className="input-time" type="time"
             onChange={this.props.captureEventStartTime} />
         </label>
       </div>
     );
-    var optional;
-    if (this.props.showAdvancedEventForm) {
-      optional = (
-        <div>
-          <hr/> <br/>
-          <label duration for="input-duration">
-            <span> End time:</span>
-            <input id="input-event-endtime" type="datetime-local" value={currentTime}
-              onChange={this.props.captureEventEndTime} />
-          </label>
-          <label for="input-event-host">
-            <span> Host:</span>
-            <input id="input-event-host" type="text" placeholder="Bob"
-              onChange={this.props.captureEventHost} />
-          </label>
-          <label for="input-event-guests">
-            <span> Guest list:</span>
-            <input id="input-event-guests" type="text" placeholder="Bill, Tim, Ryan"
-              onChange={this.props.captureEventGuests} />
-          </label>
-          <label for="input-event-memo">
-            <span> Memo:</span>
-            <input id="input-event-memo" type="text" placeholder="prepare a gift"
-              onChange={this.props.captureEventMemo} />
-          </label>
-        </div>
-      );
-    }
+    page[2] = (
+      <div>
+        <label for="input-event-host">
+          <span> Host:</span>
+          <input id="input-event-host" type="text" placeholder="Bob"
+            onChange={this.props.captureEventHost} />
+        </label>
+        <label for="input-event-guests">
+          <span> Guest list:</span>
+          <input id="input-event-guests" type="text" placeholder="Bill, Tim, Ryan"
+            onChange={this.props.captureEventGuests} />
+        </label>
+      </div>
+    );
+    page[3] = (
+      <div>
+        <label for="input-event-additional">
+          <span> Additional Infomation:</span>
+          <input id="input-event-host" type="textbox" placeholder="Bob"
+            onChange={this.props.captureEventMemo} />
+        </label>
+      </div>
+    );
+
+    var controlButtons = [];
+
+    controlButtons[0] = (
+      <div className="form-button-list">
+        <Button className="form-button" action={this.props.incPageNumber}> Next </Button>
+        <Button className="form-button" action={"/events"}> Cancel </Button>
+      </div>
+    );
+
+    controlButtons[1] = (
+      <div className="form-button-list">
+        <Button className="form-button" action={this.props.decPageNumber}> Prev </Button>
+        <Button className="form-button" action={this.props.incPageNumber}> Next </Button>
+        <Button className="form-button" action={"/events"}> Cancel </Button>
+      </div>
+    );
+
+    controlButtons[2] = (
+      <div className="form-button-list">
+        <Button className="form-button" action={this.props.decPageNumber}> Prev </Button>
+        <Button className="form-button" action={this.props.processNewEvent}> Finish </Button>
+        <Button className="form-button" action={this.props.incPageNumber}> Optional </Button>
+        <Button className="form-button" action={"/events"}> Cancel </Button>
+      </div>
+    );
+
+    controlButtons[3] = (
+      <div className="form-button-list">
+        <Button className="form-button" action={this.props.decPageNumber}> Prev </Button>
+        <Button className="form-button" action={this.props.processNewEvent}> Finish </Button>
+        <Button className="form-button" action={"/events"}> Cancel </Button>
+      </div>
+    );
+
     return (
       <form>
         <h4>
-          New Event
+          {formTitle[this.props.formPageNumber]}
         </h4>
 
         <div id="head-system-message" className="small-text">
           {this.props.inputResponse}
         </div>
 
-        {essential}
-        {optional}
+        {page[this.props.formPageNumber]}
 
-        <label id="show-advanced-checkbox" for="show-advanced">
-          <input type="checkbox" id="show-advanced" checked={this.props.showAdvancedEventForm} 
-            onClick={this.props.toggleAdvancedEventForm} />
-          <span> Show advanced form (optional) </span>
-        </label>
-
-        <div className="form-button-list">
-          <Button className="form-button" action={this.props.processNewEvent}> Update </Button>
-          <Button className="form-button" action={"/events"}> Cancel </Button>
-        </div>
+        {controlButtons[this.props.formPageNumber]}
 
       </form>
     );
@@ -127,16 +164,19 @@ var EventCreator = React.createClass({
 
 var mapStateToProps = function(state, ownProps) {
   return {
+    formPageNumber: state.session.formPageNumber,
     inputResponse: state.session.inputResponse,
-    isLoggedIn: state.session.loginStatus === 1,
-    showAdvancedEventForm: state.ui.showAdvancedEventForm
+    isLoggedIn: state.session.loginStatus === 1
   };
 };
 
 var mapDispatchToProps = function(dispatch, ownProps) {
   return {
-    toggleAdvancedEventForm: function() {
-      return dispatch(actionsUI.toggleAdvancedEventForm());
+    incPageNumber: function() {
+      return dispatch(actionsUI.incFormPageNumber());
+    },
+    decPageNumber: function() {
+      return dispatch(actionsUI.decFormPageNumber());
     },
     captureEventName: function(e) {
       return dispatch(actionsInput.captureEventName(e.target.value));

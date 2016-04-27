@@ -33,6 +33,7 @@ var objectAssign = require("../utils/utils.js").objectAssign;
  */
 
 var defaultInputs = {
+  formPageNumber: 1,
   inputUid: "",
   inputPassword: "",
   inputEventName: "",
@@ -140,6 +141,15 @@ var reducer = function(state, action) {
         return objectAssign({}, state, {loginResponse: authenticationManager.messages[result]});
       }
       return doLogin(state.inputUid);
+
+    case "SET_FORM_PAGE_NUMBER":
+      return objectAssign({}, state, {formPageNumber: action.operand});
+
+    case "INC_FORM_PAGE_NUMBER":
+      return objectAssign({}, state, {formPageNumber: state.formPageNumber + 1});
+
+    case "DEC_FORM_PAGE_NUMBER":
+      return objectAssign({}, state, {formPageNumber: state.formPageNumber - 1});
 
     case "PROCESS_NEW_EVENT":
       console.log(state);

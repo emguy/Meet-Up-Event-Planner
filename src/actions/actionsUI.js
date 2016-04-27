@@ -31,17 +31,32 @@ var hideNavMenu = function() {
 };
 
 /** 
- * toggle the advanced event form
+ * set the page number of the form
  */
-var toggleAdvancedEventForm = function() {
-  return { type: "TOGGLE_ADVANCED_EVENT_FORM", operand: undefined };
+var setFormPageNumber = function(pageNumber) {
+  return { type: "SET_FORM_PAGE_NUMBER", operand: pageNumber };
 };
 
+/** 
+ * inc the page number of the form
+ */
+var incFormPageNumber = function() {
+  return { type: "INC_FORM_PAGE_NUMBER", operand: undefined };
+};
+
+/** 
+ * dec the page number of the form
+ */
+var decFormPageNumber = function() {
+  return { type: "DEC_FORM_PAGE_NUMBER", operand: undefined };
+};
 
 /* export the action creation functions */
 module.exports.setActiveEvent = setActiveEvent;
 module.exports.unsetActiveEvent = unsetActiveEvent;
 module.exports.unhideNavMenu = unhideNavMenu;
 module.exports.hideNavMenu = hideNavMenu;
-module.exports.toggleAdvancedEventForm = toggleAdvancedEventForm;
+module.exports.setFormPageNumber = setFormPageNumber;
+module.exports.incFormPageNumber = incFormPageNumber;
+module.exports.decFormPageNumber = decFormPageNumber;
 

@@ -25,6 +25,7 @@ var reducerSession = require("./reducerSession.js")
  *   |   |
  *   |   |--showAdvancedEventForm (boolean)
  *   |   |
+ *   |   |--newEventFormPageNumber (number)
  */
 
 /* this is required by the middleware */

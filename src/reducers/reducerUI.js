@@ -7,7 +7,7 @@ var objectAssign = require("../utils/utils.js").objectAssign;
 var defaultState = {
   activeEvent: -1,
   showNavMenu: false,
-  showAdvancedEventForm: false
+  showAdvancedEventForm: false,
 };
 
 var reducerUI = function(state, action) {
@@ -48,6 +48,7 @@ var reducerUI = function(state, action) {
       } else {
         return objectAssign({}, state, {showAdvancedEventForm: true});
       }
+
     default: 
       return state || defaultState;
   }
