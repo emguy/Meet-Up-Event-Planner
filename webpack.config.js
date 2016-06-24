@@ -29,12 +29,12 @@ module.exports = {
   //  new webpack.optimize.UglifyJsPlugin({ sourceMap: false })
   //],
 
-  resolve: {
-    root: ["/opt/npm/lib/node_modules"]
-  },
+  //resolve: {
+  //  root: ["/opt/npm/lib/node_modules"]
+  //},
 
-  resolveLoader: {
-    modulesDirectories: ["/opt/npm/lib/node_modules"]
-  }
+  //resolveLoader: {
+  //  modulesDirectories: ["/opt/npm/lib/node_modules"]
+  //}
 
 };
