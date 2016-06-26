@@ -1,9 +1,9 @@
-var React = require("react");
-var Router = require("react-router");
-var Button = require("../../ui/Button.jsx");
-var ReactRedux = require("react-redux");
-var actionsSession = require("../../actions/actionsSession.js");
-var actionsInput = require("../../actions/actionsInput.js");
+var React = require('react');
+var Router = require('react-router');
+var Button = require('../../ui/Button.jsx');
+var ReactRedux = require('react-redux');
+var actionsSession = require('../../actions/actionsSession.js');
+var actionsInput = require('../../actions/actionsInput.js');
 
 
 /**
@@ -32,7 +32,7 @@ var Login = React.createClass({
   /* if logedin, redirect to the event-list */
   componentWillReceiveProps: function(nextProps) {
     if (!this.props.isLoggedIn && nextProps.isLoggedIn) {
-      Router.browserHistory.push("/events");
+      Router.browserHistory.push('/events');
     }
   },
 
@@ -46,30 +46,30 @@ var Login = React.createClass({
             User login
           </h4>
 
-          <div id="head-system-message" className="small-text">
+          <div id='head-system-message' className='small-text'>
             {this.props.loginResponse}
           </div>
 
-          <label for="user-id"> 
+          <label for='user-id'> 
             <span> User Id:</span> 
-            <input type="text" id="user-id" onChange={this.props.captureUid} placeholder=""></input>
+            <input type='text' id='user-id' onChange={this.props.captureUid} placeholder=''></input>
           </label>
 
           <br/>
 
-          <label for="password"> 
+          <label for='password'> 
             <span>Password:</span> 
-            <input type="password" id="password" onChange={this.props.capturePassword} placeholder=""></input>
+            <input type='password' id='password' onChange={this.props.capturePassword} placeholder=''></input>
           </label>
 
-          <div className="form-button-list">
-            <Button className="form-button" action={this.props.processUserInputs}> login </Button>
-            <Button className="form-button"> Register </Button>
-            <Button className="form-button" action={this.props.loginAsTrialUser}> Try </Button>
+          <div className='form-button-list'>
+            <Button className='form-button' action={this.props.processUserInputs}> login </Button>
+            <Button className='form-button' action={'/register'}> Register </Button>
+            <Button className='form-button' action={this.props.loginAsTrialUser}> Try </Button>
           </div>
 
-          <p className="small-text">
-            Note: click <span className="dummy-button">&nbsp;Try&nbsp;</span> to login as a trial user.
+          <p className='small-text'>
+            Note: click <span className='dummy-button'>&nbsp;Try&nbsp;</span> to login as a trial user.
           </p>
 
         </form>

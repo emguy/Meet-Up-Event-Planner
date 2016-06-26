@@ -21,7 +21,7 @@ authenticationManager.authenticate = function(uid, password) {
   return 0;
 };
 
-/* the are the interpretations of the returned value */
+/* they are the interpretations of the returned value */
 authenticationManager.messages = [
   "Passed the authentication.",
   "Bad user name.",

@@ -5,25 +5,32 @@
   "main": "src/index.jsx",
   "scripts": {
     "start": "webpack-dev-server --host '192.168.1.3' --inline --history-api-fallback",
-    "build": "webpack ./webpack.config.js"
+    "pack": "webpack ./webpack_prod.config.js"
   },
   "author": "Yu Zhang",
   "license": "ISC",
   "dependencies": {
-    "react-redux": "^4.4.5"
-  },
-  "devDependencies": {
-    "redux": "^3.5.2",
-    "node-sass": "",
-    "sass-loader": "",
     "babel-loader": "^6.2.2",
     "babel-preset-es2015": "^6.5.0",
     "babel-preset-react": "^6.5.0",
+    "css": "^2.2.1",
+    "css-loader": "^0.23.1",
+    "file-loader": "^0.9.0",
+    "fs": "0.0.2",
+    "json-loader": "^0.5.4",
+    "node-sass": "",
     "object-assign": "^4.0.1",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
+    "react-redux": "^4.4.5",
     "react-router": "^2.0.0",
+    "redux": "^3.5.2",
+    "sass-loader": "",
+    "style": "0.0.3",
+    "style-loader": "^0.13.1",
     "webpack": "^1.12.13",
     "webpack-dev-server": "^1.14.1"
+  },
+  "devDependencies": {
   }
 }

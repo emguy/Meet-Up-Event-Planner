@@ -36,6 +36,10 @@ var defaultInputs = {
   formPageNumber: 1,
   inputUid: "",
   inputPassword: "",
+  inputRegUid: "",
+  inputRegPassword1: "",
+  inputRegPassword2: "",
+  inputRegEmail: "",
   inputEventName: "",
   inputEventLocation: "",
   inputEventType: "",
@@ -71,7 +75,7 @@ var doLogin = function(uid) {
   var eventList = userData.eventList;
   delete userData.eventList;
   var newState = objectAssign({}, defaultState, {loginStatus: 1, userProfile: userData,  eventList: eventList});
-  /* here we index each event entry */
+  /* here we uniquely index each event entry */
   newState.eventList.forEach(function(item, index) {
     item.key = Date.now() - index * 3;
   });

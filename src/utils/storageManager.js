@@ -40,6 +40,14 @@ storageManager.setUserData = function(userData) {
   localStorage.setItem(key, JSON.stringify(data));
 };
 
+/* this is for inserting new user; it will reset the 
+ * user data if this user is already exist 
+ */
+storageManager.addNewUser = function(_uid, _password) {
+  data[userData.uid] = objectAssign({}, templateUserData, {uid: _uid, password: _password});
+  localStorage.setItem(key, JSON.stringify(data));
+};
+
 /* this is the user data getter */
 storageManager.getUserData = function(uid) {
   var rawData = localStorage.getItem(key); 
