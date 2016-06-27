@@ -49,17 +49,17 @@ var EventCreator = React.createClass({
     var page = [];
     page[0] = (
       <div>
-        <label for="input-event-name">
+        <label htmlFor="input-event-name">
           <span> Event name:</span>
           <input id="input-event-name" type="text" placeholder="Bob's birthday party" 
             onChange={this.props.captureEventName}/>
         </label>
-        <label for="input-event-type">
+        <label htmlFor="input-event-type">
           <span> Type:</span>
           <input id="input-event-type" type="text" placeholder="Birthday party"
             onChange={this.props.captureEventType} />
         </label>
-        <label for="input-event-location">
+        <label htmlFor="input-event-location">
           <span> Location:</span>
           <input id="input-event-location" type="text" placeholder="113 Cherry St., Seattle, WA 98104"
             onChange={this.props.captureEventLocation} />
@@ -68,17 +68,17 @@ var EventCreator = React.createClass({
     );
     page[1] = (
       <div>
-        <label for="input-event-date">
+        <label htmlFor="input-event-date">
           <span> Date:</span>
           <input id="input-event-date" type="date"
             onChange={this.props.captureEventStartTime} />
         </label>
-        <label for="input-event-starttime" className="label-time">
+        <label htmlFor="input-event-starttime" className="label-time">
           <span> Start time:</span>
           <input id="input-event-starttime" className="input-time" type="time"
             onChange={this.props.captureEventStartTime} />
         </label>
-        <label for="input-event-endtime" className="label-time">
+        <label htmlFor="input-event-endtime" className="label-time">
           <span> End time:</span>
           <input id="input-event-endtime" className="input-time" type="time"
             onChange={this.props.captureEventStartTime} />
@@ -87,12 +87,12 @@ var EventCreator = React.createClass({
     );
     page[2] = (
       <div>
-        <label for="input-event-host">
+        <label htmlFor="input-event-host">
           <span> Host:</span>
           <input id="input-event-host" type="text" placeholder="Bob"
             onChange={this.props.captureEventHost} />
         </label>
-        <label for="input-event-guests">
+        <label htmlFor="input-event-guests">
           <span> Guest list:</span>
           <input id="input-event-guests" type="text" placeholder="Bill, Tim, Ryan"
             onChange={this.props.captureEventGuests} />
@@ -101,7 +101,7 @@ var EventCreator = React.createClass({
     );
     page[3] = (
       <div>
-        <label for="input-event-additional">
+        <label htmlFor="input-event-additional">
           <span> Additional Infomation:</span>
           <input id="input-event-host" type="textbox" placeholder="Bob"
             onChange={this.props.captureEventMemo} />

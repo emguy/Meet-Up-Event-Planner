@@ -174,7 +174,7 @@ var reducer = function(state, action) {
       var result = registrationManager.validatePassword(action.operand, state.inputRegPassword2);
       console.log(result);
       console.log(action.operand);
-      if (result !== 0 && result !== 1 && result !== 6 && result !== 7) {
+      if (result !== 0 && result !== 1 && result < 6) {
         return objectAssign({}, state, {inputRegPassword1: action.operand}, {systemResponse: registrationManager.passwordMessages[result]});
       }
       return objectAssign({}, state, {systemResponse: ''}, {inputRegPassword1: action.operand});

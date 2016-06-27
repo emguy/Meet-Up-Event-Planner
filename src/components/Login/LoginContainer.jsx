@@ -50,14 +50,14 @@ var Login = React.createClass({
             {this.props.loginResponse}
           </div>
 
-          <label for='user-id'> 
+          <label htmlFor='user-id'> 
             <span> User Id:</span> 
             <input type='text' id='user-id' onChange={this.props.captureUid} placeholder=''></input>
           </label>
 
           <br/>
 
-          <label for='password'> 
+          <label htmlFor='password'> 
             <span>Password:</span> 
             <input type='password' id='password' onChange={this.props.capturePassword} placeholder=''></input>
           </label>

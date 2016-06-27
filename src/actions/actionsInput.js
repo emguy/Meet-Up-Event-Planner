@@ -96,6 +96,42 @@ var captureEventMemo = function(userInput) {
   return { type: "CAPTURE_EVENT_MEMO", operand: userInput };
 };
 
+/** 
+ * store the content of the input box for the uid
+ *
+ * @arg key{string} the uid
+ */
+var captureRegUid = function(userInput) {
+  return { type: "CAPTURE_REG_UID", operand: userInput };
+};
+
+/** 
+ * store the content of the input box for the email
+ *
+ * @arg key{string} the email
+ */
+var captureRegEmail = function(userInput) {
+  return { type: "CAPTURE_REG_EMAIL", operand: userInput };
+};
+
+/** 
+ * store the content of the input box for the user password
+ *
+ * @arg key{string} the user password
+ */
+var captureRegPassword1 = function(userInput) {
+  return { type: "CAPTURE_REG_PASSWORD_1", operand: userInput };
+};
+
+/** 
+ * store the content of the input box for the password confirmation
+ *
+ * @arg key{string} the user password confirmation
+ */
+var captureRegPassword2 = function(userInput) {
+  return { type: "CAPTURE_REG_PASSWORD_2", operand: userInput };
+};
+
 /**
  * process user new event input
  *
@@ -111,8 +147,6 @@ var processNewEvent = function() {
 var clearEventForm = function() {
   return { type: "CLEAR_EVENT_FORM", operand: undefined };
 }
-
-
 
 /* export the action creation functions */
 module.exports.captureLoginUid = captureLoginUid;
@@ -130,3 +164,9 @@ module.exports.captureEventMemo = captureEventMemo;
 module.exports.processInputLogin = processInputLogin;
 module.exports.processNewEvent = processNewEvent;
 module.exports.clearEventForm = clearEventForm;
+
+module.exports.captureRegUid = captureRegUid;
+module.exports.captureRegEmail = captureRegEmail;
+module.exports.captureRegPassword1 = captureRegPassword1;
+module.exports.captureRegPassword2 = captureRegPassword2;
+
