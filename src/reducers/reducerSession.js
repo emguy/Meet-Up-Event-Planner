@@ -48,25 +48,20 @@ var defaultInputs = {
   inputEventEndTime: '',
   inputEventHost: '',
   inputEventGuests: '',
-  inputEventMemo: ''
+  inputEventMemo: '',
+  inputResponse: ''
 };
 
 var defaultState = {
   loginStatus: 0, 
   userProfile: null, 
   eventList: [],
-  inputResponse: '',
-  loginResponse: '',
 };
 
 defaultState = objectAssign(defaultState, defaultInputs);
 
 var mask = {
   inputResponse: '',
-  loginResponse: '',
-  uidResponse: '',
-  passwordResponse: '',
-  emailResponse: ''
 };
 
 var doLogin = function(uid) {
@@ -146,7 +141,7 @@ var reducer = function(state, action) {
     case 'PROCESS_INPUT_LOGIN':
       var result = authenticationManager.authenticate(state.inputUid, state.inputPassword);
       if (result !== 0) {
-        return objectAssign({}, state, {loginResponse: authenticationManager.messages[result]});
+        return objectAssign({}, state, {inputResponse: authenticationManager.messages[result]});
       }
       return doLogin(state.inputUid);
 
@@ -172,8 +167,6 @@ var reducer = function(state, action) {
 
     case 'CAPTURE_REG_PASSWORD_1':
       var result = registrationManager.validatePassword(action.operand, state.inputRegPassword2);
-      console.log(result);
-      console.log(action.operand);
       if (result !== 0 && result !== 1 && result !== 6 && result !== 7) {
         return objectAssign({}, state, {inputRegPassword1: action.operand}, {systemResponse: registrationManager.passwordMessages[result]});
       }
@@ -192,6 +185,22 @@ var reducer = function(state, action) {
         return objectAssign({}, state, {inputRegEmail: action.operand}, {systemResponse: registrationManager.emailMessages[result]});
       }
       return objectAssign({}, state, {systemResponse: ''}, {inputRegEmail: action.operand});
+
+    case 'DO_REGISTRATION':
+      var result = registrationManager.validateUid(state.inputRegUid);
+      if (result !== 0) {
+        return objectAssign({}, state, {inputRegUid: state.inputRegUid}, {systemResponse: registrationManager.uidMessages[result]});
+      }
+      result = registrationManager.validatePassword(state.inputRegPassword1, state.inputRegPassword2);
+      if (result !== 0) {
+        return objectAssign({}, state, {inputRegPassword1: state.inputRegPassword1}, {systemResponse: registrationManager.passwordMessages[result]});
+      }
+      result = registrationManager.validateEmail(state.inputRegEmail);
+      if (result !== 0) {
+        return objectAssign({}, state, {inputRegEmail: action.operand}, {systemResponse: registrationManager.emailMessages[result]});
+      }
+      storageManager.addNewUser(state.inputRegUid, state.inputRegPassword1, state.inputRegEmail);
+      return doLogin(state.inputRegUid);
 
     default:
       return state || defaultState;

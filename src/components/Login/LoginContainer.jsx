@@ -11,7 +11,7 @@ var actionsInput = require('../../actions/actionsInput.js');
  * valid user id and the password.
  *
  * @prop isLoggedIn{boolean} current login status
- * @prop loginResponse{string/number} the system response on user inputs
+ * @prop systemResponse{string/number} the system response on user inputs
  * @prop captureUid{function} store the current User Name input
  * @prop capturePassword{function} store the current Password input
  * @prop processUserInput{function} processing authentication
@@ -22,7 +22,7 @@ var Login = React.createClass({
   /* it takes 6 props */
   Prototypes: {
     isLoggedIn: React.PropTypes.bool.isRequired,
-    loginResponse: React.PropTypes.string,
+    systemResponse: React.PropTypes.string,
     captureUid: React.PropTypes.func.isRequired,
     capturePassword: React.PropTypes.func.isRequired,
     processUserInput: React.PropTypes.func.isRequired,
@@ -47,7 +47,7 @@ var Login = React.createClass({
           </h4>
 
           <div id='head-system-message' className='small-text'>
-            {this.props.loginResponse}
+            {this.props.systemResponse}
           </div>
 
           <label htmlFor='user-id'> 
@@ -88,7 +88,7 @@ var Login = React.createClass({
  */
 var mapStateToProps = function(state, ownProps) {
   return {
-    loginResponse: state.session.loginResponse,
+    systemResponse: state.session.inputResponse,
     isLoggedIn: state.session.loginStatus === 1,
   };
 };

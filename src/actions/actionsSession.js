@@ -15,6 +15,13 @@ var doLogout = function() {
 };
 
 /** 
+ * perform the registration action
+ */
+var doRegistration = function() {
+  return { type: "DO_REGISTRATION", operand: undefined };
+};
+
+/** 
  * reset the current session using the provided data
  */
 var resetSession = function(data) {
@@ -24,5 +31,6 @@ var resetSession = function(data) {
 /* export the action creation functions */
 module.exports.loginAsTrialUser = loginAsTrialUser;
 module.exports.doLogout = doLogout;
+module.exports.doRegistration = doRegistration;
 module.exports.resetSession = resetSession;
 

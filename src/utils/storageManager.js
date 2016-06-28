@@ -17,6 +17,7 @@ var storageManager = {};
 var trialUserData = {
   uid: "trial",
   name: "Trial User",
+  email: "",
   password: "",
   eventList: require("../misc/preloadedEvents.js")
 };
@@ -25,6 +26,7 @@ var trialUserData = {
 var templateUserData = {
   uid: "",
   name: "",
+  email: "",
   password: "",
   eventList: []
 };
@@ -43,8 +45,13 @@ storageManager.setUserData = function(userData) {
 /* this is for inserting new user; it will reset the 
  * user data if this user is already exist 
  */
-storageManager.addNewUser = function(_uid, _password) {
-  data[userData.uid] = objectAssign({}, templateUserData, {uid: _uid, password: _password});
+storageManager.addNewUser = function(_uid, _password, _email) {
+  var data = {};
+  var rawData = localStorage.getItem(key); 
+  if (rawData) {
+    data = JSON.parse(rawData);
+  }
+  data[_uid] = objectAssign({}, templateUserData, {uid: _uid, password: _password, email: _email});
   localStorage.setItem(key, JSON.stringify(data));
 };
 

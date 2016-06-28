@@ -13,6 +13,7 @@ var Button = require('../../ui/Button.jsx');
  */
 var Regsterer = React.createClass({
   Prototypes: {
+    isLoggedIn: React.PropTypes.bool.isRequired,
     formUid: React.PropTypes.string.isRequired,
     formPassword: React.PropTypes.string.isRequired,
     formEmail: React.PropTypes.string.isRequired,
@@ -21,6 +22,7 @@ var Regsterer = React.createClass({
     captureRegPassword1: React.PropTypes.func.isRequired,
     captureRegPassword2: React.PropTypes.func.isRequired,
     captureRegEmail: React.PropTypes.func.isRequired,
+    doRegistration: React.PropTypes.func.isRequired
   },
 
   /* if logedin, redirect to the event-list */
@@ -34,7 +36,7 @@ var Regsterer = React.createClass({
   render: function() {
   var controlButtons = (
       <div className='form-button-list'>
-        <Button className='form-button'> Register </Button>
+        <Button className='form-button' action={this.props.doRegistration}> Register </Button>
         <Button className='form-button' action={'/'}> Cancel </Button>
       </div>
     );
@@ -79,6 +81,7 @@ var Regsterer = React.createClass({
 
 var mapStateToProps = function(state, ownProps) {
   return {
+    isLoggedIn: state.session.loginStatus === 1,
     inputResponse: state.session.systemResponse,
     formUid: state.session.inputRegUid,
     formPassword: state.session.inputRegPassword,
@@ -99,6 +102,9 @@ var mapDispatchToProps = function(dispatch, ownProps) {
     },
     captureRegPassword2: function(e) {
       return dispatch(actionsInput.captureRegPassword2(e.target.value));
+    },
+    doRegistration: function() {
+      return dispatch(actionsSession.doRegistration());
     }
   };
 };
