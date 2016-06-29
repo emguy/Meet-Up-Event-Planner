@@ -1,10 +1,10 @@
-var React = require("react");
-var Router = require("react-router");
-var ReactRedux = require("react-redux");
-var actionsSession = require("../../actions/actionsSession.js");
-var actionsUI = require("../../actions/actionsUI.js");
-var actionsInput = require("../../actions/actionsInput.js");
-var Button = require("../../ui/Button.jsx");
+var React = require('react');
+var Router = require('react-router');
+var ReactRedux = require('react-redux');
+var actionsSession = require('../../actions/actionsSession.js');
+var actionsUI = require('../../actions/actionsUI.js');
+var actionsInput = require('../../actions/actionsInput.js');
+var Button = require('../../ui/Button.jsx');
 
 /**
  * Here allows users to create new events by filling and submitting the form. 
@@ -18,6 +18,7 @@ var EventCreator = React.createClass({
     decFormPageNumber: React.PropTypes.func.isRequired,
     inputResponse: React.PropTypes.string.isRequired,
     isLoggedIn: React.PropTypes.bool.isRequired,
+
     captureEventName: React.PropTypes.func.isRequired,
     captureEventLocation: React.PropTypes.func.isRequired,
     captureEventType: React.PropTypes.func.isRequired,
@@ -26,13 +27,23 @@ var EventCreator = React.createClass({
     captureEventHost: React.PropTypes.func.isRequired,
     captureEventGuests: React.PropTypes.func.isRequired,
     captureEventMemo: React.PropTypes.func.isRequired,
-    processNewEvent: React.PropTypes.func.isRequired
+
+    processNewEvent: React.PropTypes.func.isRequired,
+
+    inputEventName: React.PropTypes.string.isRequired,
+    inputEventLocation: React.PropTypes.string.isRequired,
+    inputEventType: React.PropTypes.string.isRequired,
+    inputEventStartTime: React.PropTypes.string.isRequired,
+    inputEventEndTime: React.PropTypes.string.isRequired,
+    inputEventHost: React.PropTypes.string.isRequired,
+    inputEventGuests: React.PropTypes.string.isRequired,
+    inputEventMemo: React.PropTypes.string.isRequired,
   },
 
   /* if the user if not loggedin, redirect to the login page */
   componentWillMount: function() {
     if (!this.props.isLoggedIn) {
-      Router.browserHistory.push("/");
+      Router.browserHistory.push('/');
     }
   },
 
@@ -40,122 +51,191 @@ var EventCreator = React.createClass({
   render: function() {
     var currentTime = new Date().toISOString().slice(0, -1);
 
-    var formTitle = [];
-    formTitle[0] = "New Event (Title)";
-    formTitle[1] = "New Event (Date and Time)";
-    formTitle[2] = "New Event (Host and Guests)";
-    formTitle[3] = "New Event (Additional Infomation)";
+    var formTitle = 'New Event';
 
     var page = [];
-    page[0] = (
-      <div>
-        <label htmlFor="input-event-name">
-          <span> Event name:</span>
-          <input id="input-event-name" type="text" placeholder="Bob's birthday party" 
-            onChange={this.props.captureEventName}/>
-        </label>
-        <label htmlFor="input-event-type">
-          <span> Type:</span>
-          <input id="input-event-type" type="text" placeholder="Birthday party"
-            onChange={this.props.captureEventType} />
-        </label>
-        <label htmlFor="input-event-location">
-          <span> Location:</span>
-          <input id="input-event-location" type="text" placeholder="113 Cherry St., Seattle, WA 98104"
-            onChange={this.props.captureEventLocation} />
-        </label>
-      </div>
-    );
-    page[1] = (
-      <div>
-        <label htmlFor="input-event-date">
-          <span> Date:</span>
-          <input id="input-event-date" type="date"
-            onChange={this.props.captureEventStartTime} />
-        </label>
-        <label htmlFor="input-event-starttime" className="label-time">
-          <span> Start time:</span>
-          <input id="input-event-starttime" className="input-time" type="time"
-            onChange={this.props.captureEventStartTime} />
-        </label>
-        <label htmlFor="input-event-endtime" className="label-time">
-          <span> End time:</span>
-          <input id="input-event-endtime" className="input-time" type="time"
-            onChange={this.props.captureEventStartTime} />
-        </label>
-      </div>
-    );
-    page[2] = (
-      <div>
-        <label htmlFor="input-event-host">
-          <span> Host:</span>
-          <input id="input-event-host" type="text" placeholder="Bob"
-            onChange={this.props.captureEventHost} />
-        </label>
-        <label htmlFor="input-event-guests">
-          <span> Guest list:</span>
-          <input id="input-event-guests" type="text" placeholder="Bill, Tim, Ryan"
-            onChange={this.props.captureEventGuests} />
-        </label>
-      </div>
-    );
-    page[3] = (
-      <div>
-        <label htmlFor="input-event-additional">
-          <span> Additional Infomation:</span>
-          <input id="input-event-host" type="textbox" placeholder="Bob"
-            onChange={this.props.captureEventMemo} />
-        </label>
-      </div>
-    );
 
-    var controlButtons = [];
+    if (this.props.formPageNumber === 0) {
+      page[0] = (
+        <div>
+          <label htmlFor='input-event-name'>
+            <span> Event name: </span>
+            <input id='input-event-name' type='text' placeholder="Bob's birthday party" 
+              onChange={this.props.captureEventName} />
+          </label>
+          <label htmlFor='input-event-type'>
+            <span> Type: </span>
+            <input id='input-event-type' type='text' placeholder='Birthday party'
+              onChange={this.props.captureEventType} />
+          </label>
+          <label htmlFor='input-event-location'>
+            <span> Location: </span>
+            <input id='input-event-location' type='text' placeholder='113 Cherry St., Seattle, WA 98104'
+              onChange={this.props.captureEventLocation} />
+          </label>
+        </div>
+      ); 
+    } else {
+      page[0] = (
+        <div>
+          <div>
+            <span> Event name: </span>
+            <span> {this.props.inputEventName} </span>
+          </div>
+          <div>
+            <span> Type: </span>
+            <span> {this.props.inputEventType} </span>
+          </div>
+          <div>
+            <span> Location: </span>
+            <span> {this.props.inputEventLocation} </span>
+          </div>
+        </div>
+      ); 
+    }
 
-    controlButtons[0] = (
-      <div className="form-button-list">
-        <Button className="form-button" action={this.props.incPageNumber}> Next </Button>
-        <Button className="form-button" action={"/events"}> Cancel </Button>
-      </div>
-    );
+    if (this.props.formPageNumber === 1) {
+      page[1] = (
+        <div>
+          <hr />
+          <label htmlFor='input-event-date'>
+            <span> Date:</span>
+            <input id='input-event-date' type='date'
+              onChange={this.props.captureEventStartTime} />
+          </label>
+          <label htmlFor='input-event-starttime' className='label-time'>
+            <span> Start time:</span>
+            <input id='input-event-starttime' className='input-time' type='time'
+              onChange={this.props.captureEventStartTime} />
+          </label>
+          <label htmlFor='input-event-endtime' className='label-time'>
+            <span> End time:</span>
+            <input id='input-event-endtime' className='input-time' type='time'
+              onChange={this.props.captureEventStartTime} />
+          </label>
+        </div>
+      );
+    } else if (this.props.formPageNumber > 1) {
+      page[1] = (
+        <div>
+          <hr />
+          <div>
+            <span> Date: </span>
+            <span> {this.props.inputEventDate} </span>
+          </div>
+          <div>
+            <span> Start time: </span>
+            <span> {this.props.inputEventStartTime} </span>
+          </div>
+          <div>
+            <span> End time: </span>
+            <span> {this.props.inputEventEndTime} </span>
+          </div>
+        </div>
+      );
+    }
 
-    controlButtons[1] = (
-      <div className="form-button-list">
-        <Button className="form-button" action={this.props.decPageNumber}> Prev </Button>
-        <Button className="form-button" action={this.props.incPageNumber}> Next </Button>
-        <Button className="form-button" action={"/events"}> Cancel </Button>
-      </div>
-    );
+    if (this.props.formPageNumber === 2) {
+      page[2] = (
+        <div>
+          <hr />
+          <label htmlFor='input-event-host'>
+            <span> Host:</span>
+            <input id='input-event-host' type='text' placeholder='Bob'
+              onChange={this.props.captureEventHost}  readOnly={this.props.formPageNumber > 2}/>
+          </label>
+          <label htmlFor='input-event-guests'>
+            <span> Guest list:</span>
+            <input id='input-event-guests' type='text' placeholder='Bill, Tim, Ryan'
+              onChange={this.props.captureEventGuests}  readOnly={this.props.formPageNumber > 2}/>
+          </label>
+        </div>
+      );
+    } else if (this.props.formPageNumber > 2) {
+      page[2] = (
+        <div>
+          <hr />
+          <div>
+            <span> Host: </span>
+            <span> {this.props.inputEventHost} </span>
+          </div>
+          <div>
+            <span> Guest list: </span>
+            <span> {this.props.inputEventGuests} </span>
+          </div>
+        </div>
+      );
+    }
 
-    controlButtons[2] = (
-      <div className="form-button-list">
-        <Button className="form-button" action={this.props.decPageNumber}> Prev </Button>
-        <Button className="form-button" action={this.props.processNewEvent}> Finish </Button>
-        <Button className="form-button" action={this.props.incPageNumber}> Optional </Button>
-        <Button className="form-button" action={"/events"}> Cancel </Button>
-      </div>
-    );
+    if (this.props.formPageNumber > 2) {
+      page[3] = (
+        <div>
+          <hr />
+          <label htmlFor='input-event-additional'>
+            <span> Additional Infomation:</span>
+            <input id='input-event-host' type='textbox' placeholder='Bob'
+              onChange={this.props.captureEventMemo} />
+          </label>
+        </div>
+      );
+    }
 
-    controlButtons[3] = (
-      <div className="form-button-list">
-        <Button className="form-button" action={this.props.decPageNumber}> Prev </Button>
-        <Button className="form-button" action={this.props.processNewEvent}> Finish </Button>
-        <Button className="form-button" action={"/events"}> Cancel </Button>
-      </div>
-    );
+    var controlButtons;
+    switch(this.props.formPageNumber) {
+      case 0: 
+        controlButtons = (
+          <div className='form-button-list'>
+            <Button className='form-button' action={this.props.incPageNumber}> Next </Button>
+            <Button className='form-button' action={'/events'}> Cancel </Button>
+          </div>
+        );
+        break;
+      case 1: 
+        controlButtons = (
+          <div className='form-button-list'>
+            <Button className='form-button' action={this.props.decPageNumber}> Prev </Button>
+            <Button className='form-button' action={this.props.incPageNumber}> Next </Button>
+            <Button className='form-button' action={'/events'}> Cancel </Button>
+          </div>
+        );
+        break;
+      case 2: 
+        controlButtons = (
+          <div className='form-button-list'>
+            <Button className='form-button' action={this.props.decPageNumber}> Prev </Button>
+            <Button className='form-button' action={this.props.incPageNumber}> Next </Button>
+            <Button className='form-button' action={'/events'}> Cancel </Button>
+          </div>
+        );
+        break;
+      case 3: 
+        controlButtons = (
+          <div className='form-button-list'>
+            <Button className='form-button' action={this.props.decPageNumber}> Prev </Button>
+            <Button className='form-button' action={this.props.processNewEvent}> Finish </Button>
+            <Button className='form-button' action={'/events'}> Cancel </Button>
+          </div>
+        );
+        break;
+    }
+
 
     return (
       <form>
         <h4>
-          {formTitle[this.props.formPageNumber]}
+          {formTitle}
         </h4>
 
-        <div id="head-system-message" className="small-text">
+        <div id='head-system-message' className='small-text'>
           {this.props.inputResponse}
         </div>
 
-        {page[this.props.formPageNumber]}
+        {page[0]}
+        {page[1]}
+        {page[2]}
+        {page[3]}
 
-        {controlButtons[this.props.formPageNumber]}
+        {controlButtons}
 
       </form>
     );
@@ -166,7 +246,15 @@ var mapStateToProps = function(state, ownProps) {
   return {
     formPageNumber: state.session.formPageNumber,
     inputResponse: state.session.inputResponse,
-    isLoggedIn: state.session.loginStatus === 1
+    isLoggedIn: state.session.loginStatus === 1,
+    inputEventName: state.session.inputEventName,
+    inputEventLocation: state.session.inputEventLocation,
+    inputEventType: state.session.inputEventType,
+    inputEventStartTime: state.session.inputEventStartTime, 
+    inputEventEndTime: state.session.inputEventEndTime,
+    inputEventHost: state.session.inputEventHost,
+    inputEventGuests: state.session.inputEventGuests,
+    inputEventMemo: state.session.inputEventMemo
   };
 };
 

@@ -45,7 +45,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	module.exports = __webpack_require__(265);
+	module.exports = __webpack_require__(267);
 
 
 /***/ },
@@ -74,18 +74,19 @@
 	var LoginContainer = __webpack_require__(254);
 	var EventListContainer = __webpack_require__(248);
 	var NewEventContainer = __webpack_require__(256);
+	var RegisterContainer = __webpack_require__(257);
 
 	/* import redux and react-redux */
 	var Redux = __webpack_require__(234);
 	var applyMiddleware = __webpack_require__(234).applyMiddleware;
 	var Provider = __webpack_require__(227).Provider;
-	var reducer = __webpack_require__(257);
+	var reducer = __webpack_require__(258);
 
 	/* this module handles all interactions between this web app and the local storage */
-	var storageManager = __webpack_require__(262);
+	var storageManager = __webpack_require__(263);
 
 	/* create the Redux store with middleware */
-	var pushToSessionStorage = __webpack_require__(264);
+	var pushToSessionStorage = __webpack_require__(266);
 	var store = Redux.createStore(reducer, applyMiddleware(pushToSessionStorage));
 
 	/* this is the initialization script */
@@ -115,6 +116,7 @@
 	      Route,
 	      { path: '/', component: AppContainer },
 	      React.createElement(IndexRoute, { component: LoginContainer }),
+	      React.createElement(Route, { path: '/register', component: RegisterContainer }),
 	      React.createElement(Route, { path: '/events', component: EventListContainer }),
 	      React.createElement(Route, { path: '/new_event', component: NewEventContainer })
 	    )
@@ -21085,6 +21087,10 @@
 
 	var _useQueries2 = _interopRequireDefault(_useQueries);
 
+	var _invariant = __webpack_require__(172);
+
+	var _invariant2 = _interopRequireDefault(_invariant);
+
 	var _react = __webpack_require__(6);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -21119,6 +21125,12 @@
 
 	function isDeprecatedHistory(history) {
 	  return !history || !history.__v2_compatible__;
+	}
+
+	/* istanbul ignore next: sanity check */
+	function isUnsupportedHistory(history) {
+	  // v3 histories expose getCurrentLocation, but aren't currently supported.
+	  return history && history.getCurrentLocation;
 	}
 
 	var _React$PropTypes = _react2.default.PropTypes;
@@ -21207,6 +21219,8 @@
 	    var _props2 = this.props;
 	    var routes = _props2.routes;
 	    var children = _props2.children;
+
+	    !!isUnsupportedHistory(history) ? process.env.NODE_ENV !== 'production' ? (0, _invariant2.default)(false, 'You have provided a history object created with history v3.x. ' + 'This version of React Router is not compatible with v3 history ' + 'objects. Please use history v2.x instead.') : (0, _invariant2.default)(false) : void 0;
 
 	    if (isDeprecatedHistory(history)) {
 	      history = this.wrapDeprecatedHistory(history);
@@ -22191,17 +22205,17 @@
 	    // 7.3. Other pairs that do not both pass typeof value == 'object',
 	    // equivalence is determined by ==.
 	  } else if (!actual || !expected || (typeof actual === 'undefined' ? 'undefined' : _typeof(actual)) != 'object' && (typeof expected === 'undefined' ? 'undefined' : _typeof(expected)) != 'object') {
-	      return opts.strict ? actual === expected : actual == expected;
+	    return opts.strict ? actual === expected : actual == expected;
 
-	      // 7.4. For all other Object pairs, including Array objects, equivalence is
-	      // determined by having the same number of owned properties (as verified
-	      // with Object.prototype.hasOwnProperty.call), the same set of keys
-	      // (although not necessarily the same order), equivalent values for every
-	      // corresponding key, and an identical 'prototype' property. Note: this
-	      // accounts for both named and indexed properties on Arrays.
-	    } else {
-	        return objEquiv(actual, expected, opts);
-	      }
+	    // 7.4. For all other Object pairs, including Array objects, equivalence is
+	    // determined by having the same number of owned properties (as verified
+	    // with Object.prototype.hasOwnProperty.call), the same set of keys
+	    // (although not necessarily the same order), equivalent values for every
+	    // corresponding key, and an identical 'prototype' property. Note: this
+	    // accounts for both named and indexed properties on Arrays.
+	  } else {
+	    return objEquiv(actual, expected, opts);
+	  }
 	};
 
 	function isUndefinedOrNull(value) {
@@ -23261,8 +23275,8 @@
 	      if (error || redirectInfo) {
 	        done(error, redirectInfo); // No need to continue.
 	      } else {
-	          next();
-	        }
+	        next();
+	      }
 	    });
 	  }, callback);
 	}
@@ -24239,6 +24253,10 @@
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
+	var _invariant = __webpack_require__(172);
+
+	var _invariant2 = _interopRequireDefault(_invariant);
+
 	var _PropTypes = __webpack_require__(168);
 
 	function _interopRequireDefault(obj) {
@@ -24329,6 +24347,8 @@
 	    };
 	  },
 	  handleClick: function handleClick(event) {
+	    !this.context.router ? process.env.NODE_ENV !== 'production' ? (0, _invariant2.default)(false, '<Link>s rendered outside of a router context cannot handle clicks.') : (0, _invariant2.default)(false) : void 0;
+
 	    var allowTransition = true;
 
 	    if (this.props.onClick) this.props.onClick(event);
@@ -25867,16 +25887,16 @@
 	        window.location.href = path;
 	        return false; // Prevent location update.
 	      } else {
-	          window.history.pushState(historyState, null, path);
-	        }
+	        window.history.pushState(historyState, null, path);
+	      }
 	    } else {
 	      // REPLACE
 	      if (useRefresh) {
 	        window.location.replace(path);
 	        return false; // Prevent location update.
 	      } else {
-	          window.history.replaceState(historyState, null, path);
-	        }
+	        window.history.replaceState(historyState, null, path);
+	      }
 	    }
 	  }
 
@@ -28326,6 +28346,13 @@
 	};
 
 	/** 
+	 * perform the registration action
+	 */
+	var doRegistration = function doRegistration() {
+	  return { type: "DO_REGISTRATION", operand: undefined };
+	};
+
+	/** 
 	 * reset the current session using the provided data
 	 */
 	var resetSession = function resetSession(data) {
@@ -28335,13 +28362,14 @@
 	/* export the action creation functions */
 	module.exports.loginAsTrialUser = loginAsTrialUser;
 	module.exports.doLogout = doLogout;
+	module.exports.doRegistration = doRegistration;
 	module.exports.resetSession = resetSession;
 
 /***/ },
 /* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	var React = __webpack_require__(6);
 	var Router = __webpack_require__(164);
@@ -28355,7 +28383,7 @@
 	 * valid user id and the password.
 	 *
 	 * @prop isLoggedIn{boolean} current login status
-	 * @prop loginResponse{string/number} the system response on user inputs
+	 * @prop systemResponse{string/number} the system response on user inputs
 	 * @prop captureUid{function} store the current User Name input
 	 * @prop capturePassword{function} store the current Password input
 	 * @prop processUserInput{function} processing authentication
@@ -28363,12 +28391,12 @@
 	 *
 	 */
 	var Login = React.createClass({
-	  displayName: "Login",
+	  displayName: 'Login',
 
 	  /* it takes 6 props */
 	  Prototypes: {
 	    isLoggedIn: React.PropTypes.bool.isRequired,
-	    loginResponse: React.PropTypes.string,
+	    systemResponse: React.PropTypes.string,
 	    captureUid: React.PropTypes.func.isRequired,
 	    capturePassword: React.PropTypes.func.isRequired,
 	    processUserInput: React.PropTypes.func.isRequired,
@@ -28378,78 +28406,78 @@
 	  /* if logedin, redirect to the event-list */
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 	    if (!this.props.isLoggedIn && nextProps.isLoggedIn) {
-	      Router.browserHistory.push("/events");
+	      Router.browserHistory.push('/events');
 	    }
 	  },
 
 	  /* the render method */
 	  render: function render() {
 	    return React.createElement(
-	      "div",
+	      'div',
 	      null,
 	      React.createElement(
-	        "form",
+	        'form',
 	        null,
 	        React.createElement(
-	          "h4",
+	          'h4',
 	          null,
-	          "User login"
+	          'User login'
 	        ),
 	        React.createElement(
-	          "div",
-	          { id: "head-system-message", className: "small-text" },
-	          this.props.loginResponse
+	          'div',
+	          { id: 'head-system-message', className: 'small-text' },
+	          this.props.systemResponse
 	        ),
 	        React.createElement(
-	          "label",
-	          { "for": "user-id" },
+	          'label',
+	          { htmlFor: 'user-id' },
 	          React.createElement(
-	            "span",
+	            'span',
 	            null,
-	            " User Id:"
+	            ' User Id:'
 	          ),
-	          React.createElement("input", { type: "text", id: "user-id", onChange: this.props.captureUid, placeholder: "" })
+	          React.createElement('input', { type: 'text', id: 'user-id', onChange: this.props.captureUid, placeholder: '' })
 	        ),
-	        React.createElement("br", null),
+	        React.createElement('br', null),
 	        React.createElement(
-	          "label",
-	          { "for": "password" },
+	          'label',
+	          { htmlFor: 'password' },
 	          React.createElement(
-	            "span",
+	            'span',
 	            null,
-	            "Password:"
+	            'Password:'
 	          ),
-	          React.createElement("input", { type: "password", id: "password", onChange: this.props.capturePassword, placeholder: "" })
+	          React.createElement('input', { type: 'password', id: 'password', onChange: this.props.capturePassword, placeholder: '' })
 	        ),
 	        React.createElement(
-	          "div",
-	          { className: "form-button-list" },
+	          'div',
+	          { className: 'form-button-list' },
 	          React.createElement(
 	            Button,
-	            { className: "form-button", action: this.props.processUserInputs },
-	            " login "
+	            { className: 'form-button', action: this.props.processUserInputs },
+	            ' login '
 	          ),
 	          React.createElement(
 	            Button,
-	            { className: "form-button" },
-	            " Register "
+	            { className: 'form-button', action: '/register' },
+	            ' Register '
 	          ),
 	          React.createElement(
 	            Button,
-	            { className: "form-button", action: this.props.loginAsTrialUser },
-	            " Try "
+	            { className: 'form-button', action: this.props.loginAsTrialUser },
+	            ' Try '
 	          )
 	        ),
 	        React.createElement(
-	          "p",
-	          { className: "small-text" },
-	          "Note: click ",
+	          'p',
+	          { className: 'small-text' },
+	          'Note: click ',
 	          React.createElement(
-	            "span",
-	            { className: "dummy-button" },
-	            " Try "
+	            'span',
+	            { className: 'dummy-button' },
+	            ' Try '
 	          ),
-	          " to login as a trial user."
+	          ' to login as a trial user.'
 	        )
 	      )
 	    );
@@ -28465,7 +28493,7 @@
 	 */
 	var mapStateToProps = function mapStateToProps(state, ownProps) {
 	  return {
-	    loginResponse: state.session.loginResponse,
+	    systemResponse: state.session.inputResponse,
 	    isLoggedIn: state.session.loginStatus === 1
 	  };
 	};
@@ -28594,6 +28622,42 @@
 	  return { type: "CAPTURE_EVENT_MEMO", operand: userInput };
 	};
 
+	/** 
+	 * store the content of the input box for the uid
+	 *
+	 * @arg key{string} the uid
+	 */
+	var captureRegUid = function captureRegUid(userInput) {
+	  return { type: "CAPTURE_REG_UID", operand: userInput };
+	};
+
+	/** 
+	 * store the content of the input box for the email
+	 *
+	 * @arg key{string} the email
+	 */
+	var captureRegEmail = function captureRegEmail(userInput) {
+	  return { type: "CAPTURE_REG_EMAIL", operand: userInput };
+	};
+
+	/** 
+	 * store the content of the input box for the user password
+	 *
+	 * @arg key{string} the user password
+	 */
+	var captureRegPassword1 = function captureRegPassword1(userInput) {
+	  return { type: "CAPTURE_REG_PASSWORD_1", operand: userInput };
+	};
+
+	/** 
+	 * store the content of the input box for the password confirmation
+	 *
+	 * @arg key{string} the user password confirmation
+	 */
+	var captureRegPassword2 = function captureRegPassword2(userInput) {
+	  return { type: "CAPTURE_REG_PASSWORD_2", operand: userInput };
+	};
+
 	/**
 	 * process user new event input
 	 *
@@ -28626,6 +28690,11 @@
 	module.exports.processInputLogin = processInputLogin;
 	module.exports.processNewEvent = processNewEvent;
 	module.exports.clearEventForm = clearEventForm;
+
+	module.exports.captureRegUid = captureRegUid;
+	module.exports.captureRegEmail = captureRegEmail;
+	module.exports.captureRegPassword1 = captureRegPassword1;
+	module.exports.captureRegPassword2 = captureRegPassword2;
 
 /***/ },
 /* 256 */
@@ -28689,7 +28758,7 @@
 	      null,
 	      React.createElement(
 	        "label",
-	        { "for": "input-event-name" },
+	        { htmlFor: "input-event-name" },
 	        React.createElement(
 	          "span",
 	          null,
@@ -28700,7 +28769,7 @@
 	      ),
 	      React.createElement(
 	        "label",
-	        { "for": "input-event-type" },
+	        { htmlFor: "input-event-type" },
 	        React.createElement(
 	          "span",
 	          null,
@@ -28711,7 +28780,7 @@
 	      ),
 	      React.createElement(
 	        "label",
-	        { "for": "input-event-location" },
+	        { htmlFor: "input-event-location" },
 	        React.createElement(
 	          "span",
 	          null,
@@ -28726,7 +28795,7 @@
 	      null,
 	      React.createElement(
 	        "label",
-	        { "for": "input-event-date" },
+	        { htmlFor: "input-event-date" },
 	        React.createElement(
 	          "span",
 	          null,
@@ -28737,7 +28806,7 @@
 	      ),
 	      React.createElement(
 	        "label",
-	        { "for": "input-event-starttime", className: "label-time" },
+	        { htmlFor: "input-event-starttime", className: "label-time" },
 	        React.createElement(
 	          "span",
 	          null,
@@ -28748,7 +28817,7 @@
 	      ),
 	      React.createElement(
 	        "label",
-	        { "for": "input-event-endtime", className: "label-time" },
+	        { htmlFor: "input-event-endtime", className: "label-time" },
 	        React.createElement(
 	          "span",
 	          null,
@@ -28763,7 +28832,7 @@
 	      null,
 	      React.createElement(
 	        "label",
-	        { "for": "input-event-host" },
+	        { htmlFor: "input-event-host" },
 	        React.createElement(
 	          "span",
 	          null,
@@ -28774,7 +28843,7 @@
 	      ),
 	      React.createElement(
 	        "label",
-	        { "for": "input-event-guests" },
+	        { htmlFor: "input-event-guests" },
 	        React.createElement(
 	          "span",
 	          null,
@@ -28789,7 +28858,7 @@
 	      null,
 	      React.createElement(
 	        "label",
-	        { "for": "input-event-additional" },
+	        { htmlFor: "input-event-additional" },
 	        React.createElement(
 	          "span",
 	          null,
@@ -28956,11 +29025,167 @@
 /* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	var React = __webpack_require__(6);
+	var Router = __webpack_require__(164);
+	var ReactRedux = __webpack_require__(227);
+	var actionsSession = __webpack_require__(253);
+	var actionsUI = __webpack_require__(252);
+	var actionsInput = __webpack_require__(255);
+	var Button = __webpack_require__(247);
+
+	/**
+	 * This components allows user to register an account.
+	 *
+	 * @prop isLoggedIn{boolean} current login status
+	 */
+	var Regsterer = React.createClass({
+	  displayName: 'Regsterer',
+
+	  Prototypes: {
+	    isLoggedIn: React.PropTypes.bool.isRequired,
+	    formUid: React.PropTypes.string.isRequired,
+	    formPassword: React.PropTypes.string.isRequired,
+	    formEmail: React.PropTypes.string.isRequired,
+	    inputResponse: React.PropTypes.string.isRequired,
+	    captureRegUid: React.PropTypes.func.isRequired,
+	    captureRegPassword1: React.PropTypes.func.isRequired,
+	    captureRegPassword2: React.PropTypes.func.isRequired,
+	    captureRegEmail: React.PropTypes.func.isRequired,
+	    doRegistration: React.PropTypes.func.isRequired
+	  },
+
+	  /* if logedin, redirect to the event-list */
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    if (!this.props.isLoggedIn && nextProps.isLoggedIn) {
+	      Router.browserHistory.push('/events');
+	    }
+	  },
+
+	  /* the render method */
+	  render: function render() {
+	    var controlButtons = React.createElement(
+	      'div',
+	      { className: 'form-button-list' },
+	      React.createElement(
+	        Button,
+	        { className: 'form-button', action: this.props.doRegistration },
+	        ' Register '
+	      ),
+	      React.createElement(
+	        Button,
+	        { className: 'form-button', action: '/' },
+	        ' Cancel '
+	      )
+	    );
+
+	    return React.createElement(
+	      'form',
+	      null,
+	      React.createElement(
+	        'h4',
+	        null,
+	        'Register as a new user'
+	      ),
+	      React.createElement(
+	        'div',
+	        { id: 'head-system-message', className: 'small-text' },
+	        this.props.inputResponse
+	      ),
+	      React.createElement(
+	        'label',
+	        { htmlFor: 'input-uid' },
+	        React.createElement(
+	          'span',
+	          null,
+	          ' User ID:'
+	        ),
+	        React.createElement('input', { id: 'input-uid', type: 'text', placeholder: '',
+	          onChange: this.props.captureRegUid })
+	      ),
+	      React.createElement(
+	        'label',
+	        { htmlFor: 'input-password-1' },
+	        React.createElement(
+	          'span',
+	          null,
+	          ' Password:'
+	        ),
+	        React.createElement('input', { id: 'input-password1', type: 'password', placeholder: '',
+	          onChange: this.props.captureRegPassword1 })
+	      ),
+	      React.createElement(
+	        'label',
+	        { htmlFor: 'input-password-2' },
+	        React.createElement(
+	          'span',
+	          null,
+	          ' Password Comfirmation:'
+	        ),
+	        React.createElement('input', { id: 'input-password-2', type: 'password', placeholder: '',
+	          onChange: this.props.captureRegPassword2 })
+	      ),
+	      React.createElement(
+	        'label',
+	        { htmlFor: 'input-email' },
+	        React.createElement(
+	          'span',
+	          null,
+	          ' Email:'
+	        ),
+	        React.createElement('input', { id: 'input-email', type: 'text', placeholder: '',
+	          onChange: this.props.captureRegEmail })
+	      ),
+	      controlButtons
+	    );
+	  }
+	});
+
+	var mapStateToProps = function mapStateToProps(state, ownProps) {
+	  return {
+	    isLoggedIn: state.session.loginStatus === 1,
+	    inputResponse: state.session.systemResponse,
+	    formUid: state.session.inputRegUid,
+	    formPassword: state.session.inputRegPassword,
+	    formEmail: state.session.formEmail
+	  };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
+	  return {
+	    captureRegUid: function captureRegUid(e) {
+	      return dispatch(actionsInput.captureRegUid(e.target.value));
+	    },
+	    captureRegEmail: function captureRegEmail(e) {
+	      return dispatch(actionsInput.captureRegEmail(e.target.value));
+	    },
+	    captureRegPassword1: function captureRegPassword1(e) {
+	      return dispatch(actionsInput.captureRegPassword1(e.target.value));
+	    },
+	    captureRegPassword2: function captureRegPassword2(e) {
+	      return dispatch(actionsInput.captureRegPassword2(e.target.value));
+	    },
+	    doRegistration: function doRegistration() {
+	      return dispatch(actionsSession.doRegistration());
+	    }
+	  };
+	};
+
+	var RegisterContainer = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(Regsterer);
+
+	/* we only export the top most conponent */
+	module.exports = RegisterContainer;
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 
 	var Redux = __webpack_require__(234);
-	var reducerUI = __webpack_require__(258);
-	var reducerSession = __webpack_require__(260);
+	var reducerUI = __webpack_require__(259);
+	var reducerSession = __webpack_require__(261);
 
 	/*
 	 * Layout of the store (for a reference)
@@ -29004,7 +29229,7 @@
 	module.exports = reducer;
 
 /***/ },
-/* 258 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -29013,7 +29238,7 @@
 	 * This is the reducer function
 	 */
 
-	var objectAssign = __webpack_require__(259).objectAssign;
+	var objectAssign = __webpack_require__(260).objectAssign;
 
 	var defaultState = {
 	  activeEvent: -1,
@@ -29069,7 +29294,7 @@
 	module.exports = reducerUI;
 
 /***/ },
-/* 259 */
+/* 260 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -29130,16 +29355,17 @@
 	module.exports = utils;
 
 /***/ },
-/* 260 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
-	var authenticationManager = __webpack_require__(261);
-	var storageManager = __webpack_require__(262);
+	var authenticationManager = __webpack_require__(262);
+	var storageManager = __webpack_require__(263);
+	var registrationManager = __webpack_require__(265);
 
 	/* this is equivalent to Object.assign() in ES6  */
-	var objectAssign = __webpack_require__(259).objectAssign;
+	var objectAssign = __webpack_require__(260).objectAssign;
 
 	/*
 	 * Layout of the store (for a reference)
@@ -29171,44 +29397,46 @@
 
 	var defaultInputs = {
 	  formPageNumber: 1,
-	  inputUid: "",
-	  inputPassword: "",
-	  inputEventName: "",
-	  inputEventLocation: "",
-	  inputEventType: "",
-	  inputEventStartTime: "",
-	  inputEventEndTime: "",
-	  inputEventHost: "",
-	  inputEventGuests: "",
-	  inputEventMemo: ""
+	  inputUid: '',
+	  inputPassword: '',
+	  inputRegUid: '',
+	  inputRegPassword1: '',
+	  inputRegPassword2: '',
+	  inputRegEmail: '',
+	  inputEventName: '',
+	  inputEventLocation: '',
+	  inputEventType: '',
+	  inputEventStartTime: '',
+	  inputEventEndTime: '',
+	  inputEventHost: '',
+	  inputEventGuests: '',
+	  inputEventMemo: '',
+	  inputResponse: ''
 	};
 
 	var defaultState = {
 	  loginStatus: 0,
 	  userProfile: null,
-	  eventList: [],
-	  inputResponse: "",
-	  loginResponse: ""
+	  eventList: []
 	};
 
 	defaultState = objectAssign(defaultState, defaultInputs);
 
 	var mask = {
-	  inputResponse: "",
-	  loginResponse: ""
+	  inputResponse: ''
 	};
 
 	var doLogin = function doLogin(uid) {
 	  try {
 	    var userData = storageManager.getUserData(uid);
-	    console.log("user data is", userData);
+	    console.log('user data is', userData);
 	  } catch (err) {
-	    throw "Cannot retrive user data from the local storage.";
+	    throw 'Cannot retrive user data from the local storage.';
 	  }
 	  var eventList = userData.eventList;
 	  delete userData.eventList;
 	  var newState = objectAssign({}, defaultState, { loginStatus: 1, userProfile: userData, eventList: eventList });
-	  /* here we index each event entry */
+	  /* here we uniquely index each event entry */
 	  newState.eventList.forEach(function (item, index) {
 	    item.key = Date.now() - index * 3;
 	  });
@@ -29219,78 +29447,122 @@
 
 	  switch (action.type) {
 
-	    case "RESET_SESSION":
+	    case 'RESET_SESSION':
 	      if (action.operand) {
 	        objectAssign(action.operand, mask); // unset system response
 	        return action.operand;
 	      }
 	      return state;
 
-	    case "LOGIN_AS_TRIAL_USER":
+	    case 'LOGIN_AS_TRIAL_USER':
 	      if (!state.loginStatus || state.loginStatus !== 1) {
-	        return doLogin("trial");
+	        return doLogin('trial');
 	      }
 	      return state;
 
-	    case "DO_LOGOUT":
+	    case 'DO_LOGOUT':
 	      if (state.loginStatus && state.loginStatus === 1) {
 	        return defaultState;
 	      }
 	      return state;
 
-	    case "CAPTURE_LOGIN_UID":
+	    case 'CAPTURE_LOGIN_UID':
 	      return objectAssign({}, state, { inputUid: action.operand });
 
-	    case "CAPTURE_LOGIN_PASSWORD":
+	    case 'CAPTURE_LOGIN_PASSWORD':
 	      return objectAssign({}, state, { inputPassword: action.operand });
 
-	    case "CAPTURE_EVENT_NAME":
+	    case 'CAPTURE_EVENT_NAME':
 	      console.log(action.operand);
 	      return objectAssign({}, state, { inputEventName: action.operand });
 
-	    case "CAPTURE_EVENT_LOCATION":
+	    case 'CAPTURE_EVENT_LOCATION':
 	      return objectAssign({}, state, { inputEventLocation: action.operand });
 
-	    case "CAPTURE_EVENT_TYPE":
+	    case 'CAPTURE_EVENT_TYPE':
 	      return objectAssign({}, state, { inputEventType: action.operand });
 
-	    case "CAPTURE_EVENT_STARTTIME":
+	    case 'CAPTURE_EVENT_STARTTIME':
 	      return objectAssign({}, state, { inputEventStartTime: action.operand });
 
-	    case "CAPTURE_EVENT_ENDTIME":
+	    case 'CAPTURE_EVENT_ENDTIME':
 	      return objectAssign({}, state, { inputEventEndTime: action.operand });
 
-	    case "CAPTURE_EVENT_HOST":
+	    case 'CAPTURE_EVENT_HOST':
 	      return objectAssign({}, state, { inputEventHost: action.operand });
 
-	    case "CAPTURE_EVENT_GUESTS":
+	    case 'CAPTURE_EVENT_GUESTS':
 	      return objectAssign({}, state, { inputEventGuests: action.operand });
 
-	    case "CAPTURE_EVENT_MEMO":
+	    case 'CAPTURE_EVENT_MEMO':
 	      return objectAssign({}, state, { inputEventMemo: action.operand });
 
-	    case "CLEAR_EVENT_FORM":
+	    case 'CLEAR_EVENT_FORM':
 	      return objectAssign({}, state, defaultInputs);
 
-	    case "PROCESS_INPUT_LOGIN":
+	    case 'PROCESS_INPUT_LOGIN':
 	      var result = authenticationManager.authenticate(state.inputUid, state.inputPassword);
 	      if (result !== 0) {
-	        return objectAssign({}, state, { loginResponse: authenticationManager.messages[result] });
+	        return objectAssign({}, state, { inputResponse: authenticationManager.messages[result] });
 	      }
 	      return doLogin(state.inputUid);
 
-	    case "SET_FORM_PAGE_NUMBER":
+	    case 'SET_FORM_PAGE_NUMBER':
 	      return objectAssign({}, state, { formPageNumber: action.operand });
 
-	    case "INC_FORM_PAGE_NUMBER":
+	    case 'INC_FORM_PAGE_NUMBER':
 	      return objectAssign({}, state, { formPageNumber: state.formPageNumber + 1 });
 
-	    case "DEC_FORM_PAGE_NUMBER":
+	    case 'DEC_FORM_PAGE_NUMBER':
 	      return objectAssign({}, state, { formPageNumber: state.formPageNumber - 1 });
 
-	    case "PROCESS_NEW_EVENT":
+	    case 'PROCESS_NEW_EVENT':
 	      console.log(state);
 	      return objectAssign({}, state, { inputResponse: state.inputEventName });
+
+	    case 'CAPTURE_REG_UID':
+	      var result = registrationManager.validateUid(action.operand);
+	      if (result !== 0 && result !== 1) {
+	        return objectAssign({}, state, { inputRegUid: action.operand }, { systemResponse: registrationManager.uidMessages[result] });
+	      }
+	      return objectAssign({}, state, { systemResponse: '' }, { inputRegUid: action.operand });
+
+	    case 'CAPTURE_REG_PASSWORD_1':
+	      var result = registrationManager.validatePassword(action.operand, state.inputRegPassword2);
+	      if (result !== 0 && result !== 1 && result !== 6 && result !== 7) {
+	        return objectAssign({}, state, { inputRegPassword1: action.operand }, { systemResponse: registrationManager.passwordMessages[result] });
+	      }
+	      return objectAssign({}, state, { systemResponse: '' }, { inputRegPassword1: action.operand });
+
+	    case 'CAPTURE_REG_PASSWORD_2':
+	      var result = registrationManager.validatePassword(state.inputRegPassword1, action.operand);
+	      if (result !== 0 && result !== 1 && result !== 6) {
+	        return objectAssign({}, state, { inputRegPassword2: action.operand }, { systemResponse: registrationManager.passwordMessages[result] });
+	      }
+	      return objectAssign({}, state, { systemResponse: '' }, { inputRegPassword2: action.operand });
+
+	    case 'CAPTURE_REG_EMAIL':
+	      var result = registrationManager.validateEmail(action.operand);
+	      if (result !== 0 && result !== 1) {
+	        return objectAssign({}, state, { inputRegEmail: action.operand }, { systemResponse: registrationManager.emailMessages[result] });
+	      }
+	      return objectAssign({}, state, { systemResponse: '' }, { inputRegEmail: action.operand });
+
+	    case 'DO_REGISTRATION':
+	      var result = registrationManager.validateUid(state.inputRegUid);
+	      if (result !== 0) {
+	        return objectAssign({}, state, { inputRegUid: state.inputRegUid }, { systemResponse: registrationManager.uidMessages[result] });
+	      }
+	      result = registrationManager.validatePassword(state.inputRegPassword1, state.inputRegPassword2);
+	      if (result !== 0) {
+	        return objectAssign({}, state, { inputRegPassword1: state.inputRegPassword1 }, { systemResponse: registrationManager.passwordMessages[result] });
+	      }
+	      result = registrationManager.validateEmail(state.inputRegEmail);
+	      if (result !== 0) {
+	        return objectAssign({}, state, { inputRegEmail: action.operand }, { systemResponse: registrationManager.emailMessages[result] });
+	      }
+	      storageManager.addNewUser(state.inputRegUid, state.inputRegPassword1, state.inputRegEmail);
+	      return doLogin(state.inputRegUid);
 
 	    default:
 	      return state || defaultState;
@@ -29302,7 +29574,7 @@
 	module.exports = reducer;
 
 /***/ },
-/* 261 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -29313,7 +29585,7 @@
 	 * storage.
 	 */
 
-	var storageManager = __webpack_require__(262);
+	var storageManager = __webpack_require__(263);
 
 	/* module initialization */
 	var authenticationManager = {};
@@ -29330,14 +29602,14 @@
 	  return 0;
 	};
 
-	/* the are the interpretations of the returned value */
+	/* they are the interpretations of the returned value */
 	authenticationManager.messages = ["Passed the authentication.", "Bad user name.", "Bad password."];
 
 	/* we export this module */
 	module.exports = authenticationManager;
 
 /***/ },
-/* 262 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -29352,7 +29624,7 @@
 	var key = "meet_up_event_planner";
 
 	/* this is equivalent to Object.assign() in ES6  */
-	var objectAssign = __webpack_require__(259).objectAssign;
+	var objectAssign = __webpack_require__(260).objectAssign;
 
 	/* initialize this module  */
 	var storageManager = {};
@@ -29361,14 +29633,16 @@
 	var trialUserData = {
 	  uid: "trial",
 	  name: "Trial User",
+	  email: "",
 	  password: "",
-	  eventList: __webpack_require__(263)
+	  eventList: __webpack_require__(264)
 	};
 
 	/* this is the template for user data */
 	var templateUserData = {
 	  uid: "",
 	  name: "",
+	  email: "",
 	  password: "",
 	  eventList: []
 	};
@@ -29381,6 +29655,19 @@
 	    data = JSON.parse(rawData);
 	  }
 	  data[userData.uid] = objectAssign({}, templateUserData, userData);
+	  localStorage.setItem(key, JSON.stringify(data));
+	};
+
+	/* this is for inserting new user; it will reset the 
+	 * user data if this user is already exist 
+	 */
+	storageManager.addNewUser = function (_uid, _password, _email) {
+	  var data = {};
+	  var rawData = localStorage.getItem(key);
+	  if (rawData) {
+	    data = JSON.parse(rawData);
+	  }
+	  data[_uid] = objectAssign({}, templateUserData, { uid: _uid, password: _password, email: _email });
 	  localStorage.setItem(key, JSON.stringify(data));
 	};
 
@@ -29404,7 +29691,7 @@
 	module.exports = storageManager;
 
 /***/ },
-/* 263 */
+/* 264 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -29468,7 +29755,93 @@
 	module.exports = preloadedEvents;
 
 /***/ },
-/* 264 */
+/* 265 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	/**
+	 * This is a simple client side registration manager. It validates
+	 * all the user input form fields.
+	 */
+
+	var storageManager = __webpack_require__(263);
+
+	/* module initialization */
+	var registrationManager = {};
+
+	registrationManager.validateUid = function (uid) {
+	  if (uid.length == 0) {
+	    return 1;
+	  }
+	  if (uid.length < 8) {
+	    return 2;
+	  }
+	  if (storageManager.getUserData(uid)) {
+	    return 3;
+	  }
+	  return 0;
+	};
+
+	registrationManager.validatePassword = function (password1, password2) {
+	  if (password1.length === 0) {
+	    return 1;
+	  }
+	  if (password1.length < 6) {
+	    return 2;
+	  }
+	  if (!/[a-z]/.test(password1)) {
+	    return 3;
+	  }
+	  if (!/[0-9]/.test(password1)) {
+	    return 4;
+	  }
+	  if (!/[A-Z]/.test(password1)) {
+	    return 5;
+	  }
+	  if (password2.length === 0) {
+	    return 6;
+	  }
+	  if (password1 !== password2) {
+	    return 7;
+	  }
+	  return 0;
+	};
+
+	registrationManager.validateEmail = function (email) {
+	  if (email === '') {
+	    return 1;
+	  }
+	  var patt = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
+	  return patt.test(email) ? 0 : 2;
+	};
+
+	/*this is the only utility function in this module */
+	registrationManager.validateRegistration = function () {
+	  var userData = storageManager.getUserData(uid);
+	  if (!userData) {
+	    return 1;
+	  }
+	  if (userData.password !== password) {
+	    return 2;
+	  }
+	  return 0;
+	};
+
+	/* they are the interpretations of the returned value */
+	registrationManager.uidMessages = ['User id is valid.', 'No inputs.', 'User Id must contain at least 8 characters.', 'This user id has already been registered.'];
+
+	/* they are the interpretations of the returned value */
+	registrationManager.passwordMessages = ['Password is valid.', 'Password field is empty.', 'Password must contain 6 characters.', 'Password must contain at least one lower case character.', 'Password must contain at least one numeric character.', 'Password must contain at least one upper case character.', 'Password comfirmation is empty.', 'Two passwords does not match with one another.'];
+
+	/* they are the interpretations of the returned value */
+	registrationManager.emailMessages = ['Email is valid.', 'Email field is empty.', 'Email is invalid.'];
+
+	/* we export this module */
+	module.exports = registrationManager;
+
+/***/ },
+/* 266 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -29491,13 +29864,13 @@
 	module.exports = pushToSessionStorage;
 
 /***/ },
-/* 265 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(__dirname) {"use strict";
 
-	var webpack = __webpack_require__(266);
-	var path = __webpack_require__(272);
+	var webpack = __webpack_require__(268);
+	var path = __webpack_require__(274);
 
 	module.exports = {
 	  context: __dirname,
@@ -29523,7 +29896,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, "/"))
 
 /***/ },
-/* 266 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -29532,10 +29905,10 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var Compiler = __webpack_require__(267);
-	var WebEnvironmentPlugin = __webpack_require__(367);
-	var WebpackOptionsApply = __webpack_require__(368);
-	var WebpackOptionsDefaulter = __webpack_require__(625);
+	var Compiler = __webpack_require__(269);
+	var WebEnvironmentPlugin = __webpack_require__(369);
+	var WebpackOptionsApply = __webpack_require__(370);
+	var WebpackOptionsDefaulter = __webpack_require__(628);
 
 	function webpack(options, callback) {
 		new WebpackOptionsDefaulter().process(options);
@@ -29557,7 +29930,7 @@
 	webpack.WebEnvironmentPlugin = WebEnvironmentPlugin;
 
 /***/ },
-/* 267 */
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {"use strict";
@@ -29568,15 +29941,15 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var path = __webpack_require__(272);
-	var Tapable = __webpack_require__(273);
+	var path = __webpack_require__(274);
+	var Tapable = __webpack_require__(275);
 
-	var Compilation = __webpack_require__(274);
-	var Parser = __webpack_require__(343);
-	var Resolver = __webpack_require__(346);
+	var Compilation = __webpack_require__(276);
+	var Parser = __webpack_require__(345);
+	var Resolver = __webpack_require__(348);
 
-	var NormalModuleFactory = __webpack_require__(350);
-	var ContextModuleFactory = __webpack_require__(363);
+	var NormalModuleFactory = __webpack_require__(352);
+	var ContextModuleFactory = __webpack_require__(365);
 
 	function Watching(compiler, watchOptions, handler) {
 		this.startTime = null;
@@ -29793,7 +30166,7 @@
 		function emitFiles(err) {
 			if (err) return callback(err);
 
-			__webpack_require__(275).forEach(Object.keys(compilation.assets), function (file, callback) {
+			__webpack_require__(277).forEach(Object.keys(compilation.assets), function (file, callback) {
 
 				var targetFile = file;
 				var queryStringIdx = targetFile.indexOf("?");
@@ -29962,10 +30335,10 @@
 			}.bind(this));
 		}.bind(this));
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(268).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(270).Buffer))
 
 /***/ },
-/* 268 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer, global) {/*!
@@ -29978,9 +30351,9 @@
 
 	'use strict';
 
-	var base64 = __webpack_require__(269);
-	var ieee754 = __webpack_require__(270);
-	var isArray = __webpack_require__(271);
+	var base64 = __webpack_require__(271);
+	var ieee754 = __webpack_require__(272);
+	var isArray = __webpack_require__(273);
 
 	exports.Buffer = Buffer;
 	exports.SlowBuffer = SlowBuffer;
@@ -30524,26 +30897,26 @@
 	    offset = 0;
 	    // Buffer#write(string, encoding)
 	  } else if (length === undefined && typeof offset === 'string') {
-	      encoding = offset;
-	      length = this.length;
-	      offset = 0;
-	      // Buffer#write(string, offset[, length][, encoding])
-	    } else if (isFinite(offset)) {
-	        offset = offset | 0;
-	        if (isFinite(length)) {
-	          length = length | 0;
-	          if (encoding === undefined) encoding = 'utf8';
-	        } else {
-	          encoding = length;
-	          length = undefined;
-	        }
-	        // legacy write(string, encoding, offset, length) - remove in v0.13
-	      } else {
-	          var swap = encoding;
-	          encoding = offset;
-	          offset = length | 0;
-	          length = swap;
-	        }
+	    encoding = offset;
+	    length = this.length;
+	    offset = 0;
+	    // Buffer#write(string, offset[, length][, encoding])
+	  } else if (isFinite(offset)) {
+	    offset = offset | 0;
+	    if (isFinite(length)) {
+	      length = length | 0;
+	      if (encoding === undefined) encoding = 'utf8';
+	    } else {
+	      encoding = length;
+	      length = undefined;
+	    }
+	    // legacy write(string, encoding, offset, length) - remove in v0.13
+	  } else {
+	    var swap = encoding;
+	    encoding = offset;
+	    offset = length | 0;
+	    length = swap;
+	  }
 
 	  var remaining = this.length - offset;
 	  if (length === undefined || length > remaining) length = remaining;
@@ -31481,10 +31854,10 @@
 	  }
 	  return i;
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(268).Buffer, (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(270).Buffer, (function() { return this; }())))
 
 /***/ },
-/* 269 */
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31607,7 +31980,7 @@
 	})( false ? undefined.base64js = {} : exports);
 
 /***/ },
-/* 270 */
+/* 272 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -31698,7 +32071,7 @@
 	};
 
 /***/ },
-/* 271 */
+/* 273 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31710,7 +32083,7 @@
 	};
 
 /***/ },
-/* 272 */
+/* 274 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -31937,7 +32310,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 273 */
+/* 275 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -32106,7 +32479,7 @@
 	};
 
 /***/ },
-/* 274 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
@@ -32117,23 +32490,23 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var async = __webpack_require__(275);
+	var async = __webpack_require__(277);
 
-	var Tapable = __webpack_require__(273);
-	var EntryModuleNotFoundError = __webpack_require__(278);
-	var ModuleNotFoundError = __webpack_require__(279);
-	var CriticalDependenciesWarning = __webpack_require__(280);
-	var Module = __webpack_require__(281);
-	var ArrayMap = __webpack_require__(309);
-	var Chunk = __webpack_require__(310);
-	var Stats = __webpack_require__(311);
-	var MainTemplate = __webpack_require__(314);
-	var ChunkTemplate = __webpack_require__(319);
-	var HotUpdateChunkTemplate = __webpack_require__(320);
-	var ModuleTemplate = __webpack_require__(321);
-	var Dependency = __webpack_require__(322);
-	var ChunkRenderError = __webpack_require__(323);
-	var CachedSource = __webpack_require__(324);
+	var Tapable = __webpack_require__(275);
+	var EntryModuleNotFoundError = __webpack_require__(280);
+	var ModuleNotFoundError = __webpack_require__(281);
+	var CriticalDependenciesWarning = __webpack_require__(282);
+	var Module = __webpack_require__(283);
+	var ArrayMap = __webpack_require__(311);
+	var Chunk = __webpack_require__(312);
+	var Stats = __webpack_require__(313);
+	var MainTemplate = __webpack_require__(316);
+	var ChunkTemplate = __webpack_require__(321);
+	var HotUpdateChunkTemplate = __webpack_require__(322);
+	var ModuleTemplate = __webpack_require__(323);
+	var Dependency = __webpack_require__(324);
+	var ChunkRenderError = __webpack_require__(325);
+	var CachedSource = __webpack_require__(326);
 
 	function Compilation(compiler) {
 		Tapable.call(this);
@@ -32872,7 +33245,7 @@
 		var hashFunction = outputOptions.hashFunction;
 		var hashDigest = outputOptions.hashDigest;
 		var hashDigestLength = outputOptions.hashDigestLength;
-		var hash = __webpack_require__(325).createHash(hashFunction);
+		var hash = __webpack_require__(327).createHash(hashFunction);
 		this.mainTemplate.updateHash(hash);
 		this.chunkTemplate.updateHash(hash);
 		this.moduleTemplate.updateHash(hash);
@@ -32885,7 +33258,7 @@
 		});
 		for (i = 0; i < chunks.length; i++) {
 			chunk = chunks[i];
-			var chunkHash = __webpack_require__(325).createHash(hashFunction);
+			var chunkHash = __webpack_require__(327).createHash(hashFunction);
 			chunk.updateHash(chunkHash);
 			if (chunk.entry) {
 				this.mainTemplate.updateHashForChunk(chunkHash, chunk);
@@ -32906,7 +33279,7 @@
 		var hashFunction = outputOptions.hashFunction;
 		var hashDigest = outputOptions.hashDigest;
 		var hashDigestLength = outputOptions.hashDigestLength;
-		var hash = __webpack_require__(325).createHash(hashFunction);
+		var hash = __webpack_require__(327).createHash(hashFunction);
 		hash.update(this.fullHash);
 		hash.update(update);
 		this.fullHash = hash.digest(hashDigest);
@@ -32990,7 +33363,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 275 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, setImmediate, process, module) {'use strict';
@@ -34220,10 +34593,10 @@
 	                root.async = async;
 	            }
 	})();
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(276).setImmediate, __webpack_require__(9), __webpack_require__(277)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(278).setImmediate, __webpack_require__(9), __webpack_require__(279)(module)))
 
 /***/ },
-/* 276 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(setImmediate, clearImmediate) {"use strict";
@@ -34304,10 +34677,10 @@
 	exports.clearImmediate = typeof clearImmediate === "function" ? clearImmediate : function (id) {
 	  delete immediateIds[id];
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(276).setImmediate, __webpack_require__(276).clearImmediate))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(278).setImmediate, __webpack_require__(278).clearImmediate))
 
 /***/ },
-/* 277 */
+/* 279 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -34324,7 +34697,7 @@
 	};
 
 /***/ },
-/* 278 */
+/* 280 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -34346,7 +34719,7 @@
 	EntryModuleNotFoundError.prototype = Object.create(Error.prototype);
 
 /***/ },
-/* 279 */
+/* 281 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -34370,7 +34743,7 @@
 	ModuleNotFoundError.prototype = Object.create(Error.prototype);
 
 /***/ },
-/* 280 */
+/* 282 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -34400,7 +34773,7 @@
 	CriticalDependenciesWarning.prototype = Object.create(Error.prototype);
 
 /***/ },
-/* 281 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -34409,8 +34782,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var DependenciesBlock = __webpack_require__(282);
-	var ModuleReason = __webpack_require__(307);
+	var DependenciesBlock = __webpack_require__(284);
+	var ModuleReason = __webpack_require__(309);
 
 	var debugId = 1000;
 
@@ -34448,7 +34821,7 @@
 		if (idx < 0) this.chunks.push(chunk);
 	};
 
-	Module.prototype._removeAndDo = __webpack_require__(308);
+	Module.prototype._removeAndDo = __webpack_require__(310);
 
 	Module.prototype.removeChunk = function (chunk) {
 		return this._removeAndDo("chunks", chunk, "removeModule");
@@ -34518,7 +34891,7 @@
 	Module.prototype.size = null;
 
 /***/ },
-/* 282 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -34527,7 +34900,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var DependenciesBlockVariable = __webpack_require__(283);
+	var DependenciesBlockVariable = __webpack_require__(285);
 
 	function DependenciesBlock() {
 		this.dependencies = [];
@@ -34581,7 +34954,7 @@
 	};
 
 /***/ },
-/* 283 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -34590,8 +34963,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ReplaceSource = __webpack_require__(284);
-	var RawSource = __webpack_require__(306);
+	var ReplaceSource = __webpack_require__(286);
+	var RawSource = __webpack_require__(308);
 
 	function DependenciesBlockVariable(name, expression, dependencies) {
 		this.name = name;
@@ -34629,7 +35002,7 @@
 	};
 
 /***/ },
-/* 284 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -34638,11 +35011,11 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var Source = __webpack_require__(285);
-	var SourceNode = __webpack_require__(286).SourceNode;
-	var SourceListMap = __webpack_require__(297).SourceListMap;
-	var fromStringWithSourceMap = __webpack_require__(297).fromStringWithSourceMap;
-	var SourceMapConsumer = __webpack_require__(286).SourceMapConsumer;
+	var Source = __webpack_require__(287);
+	var SourceNode = __webpack_require__(288).SourceNode;
+	var SourceListMap = __webpack_require__(299).SourceListMap;
+	var fromStringWithSourceMap = __webpack_require__(299).fromStringWithSourceMap;
+	var SourceMapConsumer = __webpack_require__(288).SourceMapConsumer;
 
 	function ReplaceSource(source, name) {
 		Source.call(this);
@@ -34691,7 +35064,7 @@
 		return result.join("");
 	};
 
-	__webpack_require__(305)(ReplaceSource.prototype);
+	__webpack_require__(307)(ReplaceSource.prototype);
 
 	ReplaceSource.prototype.node = function (options) {
 		this._sortReplacements();
@@ -34777,7 +35150,7 @@
 	};
 
 /***/ },
-/* 285 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -34786,8 +35159,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var SourceNode = __webpack_require__(286).SourceNode;
-	var SourceMapConsumer = __webpack_require__(286).SourceMapConsumer;
+	var SourceNode = __webpack_require__(288).SourceNode;
+	var SourceMapConsumer = __webpack_require__(288).SourceMapConsumer;
 
 	function Source() {}
 
@@ -34820,7 +35193,7 @@
 	};
 
 /***/ },
-/* 286 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34830,12 +35203,12 @@
 	 * Licensed under the New BSD license. See LICENSE.txt or:
 	 * http://opensource.org/licenses/BSD-3-Clause
 	 */
-	exports.SourceMapGenerator = __webpack_require__(287).SourceMapGenerator;
-	exports.SourceMapConsumer = __webpack_require__(293).SourceMapConsumer;
-	exports.SourceNode = __webpack_require__(296).SourceNode;
+	exports.SourceMapGenerator = __webpack_require__(289).SourceMapGenerator;
+	exports.SourceMapConsumer = __webpack_require__(295).SourceMapConsumer;
+	exports.SourceNode = __webpack_require__(298).SourceNode;
 
 /***/ },
-/* 287 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -34851,10 +35224,10 @@
 	}
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports, module) {
 
-	  var base64VLQ = __webpack_require__(288);
-	  var util = __webpack_require__(290);
-	  var ArraySet = __webpack_require__(291).ArraySet;
-	  var MappingList = __webpack_require__(292).MappingList;
+	  var base64VLQ = __webpack_require__(290);
+	  var util = __webpack_require__(292);
+	  var ArraySet = __webpack_require__(293).ArraySet;
+	  var MappingList = __webpack_require__(294).MappingList;
 
 	  /**
 	   * An instance of the SourceMapGenerator represents a source map which is
@@ -35209,7 +35582,7 @@
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 288 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -35255,7 +35628,7 @@
 	}
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports, module) {
 
-	  var base64 = __webpack_require__(289);
+	  var base64 = __webpack_require__(291);
 
 	  // A single base 64 digit can contain 6 bits of data. For the base 64 variable
 	  // length quantities we use in the source map spec, the first bit is the sign,
@@ -35357,7 +35730,7 @@
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 289 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -35436,7 +35809,7 @@
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 290 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -35810,7 +36183,7 @@
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 291 */
+/* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -35826,7 +36199,7 @@
 	}
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports, module) {
 
-	  var util = __webpack_require__(290);
+	  var util = __webpack_require__(292);
 
 	  /**
 	   * A data structure which is a combination of an array and a set. Adding a new
@@ -35922,7 +36295,7 @@
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 292 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -35938,7 +36311,7 @@
 	}
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports, module) {
 
-	  var util = __webpack_require__(290);
+	  var util = __webpack_require__(292);
 
 	  /**
 	   * Determine whether mappingB is after mappingA with respect to generated
@@ -36012,7 +36385,7 @@
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 293 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -36028,11 +36401,11 @@
 	}
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports, module) {
 
-	  var util = __webpack_require__(290);
-	  var binarySearch = __webpack_require__(294);
-	  var ArraySet = __webpack_require__(291).ArraySet;
-	  var base64VLQ = __webpack_require__(288);
-	  var quickSort = __webpack_require__(295).quickSort;
+	  var util = __webpack_require__(292);
+	  var binarySearch = __webpack_require__(296);
+	  var ArraySet = __webpack_require__(293).ArraySet;
+	  var base64VLQ = __webpack_require__(290);
+	  var quickSort = __webpack_require__(297).quickSort;
 
 	  function SourceMapConsumer(aSourceMap) {
 	    var sourceMap = aSourceMap;
@@ -37030,7 +37403,7 @@
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 294 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -37150,7 +37523,7 @@
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 295 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -37276,7 +37649,7 @@
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 296 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -37292,8 +37665,8 @@
 	}
 	!(__WEBPACK_AMD_DEFINE_RESULT__ = function (require, exports, module) {
 
-	  var SourceMapGenerator = __webpack_require__(287).SourceMapGenerator;
-	  var util = __webpack_require__(290);
+	  var SourceMapGenerator = __webpack_require__(289).SourceMapGenerator;
+	  var util = __webpack_require__(292);
 
 	  // Matches a Windows-style `\r\n` newline or a `\n` newline used by all other
 	  // operating systems these days (capturing the result).
@@ -37376,18 +37749,18 @@
 	          lastGeneratedColumn = 0;
 	          // The remaining code is added without mapping
 	        } else {
-	            // There is no new line in between.
-	            // Associate the code between "lastGeneratedColumn" and
-	            // "mapping.generatedColumn" with "lastMapping"
-	            var nextLine = remainingLines[0];
-	            var code = nextLine.substr(0, mapping.generatedColumn - lastGeneratedColumn);
-	            remainingLines[0] = nextLine.substr(mapping.generatedColumn - lastGeneratedColumn);
-	            lastGeneratedColumn = mapping.generatedColumn;
-	            addMappingWithCode(lastMapping, code);
-	            // No more remaining code, continue
-	            lastMapping = mapping;
-	            return;
-	          }
+	          // There is no new line in between.
+	          // Associate the code between "lastGeneratedColumn" and
+	          // "mapping.generatedColumn" with "lastMapping"
+	          var nextLine = remainingLines[0];
+	          var code = nextLine.substr(0, mapping.generatedColumn - lastGeneratedColumn);
+	          remainingLines[0] = nextLine.substr(mapping.generatedColumn - lastGeneratedColumn);
+	          lastGeneratedColumn = mapping.generatedColumn;
+	          addMappingWithCode(lastMapping, code);
+	          // No more remaining code, continue
+	          lastMapping = mapping;
+	          return;
+	        }
 	      }
 	      // We add the generated code until the first mapping
 	      // to the SourceNode without any mapping.
@@ -37670,19 +38043,19 @@
 	}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
 /***/ },
-/* 297 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	exports.SourceListMap = __webpack_require__(298);
-	exports.SourceNode = __webpack_require__(301);
-	exports.CodeNode = __webpack_require__(299);
-	exports.MappingsContext = __webpack_require__(303);
-	exports.fromStringWithSourceMap = __webpack_require__(304);
+	exports.SourceListMap = __webpack_require__(300);
+	exports.SourceNode = __webpack_require__(303);
+	exports.CodeNode = __webpack_require__(301);
+	exports.MappingsContext = __webpack_require__(305);
+	exports.fromStringWithSourceMap = __webpack_require__(306);
 
 /***/ },
-/* 298 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -37691,9 +38064,9 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var CodeNode = __webpack_require__(299);
-	var SourceNode = __webpack_require__(301);
-	var MappingsContext = __webpack_require__(303);
+	var CodeNode = __webpack_require__(301);
+	var SourceNode = __webpack_require__(303);
+	var MappingsContext = __webpack_require__(305);
 
 	function SourceListMap(generatedCode, source, originalSource) {
 		if (Array.isArray(generatedCode)) {
@@ -37778,7 +38151,7 @@
 	};
 
 /***/ },
-/* 299 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -37787,7 +38160,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var getNumberOfLines = __webpack_require__(300).getNumberOfLines;
+	var getNumberOfLines = __webpack_require__(302).getNumberOfLines;
 
 	function CodeNode(generatedCode) {
 		this.generatedCode = generatedCode;
@@ -37816,7 +38189,7 @@
 	};
 
 /***/ },
-/* 300 */
+/* 302 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -37836,7 +38209,7 @@
 	};
 
 /***/ },
-/* 301 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -37845,8 +38218,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var base64VLQ = __webpack_require__(302);
-	var getNumberOfLines = __webpack_require__(300).getNumberOfLines;
+	var base64VLQ = __webpack_require__(304);
+	var getNumberOfLines = __webpack_require__(302).getNumberOfLines;
 
 	function SourceNode(generatedCode, source, originalSource, startingLine) {
 		this.generatedCode = generatedCode;
@@ -37890,7 +38263,7 @@
 	};
 
 /***/ },
-/* 302 */
+/* 304 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -38058,7 +38431,7 @@
 	};
 
 /***/ },
-/* 303 */
+/* 305 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -38087,7 +38460,7 @@
 	};
 
 /***/ },
-/* 304 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -38096,10 +38469,10 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var base64VLQ = __webpack_require__(302);
-	var SourceNode = __webpack_require__(301);
-	var CodeNode = __webpack_require__(299);
-	var SourceListMap = __webpack_require__(298);
+	var base64VLQ = __webpack_require__(304);
+	var SourceNode = __webpack_require__(303);
+	var CodeNode = __webpack_require__(301);
+	var SourceListMap = __webpack_require__(300);
 
 	module.exports = function fromStringWithSourceMap(code, map) {
 		var sources = map.sources;
@@ -38186,7 +38559,7 @@
 	};
 
 /***/ },
-/* 305 */
+/* 307 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -38221,7 +38594,7 @@
 	};
 
 /***/ },
-/* 306 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -38230,9 +38603,9 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var Source = __webpack_require__(285);
-	var SourceNode = __webpack_require__(286).SourceNode;
-	var SourceListMap = __webpack_require__(297).SourceListMap;
+	var Source = __webpack_require__(287);
+	var SourceNode = __webpack_require__(288).SourceNode;
+	var SourceListMap = __webpack_require__(299).SourceListMap;
 
 	function RawSource(value) {
 		Source.call(this);
@@ -38264,7 +38637,7 @@
 	};
 
 /***/ },
-/* 307 */
+/* 309 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -38280,7 +38653,7 @@
 	module.exports = ModuleReason;
 
 /***/ },
-/* 308 */
+/* 310 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -38300,7 +38673,7 @@
 	};
 
 /***/ },
-/* 309 */
+/* 311 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -38357,7 +38730,7 @@
 	};
 
 /***/ },
-/* 310 */
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -38397,7 +38770,7 @@
 		return true;
 	};
 
-	Chunk.prototype._removeAndDo = __webpack_require__(308);
+	Chunk.prototype._removeAndDo = __webpack_require__(310);
 
 	Chunk.prototype.removeModule = function (module) {
 		this._removeAndDo("modules", module, "removeChunk");
@@ -38615,7 +38988,7 @@
 	};
 
 /***/ },
-/* 311 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
@@ -38626,7 +38999,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var RequestShortener = __webpack_require__(312);
+	var RequestShortener = __webpack_require__(314);
 
 	function Stats(compilation) {
 		this.compilation = compilation;
@@ -38756,7 +39129,7 @@
 		});
 
 		if (showVersion) {
-			obj.version = __webpack_require__(313).version;
+			obj.version = __webpack_require__(315).version;
 		}
 
 		if (showHash) obj.hash = this.hash;
@@ -39325,7 +39698,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 312 */
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(__dirname) {"use strict";
@@ -39334,7 +39707,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var path = __webpack_require__(272);
+	var path = __webpack_require__(274);
 
 	function RequestShortener(directory) {
 		directory = directory.replace(/\\/g, "/");
@@ -39384,7 +39757,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, "/"))
 
 /***/ },
-/* 313 */
+/* 315 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -39539,7 +39912,7 @@
 	};
 
 /***/ },
-/* 314 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39548,10 +39921,10 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ConcatSource = __webpack_require__(315);
-	var OriginalSource = __webpack_require__(316);
-	var PrefixSource = __webpack_require__(317);
-	var Template = __webpack_require__(318);
+	var ConcatSource = __webpack_require__(317);
+	var OriginalSource = __webpack_require__(318);
+	var PrefixSource = __webpack_require__(319);
+	var Template = __webpack_require__(320);
 
 	function MainTemplate(outputOptions) {
 		Template.call(this, outputOptions);
@@ -39688,7 +40061,7 @@
 	};
 
 /***/ },
-/* 315 */
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39697,9 +40070,9 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var SourceNode = __webpack_require__(286).SourceNode;
-	var SourceListMap = __webpack_require__(297).SourceListMap;
-	var Source = __webpack_require__(285);
+	var SourceNode = __webpack_require__(288).SourceNode;
+	var SourceListMap = __webpack_require__(299).SourceListMap;
+	var Source = __webpack_require__(287);
 
 	function ConcatSource() {
 		Source.call(this);
@@ -39728,7 +40101,7 @@
 		}, 0);
 	};
 
-	__webpack_require__(305)(ConcatSource.prototype);
+	__webpack_require__(307)(ConcatSource.prototype);
 
 	ConcatSource.prototype.node = function (options) {
 		var node = new SourceNode(null, null, null, this.children.map(function (item) {
@@ -39752,7 +40125,7 @@
 	};
 
 /***/ },
-/* 316 */
+/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39761,10 +40134,10 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var SourceNode = __webpack_require__(286).SourceNode;
-	var SourceMapConsumer = __webpack_require__(286).SourceMapConsumer;
-	var SourceListMap = __webpack_require__(297).SourceListMap;
-	var Source = __webpack_require__(285);
+	var SourceNode = __webpack_require__(288).SourceNode;
+	var SourceMapConsumer = __webpack_require__(288).SourceMapConsumer;
+	var SourceListMap = __webpack_require__(299).SourceListMap;
+	var Source = __webpack_require__(287);
 
 	function isSplitter(c) {
 		switch (c) {
@@ -39808,7 +40181,7 @@
 		return this._value;
 	};
 
-	__webpack_require__(305)(OriginalSource.prototype);
+	__webpack_require__(307)(OriginalSource.prototype);
 
 	OriginalSource.prototype.node = function (options) {
 		options = options || {};
@@ -39841,7 +40214,7 @@
 	};
 
 /***/ },
-/* 317 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39850,8 +40223,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var Source = __webpack_require__(285);
-	var SourceNode = __webpack_require__(286).SourceNode;
+	var Source = __webpack_require__(287);
+	var SourceNode = __webpack_require__(288).SourceNode;
 
 	function PrefixSource(prefix, source) {
 		Source.call(this);
@@ -39869,7 +40242,7 @@
 		return prefix + node.replace(/\n(.)/g, "\n" + prefix + "$1");
 	};
 
-	__webpack_require__(305)(PrefixSource.prototype);
+	__webpack_require__(307)(PrefixSource.prototype);
 
 	PrefixSource.prototype.node = function (options) {
 		var node = this._source.node(options);
@@ -39907,7 +40280,7 @@
 	};
 
 /***/ },
-/* 318 */
+/* 320 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39916,8 +40289,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var Tapable = __webpack_require__(273);
-	var ConcatSource = __webpack_require__(315);
+	var Tapable = __webpack_require__(275);
+	var ConcatSource = __webpack_require__(317);
 
 	function Template(outputOptions) {
 		Tapable.call(this);
@@ -40032,7 +40405,7 @@
 	};
 
 /***/ },
-/* 319 */
+/* 321 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -40041,8 +40414,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ConcatSource = __webpack_require__(315);
-	var Template = __webpack_require__(318);
+	var ConcatSource = __webpack_require__(317);
+	var Template = __webpack_require__(320);
 
 	function ChunkTemplate(outputOptions) {
 		Template.call(this, outputOptions);
@@ -40076,7 +40449,7 @@
 	};
 
 /***/ },
-/* 320 */
+/* 322 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -40085,7 +40458,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var Template = __webpack_require__(318);
+	var Template = __webpack_require__(320);
 
 	function HotUpdateChunkTemplate(outputOptions) {
 		Template.call(this, outputOptions);
@@ -40111,7 +40484,7 @@
 	};
 
 /***/ },
-/* 321 */
+/* 323 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -40120,7 +40493,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var Template = __webpack_require__(318);
+	var Template = __webpack_require__(320);
 
 	function ModuleTemplate(outputOptions) {
 		Template.call(this, outputOptions);
@@ -40141,7 +40514,7 @@
 	};
 
 /***/ },
-/* 322 */
+/* 324 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -40204,7 +40577,7 @@
 	};
 
 /***/ },
-/* 323 */
+/* 325 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -40228,7 +40601,7 @@
 	ChunkRenderError.prototype = Object.create(Error.prototype);
 
 /***/ },
-/* 324 */
+/* 326 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -40289,21 +40662,21 @@
 	};
 
 /***/ },
-/* 325 */
+/* 327 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
 
-	var rng = __webpack_require__(326);
+	var rng = __webpack_require__(328);
 
 	function error() {
 	  var m = [].slice.call(arguments).join(' ');
 	  throw new Error([m, 'we accept pull requests', 'http://github.com/dominictarr/crypto-browserify'].join('\n'));
 	}
 
-	exports.createHash = __webpack_require__(328);
+	exports.createHash = __webpack_require__(330);
 
-	exports.createHmac = __webpack_require__(340);
+	exports.createHmac = __webpack_require__(342);
 
 	exports.randomBytes = function (size, callback) {
 	  if (callback && callback.call) {
@@ -40327,7 +40700,7 @@
 	  return ['sha1', 'sha256', 'sha512', 'md5', 'rmd160'];
 	};
 
-	var p = __webpack_require__(341)(exports);
+	var p = __webpack_require__(343)(exports);
 	exports.pbkdf2 = p.pbkdf2;
 	exports.pbkdf2Sync = p.pbkdf2Sync;
 
@@ -40337,17 +40710,17 @@
 	    error('sorry,', name, 'is not implemented yet');
 	  };
 	});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(268).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(270).Buffer))
 
 /***/ },
-/* 326 */
+/* 328 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, Buffer) {'use strict';
 
 	(function () {
 	  var g = ('undefined' === typeof window ? global : window) || {};
-	  _crypto = g.crypto || g.msCrypto || __webpack_require__(327);
+	  _crypto = g.crypto || g.msCrypto || __webpack_require__(329);
 	  module.exports = function (size) {
 	    // Modern Browsers
 	    if (_crypto.getRandomValues) {
@@ -40363,24 +40736,24 @@
 	    } else throw new Error('secure random number generation not supported by this browser\n' + 'use chrome, FireFox or Internet Explorer 11');
 	  };
 	})();
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(268).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(270).Buffer))
 
 /***/ },
-/* 327 */
+/* 329 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 328 */
+/* 330 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
 
-	var createHash = __webpack_require__(329);
+	var createHash = __webpack_require__(331);
 
-	var md5 = toConstructor(__webpack_require__(337));
-	var rmd160 = toConstructor(__webpack_require__(339));
+	var md5 = toConstructor(__webpack_require__(339));
+	var rmd160 = toConstructor(__webpack_require__(341));
 
 	function toConstructor(fn) {
 	  return function () {
@@ -40407,10 +40780,10 @@
 	  if ('rmd160' === alg) return new rmd160();
 	  return createHash(alg);
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(268).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(270).Buffer))
 
 /***/ },
-/* 329 */
+/* 331 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40421,15 +40794,15 @@
 	  return new Alg();
 	};
 
-	var Buffer = __webpack_require__(268).Buffer;
-	var Hash = __webpack_require__(330)(Buffer);
+	var Buffer = __webpack_require__(270).Buffer;
+	var Hash = __webpack_require__(332)(Buffer);
 
-	_exports.sha1 = __webpack_require__(331)(Buffer, Hash);
-	_exports.sha256 = __webpack_require__(335)(Buffer, Hash);
-	_exports.sha512 = __webpack_require__(336)(Buffer, Hash);
+	_exports.sha1 = __webpack_require__(333)(Buffer, Hash);
+	_exports.sha256 = __webpack_require__(337)(Buffer, Hash);
+	_exports.sha512 = __webpack_require__(338)(Buffer, Hash);
 
 /***/ },
-/* 330 */
+/* 332 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -40513,7 +40886,7 @@
 	};
 
 /***/ },
-/* 331 */
+/* 333 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40527,7 +40900,7 @@
 	 * See http://pajhome.org.uk/crypt/md5 for details.
 	 */
 
-	var inherits = __webpack_require__(332).inherits;
+	var inherits = __webpack_require__(334).inherits;
 
 	module.exports = function (Buffer, Hash) {
 
@@ -40652,7 +41025,7 @@
 	};
 
 /***/ },
-/* 332 */
+/* 334 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, process) {'use strict';
@@ -41149,7 +41522,7 @@
 	}
 	exports.isPrimitive = isPrimitive;
 
-	exports.isBuffer = __webpack_require__(333);
+	exports.isBuffer = __webpack_require__(335);
 
 	function objectToString(o) {
 	  return Object.prototype.toString.call(o);
@@ -41186,7 +41559,7 @@
 	 *     prototype.
 	 * @param {function} superCtor Constructor function to inherit prototype from.
 	 */
-	exports.inherits = __webpack_require__(334);
+	exports.inherits = __webpack_require__(336);
 
 	exports._extend = function (origin, add) {
 	  // Don't do anything if add isn't an object
@@ -41206,7 +41579,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(9)))
 
 /***/ },
-/* 333 */
+/* 335 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -41218,7 +41591,7 @@
 	};
 
 /***/ },
-/* 334 */
+/* 336 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -41248,7 +41621,7 @@
 	}
 
 /***/ },
-/* 335 */
+/* 337 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41261,7 +41634,7 @@
 	 *
 	 */
 
-	var inherits = __webpack_require__(332).inherits;
+	var inherits = __webpack_require__(334).inherits;
 
 	module.exports = function (Buffer, Hash) {
 
@@ -41380,12 +41753,12 @@
 	};
 
 /***/ },
-/* 336 */
+/* 338 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var inherits = __webpack_require__(332).inherits;
+	var inherits = __webpack_require__(334).inherits;
 
 	module.exports = function (Buffer, Hash) {
 	  var K = [0x428a2f98, 0xd728ae22, 0x71374491, 0x23ef65cd, 0xb5c0fbcf, 0xec4d3b2f, 0xe9b5dba5, 0x8189dbbc, 0x3956c25b, 0xf348b538, 0x59f111f1, 0xb605d019, 0x923f82a4, 0xaf194f9b, 0xab1c5ed5, 0xda6d8118, 0xd807aa98, 0xa3030242, 0x12835b01, 0x45706fbe, 0x243185be, 0x4ee4b28c, 0x550c7dc3, 0xd5ffb4e2, 0x72be5d74, 0xf27b896f, 0x80deb1fe, 0x3b1696b1, 0x9bdc06a7, 0x25c71235, 0xc19bf174, 0xcf692694, 0xe49b69c1, 0x9ef14ad2, 0xefbe4786, 0x384f25e3, 0x0fc19dc6, 0x8b8cd5b5, 0x240ca1cc, 0x77ac9c65, 0x2de92c6f, 0x592b0275, 0x4a7484aa, 0x6ea6e483, 0x5cb0a9dc, 0xbd41fbd4, 0x76f988da, 0x831153b5, 0x983e5152, 0xee66dfab, 0xa831c66d, 0x2db43210, 0xb00327c8, 0x98fb213f, 0xbf597fc7, 0xbeef0ee4, 0xc6e00bf3, 0x3da88fc2, 0xd5a79147, 0x930aa725, 0x06ca6351, 0xe003826f, 0x14292967, 0x0a0e6e70, 0x27b70a85, 0x46d22ffc, 0x2e1b2138, 0x5c26c926, 0x4d2c6dfc, 0x5ac42aed, 0x53380d13, 0x9d95b3df, 0x650a7354, 0x8baf63de, 0x766a0abb, 0x3c77b2a8, 0x81c2c92e, 0x47edaee6, 0x92722c85, 0x1482353b, 0xa2bfe8a1, 0x4cf10364, 0xa81a664b, 0xbc423001, 0xc24b8b70, 0xd0f89791, 0xc76c51a3, 0x0654be30, 0xd192e819, 0xd6ef5218, 0xd6990624, 0x5565a910, 0xf40e3585, 0x5771202a, 0x106aa070, 0x32bbd1b8, 0x19a4c116, 0xb8d2d0c8, 0x1e376c08, 0x5141ab53, 0x2748774c, 0xdf8eeb99, 0x34b0bcb5, 0xe19b48a8, 0x391c0cb3, 0xc5c95a63, 0x4ed8aa4a, 0xe3418acb, 0x5b9cca4f, 0x7763e373, 0x682e6ff3, 0xd6b2b8a3, 0x748f82ee, 0x5defb2fc, 0x78a5636f, 0x43172f60, 0x84c87814, 0xa1f0ab72, 0x8cc70208, 0x1a6439ec, 0x90befffa, 0x23631e28, 0xa4506ceb, 0xde82bde9, 0xbef9a3f7, 0xb2c67915, 0xc67178f2, 0xe372532b, 0xca273ece, 0xea26619c, 0xd186b8c7, 0x21c0c207, 0xeada7dd6, 0xcde0eb1e, 0xf57d4f7f, 0xee6ed178, 0x06f067aa, 0x72176fba, 0x0a637dc5, 0xa2c898a6, 0x113f9804, 0xbef90dae, 0x1b710b35, 0x131c471b, 0x28db77f5, 0x23047d84, 0x32caab7b, 0x40c72493, 0x3c9ebe0a, 0x15c9bebc, 0x431d67c4, 0x9c100d4c, 0x4cc5d4be, 0xcb3e42b6, 0x597f299c, 0xfc657e2a, 0x5fcb6fab, 0x3ad6faec, 0x6c44198c, 0x4a475817];
@@ -41588,7 +41961,7 @@
 	};
 
 /***/ },
-/* 337 */
+/* 339 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41602,7 +41975,7 @@
 	 * See http://pajhome.org.uk/crypt/md5 for more info.
 	 */
 
-	var helpers = __webpack_require__(338);
+	var helpers = __webpack_require__(340);
 
 	/*
 	 * Calculate the MD5 of an array of little-endian words, and a bit length
@@ -41740,7 +42113,7 @@
 	};
 
 /***/ },
-/* 338 */
+/* 340 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {"use strict";
@@ -41779,10 +42152,10 @@
 	}
 
 	module.exports = { hash: hash };
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(268).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(270).Buffer))
 
 /***/ },
-/* 339 */
+/* 341 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
@@ -41961,15 +42334,15 @@
 	  var digestbytes = wordsToBytes(H);
 	  return new Buffer(digestbytes);
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(268).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(270).Buffer))
 
 /***/ },
-/* 340 */
+/* 342 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
 
-	var createHash = __webpack_require__(328);
+	var createHash = __webpack_require__(330);
 
 	var zeroBuffer = new Buffer(128);
 	zeroBuffer.fill(0);
@@ -42011,15 +42384,15 @@
 	  var h = this._hash.digest();
 	  return createHash(this._alg).update(this._opad).update(h).digest(enc);
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(268).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(270).Buffer))
 
 /***/ },
-/* 341 */
+/* 343 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var pbkdf2Export = __webpack_require__(342);
+	var pbkdf2Export = __webpack_require__(344);
 
 	module.exports = function (crypto, exports) {
 	  exports = exports || {};
@@ -42033,7 +42406,7 @@
 	};
 
 /***/ },
-/* 342 */
+/* 344 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
@@ -42119,10 +42492,10 @@
 	    pbkdf2Sync: pbkdf2Sync
 	  };
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(268).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(270).Buffer))
 
 /***/ },
-/* 343 */
+/* 345 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -42133,9 +42506,9 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var acorn = __webpack_require__(344);
-	var Tapable = __webpack_require__(273);
-	var BasicEvaluatedExpression = __webpack_require__(345);
+	var acorn = __webpack_require__(346);
+	var Tapable = __webpack_require__(275);
+	var BasicEvaluatedExpression = __webpack_require__(347);
 
 	function Parser(options) {
 		Tapable.call(this);
@@ -42961,7 +43334,7 @@
 	};
 
 /***/ },
-/* 344 */
+/* 346 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var require;var require;"use strict";var _typeof=typeof Symbol==="function"&&typeof Symbol.iterator==="symbol"?function(obj){return typeof obj;}:function(obj){return obj&&typeof Symbol==="function"&&obj.constructor===Symbol?"symbol":typeof obj;};(function(f){if(( false?"undefined":_typeof(exports))==="object"&&typeof module!=="undefined"){module.exports=f();}else if(true){!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (f), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));}else{var g;if(typeof window!=="undefined"){g=window;}else if(typeof global!=="undefined"){g=global;}else if(typeof self!=="undefined"){g=self;}else{g=this;}g.acorn=f();}})(function(){var define,module,exports;return function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return require(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f;}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e);},l,l.exports,e,t,n,r);}return n[o].exports;}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++){s(r[o]);}return s;}({1:[function(_dereq_,module,exports){// A recursive descent parser operates by defining functions for all
@@ -43444,7 +43817,7 @@
 	"use strict";exports.__esModule=true;exports.isNewLine=isNewLine;var lineBreak=/\r\n?|\n|\u2028|\u2029/;exports.lineBreak=lineBreak;var lineBreakG=new RegExp(lineBreak.source,"g");exports.lineBreakG=lineBreakG;function isNewLine(code){return code===10||code===13||code===0x2028||code==0x2029;}var nonASCIIwhitespace=/[\u1680\u180e\u2000-\u200a\u202f\u205f\u3000\ufeff]/;exports.nonASCIIwhitespace=nonASCIIwhitespace;var skipWhiteSpace=/(?:\s|\/\/.*|\/\*[^]*?\*\/)*/g;exports.skipWhiteSpace=skipWhiteSpace;},{}]},{},[3])(3);});
 
 /***/ },
-/* 345 */
+/* 347 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -43560,7 +43933,7 @@
 	};
 
 /***/ },
-/* 346 */
+/* 348 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -43569,8 +43942,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var Tapable = __webpack_require__(273);
-	var createInnerCallback = __webpack_require__(347);
+	var Tapable = __webpack_require__(275);
+	var createInnerCallback = __webpack_require__(349);
 
 	function Resolver(fileSystem) {
 		Tapable.call(this);
@@ -43733,9 +44106,9 @@
 		return directoryRegExp.test(path);
 	};
 
-	Resolver.prototype.join = __webpack_require__(348);
+	Resolver.prototype.join = __webpack_require__(350);
 
-	Resolver.prototype.normalize = __webpack_require__(349);
+	Resolver.prototype.normalize = __webpack_require__(351);
 
 	Resolver.prototype.forEachBail = function (array, iterator, callback) {
 		if (array.length == 0) return callback();
@@ -43767,7 +44140,7 @@
 	};
 
 /***/ },
-/* 347 */
+/* 349 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -43805,12 +44178,12 @@
 	};
 
 /***/ },
-/* 348 */
+/* 350 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var normalize = __webpack_require__(349);
+	var normalize = __webpack_require__(351);
 
 	var absoluteWinRegExp = /^[A-Z]:([\\\/]|$)/i;
 	var absoluteNixRegExp = /^\//i;
@@ -43826,7 +44199,7 @@
 	};
 
 /***/ },
-/* 349 */
+/* 351 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -43871,7 +44244,7 @@
 	};
 
 /***/ },
-/* 350 */
+/* 352 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -43880,12 +44253,12 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var async = __webpack_require__(275);
+	var async = __webpack_require__(277);
 
-	var Tapable = __webpack_require__(273);
-	var NormalModule = __webpack_require__(351);
-	var RawModule = __webpack_require__(361);
-	var LoadersList = __webpack_require__(362);
+	var Tapable = __webpack_require__(275);
+	var NormalModule = __webpack_require__(353);
+	var RawModule = __webpack_require__(363);
+	var LoadersList = __webpack_require__(364);
 
 	function NormalModuleFactory(context, resolvers, parser, options) {
 		Tapable.call(this);
@@ -44023,7 +44396,7 @@
 	};
 
 /***/ },
-/* 351 */
+/* 353 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -44032,17 +44405,17 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var path = __webpack_require__(272);
-	var Module = __webpack_require__(281);
-	var NormalModuleMixin = __webpack_require__(352);
-	var SourceMapSource = __webpack_require__(353);
-	var OriginalSource = __webpack_require__(316);
-	var RawSource = __webpack_require__(306);
-	var ReplaceSource = __webpack_require__(284);
-	var CachedSource = __webpack_require__(324);
-	var ModuleParseError = __webpack_require__(358);
-	var TemplateArgumentDependency = __webpack_require__(359);
-	var AsyncDependenciesBlock = __webpack_require__(360);
+	var path = __webpack_require__(274);
+	var Module = __webpack_require__(283);
+	var NormalModuleMixin = __webpack_require__(354);
+	var SourceMapSource = __webpack_require__(355);
+	var OriginalSource = __webpack_require__(318);
+	var RawSource = __webpack_require__(308);
+	var ReplaceSource = __webpack_require__(286);
+	var CachedSource = __webpack_require__(326);
+	var ModuleParseError = __webpack_require__(360);
+	var TemplateArgumentDependency = __webpack_require__(361);
+	var AsyncDependenciesBlock = __webpack_require__(362);
 
 	function NormalModule(request, userRequest, rawRequest, loaders, resource, parser) {
 		Module.call(this);
@@ -44141,7 +44514,7 @@
 	};
 
 	NormalModule.prototype.source = function (dependencyTemplates, outputOptions, requestShortener) {
-		var hash = __webpack_require__(325).createHash("md5");
+		var hash = __webpack_require__(327).createHash("md5");
 		this.updateHash(hash);
 		hash = hash.digest("hex");
 		if (this._cachedSource && this._cachedSource.hash === hash) {
@@ -44254,7 +44627,7 @@
 
 	NormalModule.prototype.getSourceHash = function () {
 		if (!this._source) return "";
-		var hash = __webpack_require__(325).createHash("md5");
+		var hash = __webpack_require__(327).createHash("md5");
 		hash.update(this._source.source());
 		return hash.digest("hex");
 	};
@@ -44355,7 +44728,7 @@
 	};
 
 /***/ },
-/* 352 */
+/* 354 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {"use strict";
@@ -44366,15 +44739,15 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var RawSource = __webpack_require__(306);
-	var OriginalSource = __webpack_require__(316);
-	var SourceMapSource = __webpack_require__(353);
-	var LineToLineMappedSource = __webpack_require__(354);
-	var path = __webpack_require__(272); // TODO refactor
+	var RawSource = __webpack_require__(308);
+	var OriginalSource = __webpack_require__(318);
+	var SourceMapSource = __webpack_require__(355);
+	var LineToLineMappedSource = __webpack_require__(356);
+	var path = __webpack_require__(274); // TODO refactor
 
-	var ModuleBuildError = __webpack_require__(355);
-	var ModuleError = __webpack_require__(356);
-	var ModuleWarning = __webpack_require__(357);
+	var ModuleBuildError = __webpack_require__(357);
+	var ModuleError = __webpack_require__(358);
+	var ModuleWarning = __webpack_require__(359);
 
 	function utf8BufferToString(buf) {
 		var str = buf.toString("utf-8");
@@ -44672,10 +45045,10 @@
 	};
 
 	NormalModuleMixin.prototype.fillLoaderContext = function fillLoaderContext() {};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(268).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(270).Buffer))
 
 /***/ },
-/* 353 */
+/* 355 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -44684,12 +45057,12 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var SourceNode = __webpack_require__(286).SourceNode;
-	var SourceMapConsumer = __webpack_require__(286).SourceMapConsumer;
-	var SourceMapGenerator = __webpack_require__(286).SourceMapGenerator;
-	var SourceListMap = __webpack_require__(297).SourceListMap;
-	var fromStringWithSourceMap = __webpack_require__(297).fromStringWithSourceMap;
-	var Source = __webpack_require__(285);
+	var SourceNode = __webpack_require__(288).SourceNode;
+	var SourceMapConsumer = __webpack_require__(288).SourceMapConsumer;
+	var SourceMapGenerator = __webpack_require__(288).SourceMapGenerator;
+	var SourceListMap = __webpack_require__(299).SourceListMap;
+	var fromStringWithSourceMap = __webpack_require__(299).fromStringWithSourceMap;
+	var Source = __webpack_require__(287);
 
 	function SourceMapSource(value, name, sourceMap, originalSource, innerSourceMap) {
 		Source.call(this);
@@ -44708,7 +45081,7 @@
 		return this._value;
 	};
 
-	__webpack_require__(305)(SourceMapSource.prototype);
+	__webpack_require__(307)(SourceMapSource.prototype);
 
 	SourceMapSource.prototype.node = function (options) {
 		var innerSourceMap = this._innerSourceMap;
@@ -44734,7 +45107,7 @@
 	};
 
 /***/ },
-/* 354 */
+/* 356 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -44743,10 +45116,10 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var SourceNode = __webpack_require__(286).SourceNode;
-	var SourceMapConsumer = __webpack_require__(286).SourceMapConsumer;
-	var SourceListMap = __webpack_require__(297).SourceListMap;
-	var Source = __webpack_require__(285);
+	var SourceNode = __webpack_require__(288).SourceNode;
+	var SourceMapConsumer = __webpack_require__(288).SourceMapConsumer;
+	var SourceListMap = __webpack_require__(299).SourceListMap;
+	var Source = __webpack_require__(287);
 
 	function LineToLineMappedSource(value, name, originalSource) {
 		Source.call(this);
@@ -44764,7 +45137,7 @@
 		return this._value;
 	};
 
-	__webpack_require__(305)(LineToLineMappedSource.prototype);
+	__webpack_require__(307)(LineToLineMappedSource.prototype);
 
 	LineToLineMappedSource.prototype.node = function (options) {
 		var value = this._value;
@@ -44787,7 +45160,7 @@
 	};
 
 /***/ },
-/* 355 */
+/* 357 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -44834,7 +45207,7 @@
 	ModuleBuildError.prototype = Object.create(Error.prototype);
 
 /***/ },
-/* 356 */
+/* 358 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -44856,7 +45229,7 @@
 	ModuleError.prototype = Object.create(Error.prototype);
 
 /***/ },
-/* 357 */
+/* 359 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -44878,7 +45251,7 @@
 	ModuleWarning.prototype = Object.create(Error.prototype);
 
 /***/ },
-/* 358 */
+/* 360 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -44912,7 +45285,7 @@
 	ModuleParseError.prototype = Object.create(Error.prototype);
 
 /***/ },
-/* 359 */
+/* 361 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -44945,7 +45318,7 @@
 	};
 
 /***/ },
-/* 360 */
+/* 362 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -44954,7 +45327,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var DependenciesBlock = __webpack_require__(282);
+	var DependenciesBlock = __webpack_require__(284);
 
 	function AsyncDependenciesBlock(name, module, loc) {
 		DependenciesBlock.call(this);
@@ -44990,7 +45363,7 @@
 	};
 
 /***/ },
-/* 361 */
+/* 363 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -44999,9 +45372,9 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var Module = __webpack_require__(281);
-	var OriginalSource = __webpack_require__(316);
-	var RawSource = __webpack_require__(306);
+	var Module = __webpack_require__(283);
+	var OriginalSource = __webpack_require__(318);
+	var RawSource = __webpack_require__(308);
 
 	function RawModule(source, identifier, readableIdentifier) {
 		Module.call(this);
@@ -45041,7 +45414,7 @@
 	};
 
 	RawModule.prototype.getSourceHash = function () {
-		var hash = __webpack_require__(325).createHash("md5");
+		var hash = __webpack_require__(327).createHash("md5");
 		hash.update(this.sourceStr);
 		return hash.digest("hex");
 	};
@@ -45059,7 +45432,7 @@
 	};
 
 /***/ },
-/* 362 */
+/* 364 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -45157,7 +45530,7 @@
 	};
 
 /***/ },
-/* 363 */
+/* 365 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45166,12 +45539,12 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var async = __webpack_require__(275);
-	var path = __webpack_require__(272);
+	var async = __webpack_require__(277);
+	var path = __webpack_require__(274);
 
-	var Tapable = __webpack_require__(273);
-	var ContextModule = __webpack_require__(364);
-	var ContextElementDependency = __webpack_require__(365);
+	var Tapable = __webpack_require__(275);
+	var ContextModule = __webpack_require__(366);
+	var ContextElementDependency = __webpack_require__(367);
 
 	function ContextModuleFactory(resolvers) {
 		Tapable.call(this);
@@ -45290,7 +45663,7 @@
 	};
 
 /***/ },
-/* 364 */
+/* 366 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45299,9 +45672,9 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var Module = __webpack_require__(281);
-	var OriginalSource = __webpack_require__(316);
-	var RawSource = __webpack_require__(306);
+	var Module = __webpack_require__(283);
+	var OriginalSource = __webpack_require__(318);
+	var RawSource = __webpack_require__(308);
 
 	function ContextModule(resolveDependencies, context, recursive, regExp, addon) {
 		Module.call(this);
@@ -45398,7 +45771,7 @@
 	};
 
 /***/ },
-/* 365 */
+/* 367 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45407,7 +45780,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ModuleDependency = __webpack_require__(366);
+	var ModuleDependency = __webpack_require__(368);
 
 	function ContextElementDependency(request, userRequest) {
 		ModuleDependency.call(this, request);
@@ -45422,7 +45795,7 @@
 	ContextElementDependency.prototype.type = "context element";
 
 /***/ },
-/* 366 */
+/* 368 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45431,7 +45804,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var Dependency = __webpack_require__(322);
+	var Dependency = __webpack_require__(324);
 
 	function ModuleDependency(request) {
 		Dependency.call(this);
@@ -45448,7 +45821,7 @@
 	};
 
 /***/ },
-/* 367 */
+/* 369 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -45471,7 +45844,7 @@
 	};
 
 /***/ },
-/* 368 */
+/* 370 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45482,53 +45855,53 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var OptionsApply = __webpack_require__(369);
+	var OptionsApply = __webpack_require__(371);
 
-	var LoaderTargetPlugin = __webpack_require__(370);
-	var FunctionModulePlugin = __webpack_require__(371);
-	var EvalDevToolModulePlugin = __webpack_require__(373);
-	var SourceMapDevToolPlugin = __webpack_require__(376);
-	var EvalSourceMapDevToolPlugin = __webpack_require__(378);
+	var LoaderTargetPlugin = __webpack_require__(372);
+	var FunctionModulePlugin = __webpack_require__(373);
+	var EvalDevToolModulePlugin = __webpack_require__(375);
+	var SourceMapDevToolPlugin = __webpack_require__(378);
+	var EvalSourceMapDevToolPlugin = __webpack_require__(380);
 
-	var EntryOptionPlugin = __webpack_require__(380);
-	var RecordIdsPlugin = __webpack_require__(387);
+	var EntryOptionPlugin = __webpack_require__(382);
+	var RecordIdsPlugin = __webpack_require__(389);
 
-	var APIPlugin = __webpack_require__(388);
-	var ConstPlugin = __webpack_require__(392);
-	var RequireJsStuffPlugin = __webpack_require__(393);
-	var NodeStuffPlugin = __webpack_require__(394);
-	var CompatibilityPlugin = __webpack_require__(397);
-	var DefinePlugin = __webpack_require__(399);
+	var APIPlugin = __webpack_require__(390);
+	var ConstPlugin = __webpack_require__(394);
+	var RequireJsStuffPlugin = __webpack_require__(395);
+	var NodeStuffPlugin = __webpack_require__(396);
+	var CompatibilityPlugin = __webpack_require__(399);
+	var DefinePlugin = __webpack_require__(401);
 
-	var MovedToPluginWarningPlugin = __webpack_require__(400);
-	var TemplatedPathPlugin = __webpack_require__(401);
-	var WarnCaseSensitiveModulesPlugin = __webpack_require__(402);
+	var MovedToPluginWarningPlugin = __webpack_require__(402);
+	var TemplatedPathPlugin = __webpack_require__(403);
+	var WarnCaseSensitiveModulesPlugin = __webpack_require__(404);
 
-	var LoaderPlugin = __webpack_require__(404);
-	var CommonJsPlugin = __webpack_require__(406);
-	var AMDPlugin = __webpack_require__(424);
-	var RequireContextPlugin = __webpack_require__(436);
-	var RequireEnsurePlugin = __webpack_require__(440);
-	var RequireIncludePlugin = __webpack_require__(446);
+	var LoaderPlugin = __webpack_require__(406);
+	var CommonJsPlugin = __webpack_require__(408);
+	var AMDPlugin = __webpack_require__(426);
+	var RequireContextPlugin = __webpack_require__(438);
+	var RequireEnsurePlugin = __webpack_require__(442);
+	var RequireIncludePlugin = __webpack_require__(448);
 
-	var RemoveParentModulesPlugin = __webpack_require__(449);
-	var RemoveEmptyChunksPlugin = __webpack_require__(450);
-	var MergeDuplicateChunksPlugin = __webpack_require__(451);
-	var FlagIncludedChunksPlugin = __webpack_require__(452);
+	var RemoveParentModulesPlugin = __webpack_require__(451);
+	var RemoveEmptyChunksPlugin = __webpack_require__(452);
+	var MergeDuplicateChunksPlugin = __webpack_require__(453);
+	var FlagIncludedChunksPlugin = __webpack_require__(454);
 
-	var UnsafeCachePlugin = __webpack_require__(453);
-	var ModulesInDirectoriesPlugin = __webpack_require__(454);
-	var ModulesInRootPlugin = __webpack_require__(456);
-	var ModuleTemplatesPlugin = __webpack_require__(457);
-	var ModuleAsFilePlugin = __webpack_require__(458);
-	var ModuleAsDirectoryPlugin = __webpack_require__(459);
-	var ModuleAliasPlugin = __webpack_require__(398);
-	var DirectoryDefaultFilePlugin = __webpack_require__(460);
-	var DirectoryDescriptionFilePlugin = __webpack_require__(461);
-	var DirectoryDescriptionFileFieldAliasPlugin = __webpack_require__(462);
-	var FileAppendPlugin = __webpack_require__(463);
-	var DirectoryResultPlugin = __webpack_require__(464);
-	var ResultSymlinkPlugin = __webpack_require__(465);
+	var UnsafeCachePlugin = __webpack_require__(455);
+	var ModulesInDirectoriesPlugin = __webpack_require__(456);
+	var ModulesInRootPlugin = __webpack_require__(458);
+	var ModuleTemplatesPlugin = __webpack_require__(459);
+	var ModuleAsFilePlugin = __webpack_require__(460);
+	var ModuleAsDirectoryPlugin = __webpack_require__(461);
+	var ModuleAliasPlugin = __webpack_require__(400);
+	var DirectoryDefaultFilePlugin = __webpack_require__(462);
+	var DirectoryDescriptionFilePlugin = __webpack_require__(463);
+	var DirectoryDescriptionFileFieldAliasPlugin = __webpack_require__(464);
+	var FileAppendPlugin = __webpack_require__(465);
+	var DirectoryResultPlugin = __webpack_require__(466);
+	var ResultSymlinkPlugin = __webpack_require__(467);
 
 	function WebpackOptionsApply() {
 		OptionsApply.call(this);
@@ -45548,39 +45921,39 @@
 		if (typeof options.target === "string") {
 			switch (options.target) {
 				case "web":
-					var JsonpTemplatePlugin = __webpack_require__(466);
-					var NodeSourcePlugin = __webpack_require__(471);
+					var JsonpTemplatePlugin = __webpack_require__(468);
+					var NodeSourcePlugin = __webpack_require__(473);
 					compiler.apply(new JsonpTemplatePlugin(options.output), new FunctionModulePlugin(options.output), new NodeSourcePlugin(options.node), new LoaderTargetPlugin("web"));
 					break;
 				case "webworker":
-					var WebWorkerTemplatePlugin = __webpack_require__(483);
-					var NodeSourcePlugin = __webpack_require__(471);
+					var WebWorkerTemplatePlugin = __webpack_require__(485);
+					var NodeSourcePlugin = __webpack_require__(473);
 					compiler.apply(new WebWorkerTemplatePlugin(options.output), new FunctionModulePlugin(options.output), new NodeSourcePlugin(options.node), new LoaderTargetPlugin("webworker"));
 					break;
 				case "node":
 				case "async-node":
-					var NodeTemplatePlugin = __webpack_require__(486);
-					var NodeTargetPlugin = __webpack_require__(590);
+					var NodeTemplatePlugin = __webpack_require__(488);
+					var NodeTargetPlugin = __webpack_require__(593);
 					compiler.apply(new NodeTemplatePlugin(options.output, options.target === "async-node"), new FunctionModulePlugin(options.output), new NodeTargetPlugin(), new LoaderTargetPlugin("node"));
 					break;
 				case "node-webkit":
-					var JsonpTemplatePlugin = __webpack_require__(466);
-					var NodeTargetPlugin = __webpack_require__(590);
-					var ExternalsPlugin = __webpack_require__(591);
+					var JsonpTemplatePlugin = __webpack_require__(468);
+					var NodeTargetPlugin = __webpack_require__(593);
+					var ExternalsPlugin = __webpack_require__(594);
 					compiler.apply(new JsonpTemplatePlugin(options.output), new FunctionModulePlugin(options.output), new NodeTargetPlugin(), new ExternalsPlugin("commonjs", "nw.gui"), new LoaderTargetPlugin("node-webkit"));
 					break;
 				case "atom":
 				case "electron":
 				case "electron-main":
-					var NodeTemplatePlugin = __webpack_require__(486);
-					var NodeTargetPlugin = __webpack_require__(590);
-					var ExternalsPlugin = __webpack_require__(591);
+					var NodeTemplatePlugin = __webpack_require__(488);
+					var NodeTargetPlugin = __webpack_require__(593);
+					var ExternalsPlugin = __webpack_require__(594);
 					compiler.apply(new NodeTemplatePlugin(options.output, true), new FunctionModulePlugin(options.output), new NodeTargetPlugin(), new ExternalsPlugin("commonjs", ["app", "auto-updater", "browser-window", "content-tracing", "dialog", "electron", "global-shortcut", "ipc", "ipc-main", "menu", "menu-item", "power-monitor", "power-save-blocker", "protocol", "session", "web-contents", "tray", "clipboard", "crash-reporter", "native-image", "screen", "shell"]), new LoaderTargetPlugin(options.target));
 					break;
 				case "electron-renderer":
-					var JsonpTemplatePlugin = __webpack_require__(466);
-					var NodeTargetPlugin = __webpack_require__(590);
-					var ExternalsPlugin = __webpack_require__(591);
+					var JsonpTemplatePlugin = __webpack_require__(468);
+					var NodeTargetPlugin = __webpack_require__(593);
+					var ExternalsPlugin = __webpack_require__(594);
 					compiler.apply(new JsonpTemplatePlugin(options.output), new FunctionModulePlugin(options.output), new NodeTargetPlugin(), new ExternalsPlugin("commonjs", ["desktop-capturer", "electron", "ipc", "ipc-renderer", "remote", "web-frame", "clipboard", "crash-reporter", "native-image", "screen", "shell"]), new LoaderTargetPlugin(options.target));
 					break;
 				default:
@@ -45592,17 +45965,17 @@
 			throw new Error("Unsupported target '" + options.target + "'.");
 		}
 		if (options.output.library || options.output.libraryTarget !== "var") {
-			var LibraryTemplatePlugin = __webpack_require__(595);
+			var LibraryTemplatePlugin = __webpack_require__(598);
 			compiler.apply(new LibraryTemplatePlugin(options.output.library, options.output.libraryTarget, options.output.umdNamedDefine));
 		}
 		if (options.externals) {
-			var ExternalsPlugin = __webpack_require__(591);
+			var ExternalsPlugin = __webpack_require__(594);
 			compiler.apply(new ExternalsPlugin(options.output.libraryTarget, options.externals));
 		}
 
 		if (options.hot) {
 			compiler.apply(new MovedToPluginWarningPlugin("hot", "HotModuleReplacementPlugin"));
-			var HotModuleReplacementPlugin = __webpack_require__(600);
+			var HotModuleReplacementPlugin = __webpack_require__(603);
 			compiler.apply(new HotModuleReplacementPlugin(options.output));
 		}
 
@@ -45639,7 +46012,7 @@
 
 		if (options.prefetch) {
 			compiler.apply(new MovedToPluginWarningPlugin("prefetch", "PrefetchPlugin"));
-			var PrefetchPlugin = __webpack_require__(604);
+			var PrefetchPlugin = __webpack_require__(607);
 			options.prefetch.map(function (request) {
 				compiler.apply(new PrefetchPlugin(options.context, request));
 			});
@@ -45656,36 +46029,36 @@
 
 		if (options.optimize && options.optimize.occurenceOrder) {
 			compiler.apply(new MovedToPluginWarningPlugin("optimize.occurenceOrder", "optimize.OccurrenceOrderPlugin"));
-			var OccurrenceOrderPlugin = __webpack_require__(606);
+			var OccurrenceOrderPlugin = __webpack_require__(609);
 			compiler.apply(new OccurrenceOrderPlugin(options.optimize.occurenceOrderPreferEntry));
 		}
 
 		if (options.optimize && options.optimize.minChunkSize) {
 			compiler.apply(new MovedToPluginWarningPlugin("optimize.minChunkSize", "optimize.MinChunkSizePlugin"));
-			var MinChunkSizePlugin = __webpack_require__(607);
+			var MinChunkSizePlugin = __webpack_require__(610);
 			compiler.apply(new MinChunkSizePlugin(options.optimize));
 		}
 
 		if (options.optimize && options.optimize.maxChunks) {
 			compiler.apply(new MovedToPluginWarningPlugin("optimize.maxChunks", "optimize.LimitChunkCountPlugin"));
-			var LimitChunkCountPlugin = __webpack_require__(608);
+			var LimitChunkCountPlugin = __webpack_require__(611);
 			compiler.apply(new LimitChunkCountPlugin(options.optimize));
 		}
 
 		if (options.optimize.minimize) {
 			compiler.apply(new MovedToPluginWarningPlugin("optimize.minimize", "optimize.UglifyJsPlugin"));
-			var UglifyJsPlugin = __webpack_require__(609);
+			var UglifyJsPlugin = __webpack_require__(612);
 			if (options.optimize.minimize === true) compiler.apply(new UglifyJsPlugin());else compiler.apply(new UglifyJsPlugin(options.optimize.minimize));
 		}
 
 		if (options.cache === undefined ? options.watch : options.cache) {
-			var CachePlugin = __webpack_require__(623);
+			var CachePlugin = __webpack_require__(626);
 			compiler.apply(new CachePlugin(_typeof(options.cache) === "object" ? options.cache : null));
 		}
 
 		if (_typeof(options.provide) === "object") {
 			compiler.apply(new MovedToPluginWarningPlugin("provide", "ProvidePlugin"));
-			var ProvidePlugin = __webpack_require__(624);
+			var ProvidePlugin = __webpack_require__(627);
 			compiler.apply(new ProvidePlugin(options.provide));
 		}
 
@@ -45723,7 +46096,7 @@
 	}
 
 /***/ },
-/* 369 */
+/* 371 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -45738,7 +46111,7 @@
 	OptionsApply.prototype.process = function () /* options, compiler */{};
 
 /***/ },
-/* 370 */
+/* 372 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -45761,7 +46134,7 @@
 	};
 
 /***/ },
-/* 371 */
+/* 373 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45770,8 +46143,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var FunctionModuleTemplatePlugin = __webpack_require__(372);
-	var RequestShortener = __webpack_require__(312);
+	var FunctionModuleTemplatePlugin = __webpack_require__(374);
+	var RequestShortener = __webpack_require__(314);
 
 	function FunctionModulePlugin(options, requestShortener) {
 		this.options = options;
@@ -45786,7 +46159,7 @@
 	};
 
 /***/ },
-/* 372 */
+/* 374 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45795,8 +46168,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ConcatSource = __webpack_require__(315);
-	var PrefixSource = __webpack_require__(317);
+	var ConcatSource = __webpack_require__(317);
+	var PrefixSource = __webpack_require__(319);
 
 	function FunctionModuleTemplatePlugin() {}
 	module.exports = FunctionModuleTemplatePlugin;
@@ -45832,7 +46205,7 @@
 	};
 
 /***/ },
-/* 373 */
+/* 375 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45841,7 +46214,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var EvalDevToolModuleTemplatePlugin = __webpack_require__(374);
+	var EvalDevToolModuleTemplatePlugin = __webpack_require__(376);
 
 	function EvalDevToolModulePlugin(sourceUrlComment, moduleFilenameTemplate) {
 		this.sourceUrlComment = sourceUrlComment;
@@ -45856,7 +46229,7 @@
 	};
 
 /***/ },
-/* 374 */
+/* 376 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45865,8 +46238,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var RawSource = __webpack_require__(306);
-	var ModuleFilenameHelpers = __webpack_require__(375);
+	var RawSource = __webpack_require__(308);
+	var ModuleFilenameHelpers = __webpack_require__(377);
 
 	function EvalDevToolModuleTemplatePlugin(sourceUrlComment, moduleFilenameTemplate) {
 		this.sourceUrlComment = sourceUrlComment || "//# sourceURL=[url]";
@@ -45889,7 +46262,7 @@
 	};
 
 /***/ },
-/* 375 */
+/* 377 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -45932,7 +46305,7 @@
 	}
 
 	function getHash(str) {
-		var hash = __webpack_require__(325).createHash("md5");
+		var hash = __webpack_require__(327).createHash("md5");
 		hash.update(str);
 		return hash.digest("hex").substr(0, 4);
 	}
@@ -46030,7 +46403,7 @@
 	};
 
 /***/ },
-/* 376 */
+/* 378 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {"use strict";
@@ -46041,12 +46414,12 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var path = __webpack_require__(272);
-	var RequestShortener = __webpack_require__(312);
-	var ConcatSource = __webpack_require__(315);
-	var RawSource = __webpack_require__(306);
-	var ModuleFilenameHelpers = __webpack_require__(375);
-	var SourceMapDevToolModuleOptionsPlugin = __webpack_require__(377);
+	var path = __webpack_require__(274);
+	var RequestShortener = __webpack_require__(314);
+	var ConcatSource = __webpack_require__(317);
+	var RawSource = __webpack_require__(308);
+	var ModuleFilenameHelpers = __webpack_require__(377);
+	var SourceMapDevToolModuleOptionsPlugin = __webpack_require__(379);
 
 	function SourceMapDevToolPlugin(options, sourceMappingURLComment, moduleFilenameTemplate, fallbackModuleFilenameTemplate) {
 		if (!options || (typeof options === "undefined" ? "undefined" : _typeof(options)) !== "object") {
@@ -46200,10 +46573,10 @@
 		if (name.indexOf("/") < 0) return name;
 		return name.substr(name.lastIndexOf("/") + 1);
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(268).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(270).Buffer))
 
 /***/ },
-/* 377 */
+/* 379 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -46212,7 +46585,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ModuleFilenameHelpers = __webpack_require__(375);
+	var ModuleFilenameHelpers = __webpack_require__(377);
 
 	function SourceMapDevToolModuleOptionsPlugin(options) {
 		this.options = options;
@@ -46243,7 +46616,7 @@
 	};
 
 /***/ },
-/* 378 */
+/* 380 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -46254,8 +46627,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var EvalSourceMapDevToolModuleTemplatePlugin = __webpack_require__(379);
-	var SourceMapDevToolModuleOptionsPlugin = __webpack_require__(377);
+	var EvalSourceMapDevToolModuleTemplatePlugin = __webpack_require__(381);
+	var SourceMapDevToolModuleOptionsPlugin = __webpack_require__(379);
 
 	function EvalSourceMapDevToolPlugin(options, moduleFilenameTemplate) {
 		if (!options || (typeof options === "undefined" ? "undefined" : _typeof(options)) !== "object") {
@@ -46277,7 +46650,7 @@
 	};
 
 /***/ },
-/* 379 */
+/* 381 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {"use strict";
@@ -46286,8 +46659,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var RawSource = __webpack_require__(306);
-	var ModuleFilenameHelpers = __webpack_require__(375);
+	var RawSource = __webpack_require__(308);
+	var ModuleFilenameHelpers = __webpack_require__(377);
 
 	function EvalSourceMapDevToolModuleTemplatePlugin(compilation, options, sourceMapComment, moduleFilenameTemplate) {
 		this.compilation = compilation;
@@ -46349,10 +46722,10 @@
 			hash.update("1");
 		});
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(268).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(270).Buffer))
 
 /***/ },
-/* 380 */
+/* 382 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -46363,8 +46736,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var SingleEntryPlugin = __webpack_require__(381);
-	var MultiEntryPlugin = __webpack_require__(383);
+	var SingleEntryPlugin = __webpack_require__(383);
+	var MultiEntryPlugin = __webpack_require__(385);
 
 	function EntryOptionPlugin() {}
 	module.exports = EntryOptionPlugin;
@@ -46386,7 +46759,7 @@
 	};
 
 /***/ },
-/* 381 */
+/* 383 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -46395,7 +46768,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var SingleEntryDependency = __webpack_require__(382);
+	var SingleEntryDependency = __webpack_require__(384);
 
 	function SingleEntryPlugin(context, entry, name) {
 		this.context = context;
@@ -46417,7 +46790,7 @@
 	};
 
 /***/ },
-/* 382 */
+/* 384 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -46426,7 +46799,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ModuleDependency = __webpack_require__(366);
+	var ModuleDependency = __webpack_require__(368);
 
 	function SingleEntryDependency(request) {
 		ModuleDependency.call(this, request);
@@ -46438,7 +46811,7 @@
 	SingleEntryDependency.prototype.type = "single entry";
 
 /***/ },
-/* 383 */
+/* 385 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -46447,9 +46820,9 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var MultiEntryDependency = __webpack_require__(384);
-	var SingleEntryDependency = __webpack_require__(382);
-	var MultiModuleFactory = __webpack_require__(385);
+	var MultiEntryDependency = __webpack_require__(386);
+	var SingleEntryDependency = __webpack_require__(384);
+	var MultiModuleFactory = __webpack_require__(387);
 
 	function MultiEntryPlugin(context, entries, name) {
 		this.context = context;
@@ -46476,7 +46849,7 @@
 	};
 
 /***/ },
-/* 384 */
+/* 386 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -46485,7 +46858,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var Dependency = __webpack_require__(322);
+	var Dependency = __webpack_require__(324);
 
 	function MultiEntryDependency(dependencies, name) {
 		Dependency.call(this);
@@ -46499,7 +46872,7 @@
 	MultiEntryDependency.prototype.type = "multi entry";
 
 /***/ },
-/* 385 */
+/* 387 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -46508,8 +46881,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var Tapable = __webpack_require__(273);
-	var MultiModule = __webpack_require__(386);
+	var Tapable = __webpack_require__(275);
+	var MultiModule = __webpack_require__(388);
 
 	function MultiModuleFactory() {
 		Tapable.call(this);
@@ -46524,7 +46897,7 @@
 	};
 
 /***/ },
-/* 386 */
+/* 388 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -46533,8 +46906,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var Module = __webpack_require__(281);
-	var RawSource = __webpack_require__(306);
+	var Module = __webpack_require__(283);
+	var RawSource = __webpack_require__(308);
 
 	function MultiModule(context, dependencies, name) {
 		Module.call(this);
@@ -46600,7 +46973,7 @@
 	};
 
 /***/ },
-/* 387 */
+/* 389 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -46609,7 +46982,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var path = __webpack_require__(272);
+	var path = __webpack_require__(274);
 
 	function RecordIdsPlugin() {}
 	module.exports = RecordIdsPlugin;
@@ -46734,7 +47107,7 @@
 	};
 
 /***/ },
-/* 388 */
+/* 390 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -46743,10 +47116,10 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ConstDependency = __webpack_require__(389);
-	var BasicEvaluatedExpression = __webpack_require__(345);
+	var ConstDependency = __webpack_require__(391);
+	var BasicEvaluatedExpression = __webpack_require__(347);
 
-	var NullFactory = __webpack_require__(391);
+	var NullFactory = __webpack_require__(393);
 
 	function APIPlugin() {}
 	module.exports = APIPlugin;
@@ -46790,7 +47163,7 @@
 	};
 
 /***/ },
-/* 389 */
+/* 391 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -46799,7 +47172,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var NullDependency = __webpack_require__(390);
+	var NullDependency = __webpack_require__(392);
 
 	function ConstDependency(expression, range) {
 		NullDependency.call(this);
@@ -46823,7 +47196,7 @@
 	};
 
 /***/ },
-/* 390 */
+/* 392 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -46832,7 +47205,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var Dependency = __webpack_require__(322);
+	var Dependency = __webpack_require__(324);
 
 	function NullDependency() {
 		Dependency.call(this);
@@ -46847,7 +47220,7 @@
 	};
 
 /***/ },
-/* 391 */
+/* 393 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -46864,7 +47237,7 @@
 	};
 
 /***/ },
-/* 392 */
+/* 394 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -46873,10 +47246,10 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ConstDependency = __webpack_require__(389);
-	var BasicEvaluatedExpression = __webpack_require__(345);
+	var ConstDependency = __webpack_require__(391);
+	var BasicEvaluatedExpression = __webpack_require__(347);
 
-	var NullFactory = __webpack_require__(391);
+	var NullFactory = __webpack_require__(393);
 
 	function ConstPlugin() {}
 	module.exports = ConstPlugin;
@@ -46925,7 +47298,7 @@
 	};
 
 /***/ },
-/* 393 */
+/* 395 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -46934,9 +47307,9 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ConstDependency = __webpack_require__(389);
+	var ConstDependency = __webpack_require__(391);
 
-	var NullFactory = __webpack_require__(391);
+	var NullFactory = __webpack_require__(393);
 
 	function RequireJsStuffPlugin() {}
 	module.exports = RequireJsStuffPlugin;
@@ -46970,7 +47343,7 @@
 	};
 
 /***/ },
-/* 394 */
+/* 396 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(__dirname) {"use strict";
@@ -46979,13 +47352,13 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var path = __webpack_require__(272);
-	var ModuleParserHelpers = __webpack_require__(395);
-	var ConstDependency = __webpack_require__(389);
-	var BasicEvaluatedExpression = __webpack_require__(345);
-	var UnsupportedFeatureWarning = __webpack_require__(396);
+	var path = __webpack_require__(274);
+	var ModuleParserHelpers = __webpack_require__(397);
+	var ConstDependency = __webpack_require__(391);
+	var BasicEvaluatedExpression = __webpack_require__(347);
+	var UnsupportedFeatureWarning = __webpack_require__(398);
 
-	var NullFactory = __webpack_require__(391);
+	var NullFactory = __webpack_require__(393);
 
 	function NodeStuffPlugin(options) {
 		this.options = options;
@@ -47077,7 +47450,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, "/"))
 
 /***/ },
-/* 395 */
+/* 397 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -47105,7 +47478,7 @@
 	};
 
 /***/ },
-/* 396 */
+/* 398 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -47126,7 +47499,7 @@
 	UnsupportedFeatureWarning.prototype = Object.create(Error.prototype);
 
 /***/ },
-/* 397 */
+/* 399 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(__dirname) {"use strict";
@@ -47135,12 +47508,12 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var path = __webpack_require__(272);
-	var ConstDependency = __webpack_require__(389);
+	var path = __webpack_require__(274);
+	var ConstDependency = __webpack_require__(391);
 
-	var ModuleAliasPlugin = __webpack_require__(398);
+	var ModuleAliasPlugin = __webpack_require__(400);
 
-	var NullFactory = __webpack_require__(391);
+	var NullFactory = __webpack_require__(393);
 
 	function CompatibilityPlugin() {}
 	module.exports = CompatibilityPlugin;
@@ -47173,7 +47546,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, "/"))
 
 /***/ },
-/* 398 */
+/* 400 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -47182,7 +47555,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var createInnerCallback = __webpack_require__(347);
+	var createInnerCallback = __webpack_require__(349);
 
 	function ModuleAliasPlugin(aliasMap) {
 		this.aliasMap = aliasMap;
@@ -47224,7 +47597,7 @@
 	};
 
 /***/ },
-/* 399 */
+/* 401 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -47235,10 +47608,10 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ConstDependency = __webpack_require__(389);
-	var BasicEvaluatedExpression = __webpack_require__(345);
+	var ConstDependency = __webpack_require__(391);
+	var BasicEvaluatedExpression = __webpack_require__(347);
 
-	var NullFactory = __webpack_require__(391);
+	var NullFactory = __webpack_require__(393);
 
 	function DefinePlugin(definitions) {
 		this.definitions = definitions;
@@ -47354,7 +47727,7 @@
 	};
 
 /***/ },
-/* 400 */
+/* 402 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -47378,7 +47751,7 @@
 	};
 
 /***/ },
-/* 401 */
+/* 403 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -47403,7 +47776,7 @@
 	    REGEXP_NAME_FOR_TEST = new RegExp(REGEXP_NAME.source, "i");
 
 	// Backwards compatibility; expose regexes on Template object
-	var Template = __webpack_require__(318);
+	var Template = __webpack_require__(320);
 	Template.REGEXP_HASH = REGEXP_HASH;
 	Template.REGEXP_CHUNKHASH = REGEXP_CHUNKHASH;
 	Template.REGEXP_NAME = REGEXP_NAME;
@@ -47484,7 +47857,7 @@
 	};
 
 /***/ },
-/* 402 */
+/* 404 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -47493,7 +47866,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var CaseSensitiveModulesWarning = __webpack_require__(403);
+	var CaseSensitiveModulesWarning = __webpack_require__(405);
 
 	function WarnCaseSensitiveModulesPlugin() {}
 	module.exports = WarnCaseSensitiveModulesPlugin;
@@ -47517,7 +47890,7 @@
 	};
 
 /***/ },
-/* 403 */
+/* 405 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -47538,7 +47911,7 @@
 	CaseSensitiveModulesWarning.prototype = Object.create(Error.prototype);
 
 /***/ },
-/* 404 */
+/* 406 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -47547,7 +47920,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var LoaderDependency = __webpack_require__(405);
+	var LoaderDependency = __webpack_require__(407);
 
 	function LoaderPlugin() {}
 	module.exports = LoaderPlugin;
@@ -47603,7 +47976,7 @@
 	};
 
 /***/ },
-/* 405 */
+/* 407 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -47612,7 +47985,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ModuleDependency = __webpack_require__(366);
+	var ModuleDependency = __webpack_require__(368);
 
 	function LoaderDependency(request) {
 		ModuleDependency.call(this, request);
@@ -47624,7 +47997,7 @@
 	LoaderDependency.prototype.type = "loader";
 
 /***/ },
-/* 406 */
+/* 408 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -47633,20 +48006,20 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ConstDependency = __webpack_require__(389);
-	var CommonJsRequireDependency = __webpack_require__(407);
-	var CommonJsRequireContextDependency = __webpack_require__(410);
-	var RequireResolveDependency = __webpack_require__(413);
-	var RequireResolveContextDependency = __webpack_require__(414);
-	var RequireResolveHeaderDependency = __webpack_require__(416);
-	var RequireHeaderDependency = __webpack_require__(417);
+	var ConstDependency = __webpack_require__(391);
+	var CommonJsRequireDependency = __webpack_require__(409);
+	var CommonJsRequireContextDependency = __webpack_require__(412);
+	var RequireResolveDependency = __webpack_require__(415);
+	var RequireResolveContextDependency = __webpack_require__(416);
+	var RequireResolveHeaderDependency = __webpack_require__(418);
+	var RequireHeaderDependency = __webpack_require__(419);
 
-	var NullFactory = __webpack_require__(391);
+	var NullFactory = __webpack_require__(393);
 
-	var RequireResolveDependencyParserPlugin = __webpack_require__(418);
-	var CommonJsRequireDependencyParserPlugin = __webpack_require__(420);
+	var RequireResolveDependencyParserPlugin = __webpack_require__(420);
+	var CommonJsRequireDependencyParserPlugin = __webpack_require__(422);
 
-	var BasicEvaluatedExpression = __webpack_require__(345);
+	var BasicEvaluatedExpression = __webpack_require__(347);
 
 	function CommonJsPlugin(options) {
 		this.options = options;
@@ -47721,7 +48094,7 @@
 	};
 
 /***/ },
-/* 407 */
+/* 409 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -47730,7 +48103,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ModuleDependency = __webpack_require__(366);
+	var ModuleDependency = __webpack_require__(368);
 
 	function CommonJsRequireDependency(request, range) {
 		ModuleDependency.call(this, request);
@@ -47742,10 +48115,10 @@
 	CommonJsRequireDependency.prototype.constructor = CommonJsRequireDependency;
 	CommonJsRequireDependency.prototype.type = "cjs require";
 
-	CommonJsRequireDependency.Template = __webpack_require__(408);
+	CommonJsRequireDependency.Template = __webpack_require__(410);
 
 /***/ },
-/* 408 */
+/* 410 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -47761,7 +48134,7 @@
 		if (!dep.range) return;
 		var comment = "";
 		if (outputOptions.pathinfo) comment = "/*! " + requestShortener.shorten(dep.request) + " */ ";
-		if (dep.module) var content = comment + JSON.stringify(dep.module.id);else var content = __webpack_require__(409).module(dep.request);
+		if (dep.module) var content = comment + JSON.stringify(dep.module.id);else var content = __webpack_require__(411).module(dep.request);
 		source.replace(dep.range[0], dep.range[1] - 1, content);
 	};
 
@@ -47771,7 +48144,7 @@
 	};
 
 /***/ },
-/* 409 */
+/* 411 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -47793,7 +48166,7 @@
 	};
 
 /***/ },
-/* 410 */
+/* 412 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -47802,7 +48175,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ContextDependency = __webpack_require__(411);
+	var ContextDependency = __webpack_require__(413);
 
 	function CommonJsRequireContextDependency(request, recursive, regExp, range, valueRange) {
 		ContextDependency.call(this, request, recursive, regExp);
@@ -47815,10 +48188,10 @@
 	CommonJsRequireContextDependency.prototype.constructor = CommonJsRequireContextDependency;
 	CommonJsRequireContextDependency.prototype.type = "cjs require context";
 
-	CommonJsRequireContextDependency.Template = __webpack_require__(412);
+	CommonJsRequireContextDependency.Template = __webpack_require__(414);
 
 /***/ },
-/* 411 */
+/* 413 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -47827,7 +48200,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var Dependency = __webpack_require__(322);
+	var Dependency = __webpack_require__(324);
 
 	function ContextDependency(request, recursive, regExp) {
 		Dependency.call(this);
@@ -47846,7 +48219,7 @@
 	};
 
 /***/ },
-/* 412 */
+/* 414 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -47869,7 +48242,7 @@
 				source.replace(dep.range[0], dep.range[1] - 1, "__webpack_require__(" + comment + JSON.stringify(dep.module.id) + ")");
 			}
 		} else {
-			var content = __webpack_require__(409).module(dep.request);
+			var content = __webpack_require__(411).module(dep.request);
 			source.replace(dep.range[0], dep.range[1] - 1, content);
 		}
 	};
@@ -47884,7 +48257,7 @@
 	};
 
 /***/ },
-/* 413 */
+/* 415 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -47893,7 +48266,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ModuleDependency = __webpack_require__(366);
+	var ModuleDependency = __webpack_require__(368);
 
 	function RequireResolveDependency(request, range) {
 		ModuleDependency.call(this, request);
@@ -47905,10 +48278,10 @@
 	RequireResolveDependency.prototype.constructor = RequireResolveDependency;
 	RequireResolveDependency.prototype.type = "require.resolve";
 
-	RequireResolveDependency.Template = __webpack_require__(408);
+	RequireResolveDependency.Template = __webpack_require__(410);
 
 /***/ },
-/* 414 */
+/* 416 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -47917,7 +48290,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ContextDependency = __webpack_require__(411);
+	var ContextDependency = __webpack_require__(413);
 
 	function RequireResolveContextDependency(request, recursive, regExp, range, valueRange) {
 		ContextDependency.call(this, request, recursive, regExp);
@@ -47930,10 +48303,10 @@
 	RequireResolveContextDependency.prototype.constructor = RequireResolveContextDependency;
 	RequireResolveContextDependency.prototype.type = "amd require context";
 
-	RequireResolveContextDependency.Template = __webpack_require__(415);
+	RequireResolveContextDependency.Template = __webpack_require__(417);
 
 /***/ },
-/* 415 */
+/* 417 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -47956,13 +48329,13 @@
 				source.replace(dep.range[0], dep.range[1] - 1, "__webpack_require__(" + comment + JSON.stringify(dep.module.id) + ").resolve");
 			}
 		} else {
-			var content = __webpack_require__(409).module(dep.request);
+			var content = __webpack_require__(411).module(dep.request);
 			source.replace(dep.range[0], dep.range[1] - 1, content);
 		}
 	};
 
 /***/ },
-/* 416 */
+/* 418 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -47971,7 +48344,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var NullDependency = __webpack_require__(390);
+	var NullDependency = __webpack_require__(392);
 
 	function RequireResolveHeaderDependency(range) {
 		if (!Array.isArray(range)) throw new Error("range must be valid");
@@ -47994,7 +48367,7 @@
 	};
 
 /***/ },
-/* 417 */
+/* 419 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -48003,7 +48376,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var NullDependency = __webpack_require__(390);
+	var NullDependency = __webpack_require__(392);
 
 	function RequireHeaderDependency(range) {
 		if (!Array.isArray(range)) throw new Error("range must be valid");
@@ -48026,7 +48399,7 @@
 	};
 
 /***/ },
-/* 418 */
+/* 420 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -48035,10 +48408,10 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var RequireResolveDependency = __webpack_require__(413);
-	var RequireResolveContextDependency = __webpack_require__(414);
-	var RequireResolveHeaderDependency = __webpack_require__(416);
-	var ContextDependencyHelpers = __webpack_require__(419);
+	var RequireResolveDependency = __webpack_require__(415);
+	var RequireResolveContextDependency = __webpack_require__(416);
+	var RequireResolveHeaderDependency = __webpack_require__(418);
+	var ContextDependencyHelpers = __webpack_require__(421);
 
 	function RequireResolveDependencyParserPlugin(options) {
 		this.options = options;
@@ -48102,7 +48475,7 @@
 	};
 
 /***/ },
-/* 419 */
+/* 421 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -48140,7 +48513,7 @@
 	};
 
 /***/ },
-/* 420 */
+/* 422 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -48149,13 +48522,13 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ConstDependency = __webpack_require__(389);
-	var CommonJsRequireDependency = __webpack_require__(407);
-	var CommonJsRequireContextDependency = __webpack_require__(410);
-	var RequireHeaderDependency = __webpack_require__(417);
-	var LocalModuleDependency = __webpack_require__(421);
-	var ContextDependencyHelpers = __webpack_require__(419);
-	var LocalModulesHelpers = __webpack_require__(422);
+	var ConstDependency = __webpack_require__(391);
+	var CommonJsRequireDependency = __webpack_require__(409);
+	var CommonJsRequireContextDependency = __webpack_require__(412);
+	var RequireHeaderDependency = __webpack_require__(419);
+	var LocalModuleDependency = __webpack_require__(423);
+	var ContextDependencyHelpers = __webpack_require__(421);
+	var LocalModulesHelpers = __webpack_require__(424);
 
 	function CommonJsRequireDependencyParserPlugin(options) {
 		this.options = options;
@@ -48238,7 +48611,7 @@
 	};
 
 /***/ },
-/* 421 */
+/* 423 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -48247,7 +48620,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var NullDependency = __webpack_require__(390);
+	var NullDependency = __webpack_require__(392);
 
 	function LocalModuleDependency(localModule, range) {
 		NullDependency.call(this);
@@ -48268,7 +48641,7 @@
 	};
 
 /***/ },
-/* 422 */
+/* 424 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -48277,7 +48650,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var LocalModule = __webpack_require__(423);
+	var LocalModule = __webpack_require__(425);
 
 	var LocalModulesHelpers = exports;
 
@@ -48316,7 +48689,7 @@
 	}
 
 /***/ },
-/* 423 */
+/* 425 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -48342,7 +48715,7 @@
 	};
 
 /***/ },
-/* 424 */
+/* 426 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(__dirname) {"use strict";
@@ -48353,23 +48726,23 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var path = __webpack_require__(272);
-	var AMDRequireDependency = __webpack_require__(425);
-	var AMDRequireItemDependency = __webpack_require__(427);
-	var AMDRequireArrayDependency = __webpack_require__(429);
-	var AMDRequireContextDependency = __webpack_require__(430);
-	var AMDDefineDependency = __webpack_require__(431);
-	var LocalModuleDependency = __webpack_require__(421);
-	var ConstDependency = __webpack_require__(389);
+	var path = __webpack_require__(274);
+	var AMDRequireDependency = __webpack_require__(427);
+	var AMDRequireItemDependency = __webpack_require__(429);
+	var AMDRequireArrayDependency = __webpack_require__(431);
+	var AMDRequireContextDependency = __webpack_require__(432);
+	var AMDDefineDependency = __webpack_require__(433);
+	var LocalModuleDependency = __webpack_require__(423);
+	var ConstDependency = __webpack_require__(391);
 
-	var NullFactory = __webpack_require__(391);
+	var NullFactory = __webpack_require__(393);
 
-	var AMDRequireDependenciesBlockParserPlugin = __webpack_require__(432);
-	var AMDDefineDependencyParserPlugin = __webpack_require__(435);
+	var AMDRequireDependenciesBlockParserPlugin = __webpack_require__(434);
+	var AMDDefineDependencyParserPlugin = __webpack_require__(437);
 
-	var ModuleAliasPlugin = __webpack_require__(398);
+	var ModuleAliasPlugin = __webpack_require__(400);
 
-	var BasicEvaluatedExpression = __webpack_require__(345);
+	var BasicEvaluatedExpression = __webpack_require__(347);
 
 	function AMDPlugin(options, amdOptions) {
 		this.amdOptions = amdOptions;
@@ -48462,7 +48835,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, "/"))
 
 /***/ },
-/* 425 */
+/* 427 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -48471,8 +48844,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var NullDependency = __webpack_require__(390);
-	var DepBlockHelpers = __webpack_require__(426);
+	var NullDependency = __webpack_require__(392);
+	var DepBlockHelpers = __webpack_require__(428);
 
 	function AMDRequireDependency(block) {
 		NullDependency.call(this);
@@ -48527,7 +48900,7 @@
 	}
 
 /***/ },
-/* 426 */
+/* 428 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -48560,7 +48933,7 @@
 	}
 
 /***/ },
-/* 427 */
+/* 429 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -48569,7 +48942,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ModuleDependency = __webpack_require__(366);
+	var ModuleDependency = __webpack_require__(368);
 
 	function AMDRequireItemDependency(request, range) {
 		ModuleDependency.call(this, request);
@@ -48581,10 +48954,10 @@
 	AMDRequireItemDependency.prototype.constructor = AMDRequireItemDependency;
 	AMDRequireItemDependency.prototype.type = "amd require";
 
-	AMDRequireItemDependency.Template = __webpack_require__(428);
+	AMDRequireItemDependency.Template = __webpack_require__(430);
 
 /***/ },
-/* 428 */
+/* 430 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -48600,7 +48973,7 @@
 		if (!dep.range) return;
 		var comment = "";
 		if (outputOptions.pathinfo) comment = "/*! " + requestShortener.shorten(dep.request) + " */ ";
-		if (dep.module) var content = "__webpack_require__(" + comment + JSON.stringify(dep.module.id) + ")";else var content = __webpack_require__(409).module(dep.request);
+		if (dep.module) var content = "__webpack_require__(" + comment + JSON.stringify(dep.module.id) + ")";else var content = __webpack_require__(411).module(dep.request);
 		source.replace(dep.range[0], dep.range[1] - 1, content);
 	};
 
@@ -48610,7 +48983,7 @@
 	};
 
 /***/ },
-/* 429 */
+/* 431 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -48619,7 +48992,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var Dependency = __webpack_require__(322);
+	var Dependency = __webpack_require__(324);
 
 	function AMDRequireArrayDependency(depsArray, range) {
 		Dependency.call(this);
@@ -48641,14 +49014,14 @@
 			} else {
 				var comment = "";
 				if (outputOptions.pathinfo) comment = "/*! " + requestShortener.shorten(dep.request) + " */ ";
-				if (dep.module) return "__webpack_require__(" + comment + JSON.stringify(dep.module.id) + ")";else return __webpack_require__(409).module(dep.request);
+				if (dep.module) return "__webpack_require__(" + comment + JSON.stringify(dep.module.id) + ")";else return __webpack_require__(411).module(dep.request);
 			}
 		}).join(", ") + "]";
 		source.replace(dep.range[0], dep.range[1] - 1, content);
 	};
 
 /***/ },
-/* 430 */
+/* 432 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -48657,7 +49030,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ContextDependency = __webpack_require__(411);
+	var ContextDependency = __webpack_require__(413);
 
 	function AMDRequireContextDependency(request, recursive, regExp, range, valueRange) {
 		ContextDependency.call(this, request, recursive, regExp);
@@ -48670,10 +49043,10 @@
 	AMDRequireContextDependency.prototype.constructor = AMDRequireContextDependency;
 	AMDRequireContextDependency.prototype.type = "amd require context";
 
-	AMDRequireContextDependency.Template = __webpack_require__(412);
+	AMDRequireContextDependency.Template = __webpack_require__(414);
 
 /***/ },
-/* 431 */
+/* 433 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -48682,7 +49055,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var NullDependency = __webpack_require__(390);
+	var NullDependency = __webpack_require__(392);
 
 	function AMDDefineDependency(range, arrayRange, functionRange, objectRange) {
 		NullDependency.call(this);
@@ -48741,7 +49114,7 @@
 	};
 
 /***/ },
-/* 432 */
+/* 434 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -48750,15 +49123,15 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var AMDRequireItemDependency = __webpack_require__(427);
-	var AMDRequireArrayDependency = __webpack_require__(429);
-	var AMDRequireContextDependency = __webpack_require__(430);
-	var AMDRequireDependenciesBlock = __webpack_require__(433);
-	var LocalModuleDependency = __webpack_require__(421);
-	var ContextDependencyHelpers = __webpack_require__(419);
-	var LocalModulesHelpers = __webpack_require__(422);
-	var ConstDependency = __webpack_require__(389);
-	var getFunctionExpression = __webpack_require__(434);
+	var AMDRequireItemDependency = __webpack_require__(429);
+	var AMDRequireArrayDependency = __webpack_require__(431);
+	var AMDRequireContextDependency = __webpack_require__(432);
+	var AMDRequireDependenciesBlock = __webpack_require__(435);
+	var LocalModuleDependency = __webpack_require__(423);
+	var ContextDependencyHelpers = __webpack_require__(421);
+	var LocalModulesHelpers = __webpack_require__(424);
+	var ConstDependency = __webpack_require__(391);
+	var getFunctionExpression = __webpack_require__(436);
 
 	function AMDRequireDependenciesBlockParserPlugin(options) {
 		this.options = options;
@@ -48892,7 +49265,7 @@
 	};
 
 /***/ },
-/* 433 */
+/* 435 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -48901,8 +49274,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var AsyncDependenciesBlock = __webpack_require__(360);
-	var AMDRequireDependency = __webpack_require__(425);
+	var AsyncDependenciesBlock = __webpack_require__(362);
+	var AMDRequireDependency = __webpack_require__(427);
 
 	function AMDRequireDependenciesBlock(expr, arrayRange, functionRange, module, loc) {
 		AsyncDependenciesBlock.call(this, null, module, loc);
@@ -48921,7 +49294,7 @@
 	AMDRequireDependenciesBlock.prototype = Object.create(AsyncDependenciesBlock.prototype);
 
 /***/ },
-/* 434 */
+/* 436 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -48957,7 +49330,7 @@
 	};
 
 /***/ },
-/* 435 */
+/* 437 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -48966,14 +49339,14 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var AMDRequireItemDependency = __webpack_require__(427);
-	var AMDRequireContextDependency = __webpack_require__(430);
-	var ConstDependency = __webpack_require__(389);
-	var AMDDefineDependency = __webpack_require__(431);
-	var AMDRequireArrayDependency = __webpack_require__(429);
-	var LocalModuleDependency = __webpack_require__(421);
-	var ContextDependencyHelpers = __webpack_require__(419);
-	var LocalModulesHelpers = __webpack_require__(422);
+	var AMDRequireItemDependency = __webpack_require__(429);
+	var AMDRequireContextDependency = __webpack_require__(432);
+	var ConstDependency = __webpack_require__(391);
+	var AMDDefineDependency = __webpack_require__(433);
+	var AMDRequireArrayDependency = __webpack_require__(431);
+	var LocalModuleDependency = __webpack_require__(423);
+	var ContextDependencyHelpers = __webpack_require__(421);
+	var LocalModulesHelpers = __webpack_require__(424);
 
 	function isBoundFunctionExpression(expr) {
 		if (expr.type !== "CallExpression") return false;
@@ -49197,7 +49570,7 @@
 	};
 
 /***/ },
-/* 436 */
+/* 438 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49206,10 +49579,10 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var RequireContextDependency = __webpack_require__(437);
-	var ContextElementDependency = __webpack_require__(365);
+	var RequireContextDependency = __webpack_require__(439);
+	var ContextElementDependency = __webpack_require__(367);
 
-	var RequireContextDependencyParserPlugin = __webpack_require__(438);
+	var RequireContextDependencyParserPlugin = __webpack_require__(440);
 
 	function RequireContextPlugin(modulesDirectories, extensions) {
 		this.modulesDirectories = modulesDirectories;
@@ -49268,7 +49641,7 @@
 	};
 
 /***/ },
-/* 437 */
+/* 439 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49277,7 +49650,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ContextDependency = __webpack_require__(411);
+	var ContextDependency = __webpack_require__(413);
 
 	function RequireContextDependency(request, recursive, regExp, range) {
 		ContextDependency.call(this, request, recursive, regExp);
@@ -49289,10 +49662,10 @@
 	RequireContextDependency.prototype.constructor = RequireContextDependency;
 	RequireContextDependency.prototype.type = "require.context";
 
-	RequireContextDependency.Template = __webpack_require__(428);
+	RequireContextDependency.Template = __webpack_require__(430);
 
 /***/ },
-/* 438 */
+/* 440 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49301,8 +49674,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var AbstractPlugin = __webpack_require__(439);
-	var RequireContextDependency = __webpack_require__(437);
+	var AbstractPlugin = __webpack_require__(441);
+	var RequireContextDependency = __webpack_require__(439);
 
 	module.exports = AbstractPlugin.create({
 		"call require.context": function callRequireContext(expr) {
@@ -49332,7 +49705,7 @@
 	});
 
 /***/ },
-/* 439 */
+/* 441 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -49361,7 +49734,7 @@
 	};
 
 /***/ },
-/* 440 */
+/* 442 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49370,15 +49743,15 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var RequireEnsureItemDependency = __webpack_require__(441);
-	var RequireEnsureDependency = __webpack_require__(443);
-	var ConstDependency = __webpack_require__(389);
+	var RequireEnsureItemDependency = __webpack_require__(443);
+	var RequireEnsureDependency = __webpack_require__(445);
+	var ConstDependency = __webpack_require__(391);
 
-	var NullFactory = __webpack_require__(391);
+	var NullFactory = __webpack_require__(393);
 
-	var RequireEnsureDependenciesBlockParserPlugin = __webpack_require__(444);
+	var RequireEnsureDependenciesBlockParserPlugin = __webpack_require__(446);
 
-	var BasicEvaluatedExpression = __webpack_require__(345);
+	var BasicEvaluatedExpression = __webpack_require__(347);
 
 	function RequireEnsurePlugin() {}
 	module.exports = RequireEnsurePlugin;
@@ -49406,7 +49779,7 @@
 	};
 
 /***/ },
-/* 441 */
+/* 443 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49415,7 +49788,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ModuleDependency = __webpack_require__(366);
+	var ModuleDependency = __webpack_require__(368);
 
 	function RequireEnsureItemDependency(request) {
 		ModuleDependency.call(this, request);
@@ -49426,10 +49799,10 @@
 	RequireEnsureItemDependency.prototype.constructor = RequireEnsureItemDependency;
 	RequireEnsureItemDependency.prototype.type = "require.ensure item";
 
-	RequireEnsureItemDependency.Template = __webpack_require__(442);
+	RequireEnsureItemDependency.Template = __webpack_require__(444);
 
 /***/ },
-/* 442 */
+/* 444 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -49444,7 +49817,7 @@
 	NullDependencyTemplate.prototype.apply = function () {};
 
 /***/ },
-/* 443 */
+/* 445 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49453,8 +49826,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var NullDependency = __webpack_require__(390);
-	var DepBlockHelpers = __webpack_require__(426);
+	var NullDependency = __webpack_require__(392);
+	var DepBlockHelpers = __webpack_require__(428);
 
 	function RequireEnsureDependency(block) {
 		NullDependency.call(this);
@@ -49477,7 +49850,7 @@
 	};
 
 /***/ },
-/* 444 */
+/* 446 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49486,10 +49859,10 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var AbstractPlugin = __webpack_require__(439);
-	var RequireEnsureDependenciesBlock = __webpack_require__(445);
-	var RequireEnsureItemDependency = __webpack_require__(441);
-	var getFunctionExpression = __webpack_require__(434);
+	var AbstractPlugin = __webpack_require__(441);
+	var RequireEnsureDependenciesBlock = __webpack_require__(447);
+	var RequireEnsureItemDependency = __webpack_require__(443);
+	var getFunctionExpression = __webpack_require__(436);
 
 	module.exports = AbstractPlugin.create({
 		"call require.ensure": function callRequireEnsure(expr) {
@@ -49547,7 +49920,7 @@
 	});
 
 /***/ },
-/* 445 */
+/* 447 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49556,8 +49929,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var AsyncDependenciesBlock = __webpack_require__(360);
-	var RequireEnsureDependency = __webpack_require__(443);
+	var AsyncDependenciesBlock = __webpack_require__(362);
+	var RequireEnsureDependency = __webpack_require__(445);
 
 	function RequireEnsureDependenciesBlock(expr, fnExpression, chunkName, chunkNameRange, module, loc) {
 		AsyncDependenciesBlock.call(this, chunkName, module, loc);
@@ -49574,7 +49947,7 @@
 	RequireEnsureDependenciesBlock.prototype = Object.create(AsyncDependenciesBlock.prototype);
 
 /***/ },
-/* 446 */
+/* 448 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49583,11 +49956,11 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var RequireIncludeDependency = __webpack_require__(447);
-	var RequireIncludeDependencyParserPlugin = __webpack_require__(448);
-	var ConstDependency = __webpack_require__(389);
+	var RequireIncludeDependency = __webpack_require__(449);
+	var RequireIncludeDependencyParserPlugin = __webpack_require__(450);
+	var ConstDependency = __webpack_require__(391);
 
-	var BasicEvaluatedExpression = __webpack_require__(345);
+	var BasicEvaluatedExpression = __webpack_require__(347);
 
 	function RequireIncludePlugin() {}
 	module.exports = RequireIncludePlugin;
@@ -49612,7 +49985,7 @@
 	};
 
 /***/ },
-/* 447 */
+/* 449 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49621,7 +49994,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ModuleDependency = __webpack_require__(366);
+	var ModuleDependency = __webpack_require__(368);
 
 	function RequireIncludeDependency(request, range) {
 		ModuleDependency.call(this, request);
@@ -49642,7 +50015,7 @@
 	};
 
 /***/ },
-/* 448 */
+/* 450 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49651,8 +50024,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var AbstractPlugin = __webpack_require__(439);
-	var RequireIncludeDependency = __webpack_require__(447);
+	var AbstractPlugin = __webpack_require__(441);
+	var RequireIncludeDependency = __webpack_require__(449);
 
 	module.exports = AbstractPlugin.create({
 		"call require.include": function callRequireInclude(expr) {
@@ -49667,7 +50040,7 @@
 	});
 
 /***/ },
-/* 449 */
+/* 451 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -49723,7 +50096,7 @@
 	};
 
 /***/ },
-/* 450 */
+/* 452 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -49749,7 +50122,7 @@
 	};
 
 /***/ },
-/* 451 */
+/* 453 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -49785,7 +50158,7 @@
 	};
 
 /***/ },
-/* 452 */
+/* 454 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -49816,7 +50189,7 @@
 	};
 
 /***/ },
-/* 453 */
+/* 455 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -49854,7 +50227,7 @@
 	};
 
 /***/ },
-/* 454 */
+/* 456 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49863,8 +50236,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var createInnerCallback = __webpack_require__(347);
-	var popPathSeqment = __webpack_require__(455);
+	var createInnerCallback = __webpack_require__(349);
+	var popPathSeqment = __webpack_require__(457);
 
 	function ModulesInDirectoriesPlugin(moduleType, directories) {
 		this.moduleType = moduleType;
@@ -49919,7 +50292,7 @@
 	};
 
 /***/ },
-/* 455 */
+/* 457 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -49939,7 +50312,7 @@
 	};
 
 /***/ },
-/* 456 */
+/* 458 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49948,7 +50321,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var createInnerCallback = __webpack_require__(347);
+	var createInnerCallback = __webpack_require__(349);
 
 	function ModulesInRootPlugin(moduleType, path) {
 		this.moduleType = moduleType;
@@ -49974,7 +50347,7 @@
 	};
 
 /***/ },
-/* 457 */
+/* 459 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -49983,7 +50356,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var createInnerCallback = __webpack_require__(347);
+	var createInnerCallback = __webpack_require__(349);
 
 	function ModuleTemplatesPlugin(moduleType, templates, targetModuleType) {
 		this.moduleType = moduleType;
@@ -50026,7 +50399,7 @@
 	};
 
 /***/ },
-/* 458 */
+/* 460 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -50051,7 +50424,7 @@
 	};
 
 /***/ },
-/* 459 */
+/* 461 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -50100,7 +50473,7 @@
 	};
 
 /***/ },
-/* 460 */
+/* 462 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -50109,7 +50482,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var createInnerCallback = __webpack_require__(347);
+	var createInnerCallback = __webpack_require__(349);
 
 	function DirectoryDefaultFilePlugin(files) {
 		this.files = files;
@@ -50149,7 +50522,7 @@
 	};
 
 /***/ },
-/* 461 */
+/* 463 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -50160,7 +50533,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var createInnerCallback = __webpack_require__(347);
+	var createInnerCallback = __webpack_require__(349);
 
 	function DirectoryDescriptionFilePlugin(filename, fields) {
 		this.filename = filename;
@@ -50228,7 +50601,7 @@
 	};
 
 /***/ },
-/* 462 */
+/* 464 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -50239,7 +50612,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var createInnerCallback = __webpack_require__(347);
+	var createInnerCallback = __webpack_require__(349);
 
 	function DirectoryDescriptionFileFieldAliasPlugin(filename, field) {
 		this.filename = filename;
@@ -50357,7 +50730,7 @@
 	};
 
 /***/ },
-/* 463 */
+/* 465 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -50403,7 +50776,7 @@
 	};
 
 /***/ },
-/* 464 */
+/* 466 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -50440,7 +50813,7 @@
 	};
 
 /***/ },
-/* 465 */
+/* 467 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -50449,7 +50822,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var popPathSeqment = __webpack_require__(455);
+	var popPathSeqment = __webpack_require__(457);
 
 	function ResultSymlinkPlugin(appendings) {}
 	module.exports = ResultSymlinkPlugin;
@@ -50496,7 +50869,7 @@
 	};
 
 /***/ },
-/* 466 */
+/* 468 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -50505,9 +50878,9 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var JsonpMainTemplatePlugin = __webpack_require__(467);
-	var JsonpChunkTemplatePlugin = __webpack_require__(469);
-	var JsonpHotUpdateChunkTemplatePlugin = __webpack_require__(470);
+	var JsonpMainTemplatePlugin = __webpack_require__(469);
+	var JsonpChunkTemplatePlugin = __webpack_require__(471);
+	var JsonpHotUpdateChunkTemplatePlugin = __webpack_require__(472);
 
 	function JsonpTemplatePlugin() {}
 	module.exports = JsonpTemplatePlugin;
@@ -50520,7 +50893,7 @@
 	};
 
 /***/ },
-/* 467 */
+/* 469 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -50529,7 +50902,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var Template = __webpack_require__(318);
+	var Template = __webpack_require__(320);
 
 	function JsonpMainTemplatePlugin() {}
 	module.exports = JsonpMainTemplatePlugin;
@@ -50600,7 +50973,7 @@
 				}.bind(this)
 			});
 
-			return source + "\n" + "var parentHotUpdateCallback = this[" + JSON.stringify(hotUpdateFunction) + "];\n" + "this[" + JSON.stringify(hotUpdateFunction) + "] = " + Template.getFunctionContent(__webpack_require__(468)).replace(/\$require\$/g, this.requireFn).replace(/\$hotMainFilename\$/g, currentHotUpdateMainFilename).replace(/\$hotChunkFilename\$/g, currentHotUpdateChunkFilename).replace(/\$hash\$/g, JSON.stringify(hash));
+			return source + "\n" + "var parentHotUpdateCallback = this[" + JSON.stringify(hotUpdateFunction) + "];\n" + "this[" + JSON.stringify(hotUpdateFunction) + "] = " + Template.getFunctionContent(__webpack_require__(470)).replace(/\$require\$/g, this.requireFn).replace(/\$hotMainFilename\$/g, currentHotUpdateMainFilename).replace(/\$hotChunkFilename\$/g, currentHotUpdateChunkFilename).replace(/\$hash\$/g, JSON.stringify(hash));
 		});
 		mainTemplate.plugin("hash", function (hash) {
 			hash.update("jsonp");
@@ -50613,7 +50986,7 @@
 	};
 
 /***/ },
-/* 468 */
+/* 470 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -50678,7 +51051,7 @@
 	};
 
 /***/ },
-/* 469 */
+/* 471 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -50687,8 +51060,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ConcatSource = __webpack_require__(315);
-	var Template = __webpack_require__(318);
+	var ConcatSource = __webpack_require__(317);
+	var Template = __webpack_require__(320);
 
 	function JsonpChunkTemplatePlugin() {}
 	module.exports = JsonpChunkTemplatePlugin;
@@ -50711,7 +51084,7 @@
 	};
 
 /***/ },
-/* 470 */
+/* 472 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -50720,8 +51093,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ConcatSource = __webpack_require__(315);
-	var Template = __webpack_require__(318);
+	var ConcatSource = __webpack_require__(317);
+	var Template = __webpack_require__(320);
 
 	function JsonpHotUpdateChunkTemplatePlugin() {}
 	module.exports = JsonpHotUpdateChunkTemplatePlugin;
@@ -50744,7 +51117,7 @@
 	};
 
 /***/ },
-/* 471 */
+/* 473 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -50753,9 +51126,9 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ModuleAliasPlugin = __webpack_require__(398);
-	var ModuleParserHelpers = __webpack_require__(395);
-	var nodeLibsBrowser = __webpack_require__(472);
+	var ModuleAliasPlugin = __webpack_require__(400);
+	var ModuleParserHelpers = __webpack_require__(397);
+	var nodeLibsBrowser = __webpack_require__(474);
 
 	function NodeSourcePlugin(options) {
 		this.options = options;
@@ -50767,9 +51140,9 @@
 				if (!nodeLibsBrowser[module]) throw new Error("No browser version for node.js core module '" + module + "' available");
 				return nodeLibsBrowser[module];
 			} else if (type === "mock") {
-				return /*require.resolve*/(__webpack_require__(473).resolve("./" + module));
+				return /*require.resolve*/(__webpack_require__(475).resolve("./" + module));
 			} else if (type === "empty") {
-				return /*require.resolve*/(477);
+				return /*require.resolve*/(479);
 			} else return module;
 		}
 		if (this.options.process) {
@@ -50822,34 +51195,34 @@
 	};
 
 /***/ },
-/* 472 */
+/* 474 */
 /***/ function(module, exports) {
 
 	"use strict";
 
 /***/ },
-/* 473 */
+/* 475 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./buffer": 474,
-		"./buffer.js": 474,
-		"./console": 475,
-		"./console.js": 475,
-		"./dns": 476,
-		"./dns.js": 476,
-		"./empty": 477,
-		"./empty.js": 477,
-		"./net": 478,
-		"./net.js": 478,
-		"./process": 479,
-		"./process.js": 479,
-		"./punycode": 480,
-		"./punycode.js": 480,
-		"./tls": 481,
-		"./tls.js": 481,
-		"./tty": 482,
-		"./tty.js": 482
+		"./buffer": 476,
+		"./buffer.js": 476,
+		"./console": 477,
+		"./console.js": 477,
+		"./dns": 478,
+		"./dns.js": 478,
+		"./empty": 479,
+		"./empty.js": 479,
+		"./net": 480,
+		"./net.js": 480,
+		"./process": 481,
+		"./process.js": 481,
+		"./punycode": 482,
+		"./punycode.js": 482,
+		"./tls": 483,
+		"./tls.js": 483,
+		"./tty": 484,
+		"./tty.js": 484
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -50862,11 +51235,11 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 473;
+	webpackContext.id = 475;
 
 
 /***/ },
-/* 474 */
+/* 476 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -50883,7 +51256,7 @@
 	exports.Buffer = Buffer;
 
 /***/ },
-/* 475 */
+/* 477 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {"use strict";
@@ -50903,7 +51276,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 476 */
+/* 478 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -50918,13 +51291,13 @@
 	};
 
 /***/ },
-/* 477 */
+/* 479 */
 /***/ function(module, exports) {
 
 	"use strict";
 
 /***/ },
-/* 478 */
+/* 480 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -50936,7 +51309,7 @@
 	};
 
 /***/ },
-/* 479 */
+/* 481 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50962,7 +51335,7 @@
 	        return cwd;
 	    };
 	    exports.chdir = function (dir) {
-	        if (!path) path = __webpack_require__(272);
+	        if (!path) path = __webpack_require__(274);
 	        cwd = path.resolve(dir, cwd);
 	    };
 	})();
@@ -50971,7 +51344,7 @@
 	exports.features = {};
 
 /***/ },
-/* 480 */
+/* 482 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -50983,14 +51356,14 @@
 	exports.version = "0.0.0";
 
 /***/ },
-/* 481 */
+/* 483 */
 /***/ function(module, exports) {
 
 	// todo
 	"use strict";
 
 /***/ },
-/* 482 */
+/* 484 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -50999,7 +51372,7 @@
 	exports.setRawMode = function () {};
 
 /***/ },
-/* 483 */
+/* 485 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51008,8 +51381,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var WebWorkerMainTemplatePlugin = __webpack_require__(484);
-	var WebWorkerChunkTemplatePlugin = __webpack_require__(485);
+	var WebWorkerMainTemplatePlugin = __webpack_require__(486);
+	var WebWorkerChunkTemplatePlugin = __webpack_require__(487);
 
 	function WebWorkerTemplatePlugin() {}
 	module.exports = WebWorkerTemplatePlugin;
@@ -51021,7 +51394,7 @@
 	};
 
 /***/ },
-/* 484 */
+/* 486 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51030,7 +51403,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var Template = __webpack_require__(318);
+	var Template = __webpack_require__(320);
 
 	function WebWorkerMainTemplatePlugin() {}
 	module.exports = WebWorkerMainTemplatePlugin;
@@ -51076,7 +51449,7 @@
 	};
 
 /***/ },
-/* 485 */
+/* 487 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51085,8 +51458,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ConcatSource = __webpack_require__(315);
-	var Template = __webpack_require__(318);
+	var ConcatSource = __webpack_require__(317);
+	var Template = __webpack_require__(320);
 
 	function WebWorkerChunkTemplatePlugin() {}
 	module.exports = WebWorkerChunkTemplatePlugin;
@@ -51109,7 +51482,7 @@
 	};
 
 /***/ },
-/* 486 */
+/* 488 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51118,9 +51491,9 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var NodeMainTemplatePlugin = __webpack_require__(487);
-	var NodeChunkTemplatePlugin = __webpack_require__(494);
-	var NodeHotUpdateChunkTemplatePlugin = __webpack_require__(589);
+	var NodeMainTemplatePlugin = __webpack_require__(489);
+	var NodeChunkTemplatePlugin = __webpack_require__(496);
+	var NodeHotUpdateChunkTemplatePlugin = __webpack_require__(592);
 
 	function NodeTemplatePlugin(options, asyncChunkLoading) {
 		// TODO remove options parameter
@@ -51137,7 +51510,7 @@
 	};
 
 /***/ },
-/* 487 */
+/* 489 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51146,7 +51519,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var Template = __webpack_require__(318);
+	var Template = __webpack_require__(320);
 
 	function NodeMainTemplatePlugin(asyncChunkLoading) {
 		this.asyncChunkLoading = asyncChunkLoading;
@@ -51236,7 +51609,7 @@
 					return "\" + " + this.renderCurrentHashCode(hash, length) + " + \"";
 				}.bind(this)
 			});
-			return Template.getFunctionContent(self.asyncChunkLoading ? __webpack_require__(488) : __webpack_require__(492)).replace(/\$require\$/g, this.requireFn).replace(/\$hotMainFilename\$/g, currentHotUpdateMainFilename).replace(/\$hotChunkFilename\$/g, currentHotUpdateChunkFilename);
+			return Template.getFunctionContent(self.asyncChunkLoading ? __webpack_require__(490) : __webpack_require__(494)).replace(/\$require\$/g, this.requireFn).replace(/\$hotMainFilename\$/g, currentHotUpdateMainFilename).replace(/\$hotChunkFilename\$/g, currentHotUpdateChunkFilename);
 		});
 		mainTemplate.plugin("hash", function (hash) {
 			hash.update("node");
@@ -51247,7 +51620,7 @@
 	};
 
 /***/ },
-/* 488 */
+/* 490 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(__dirname) {"use strict";
@@ -51260,21 +51633,21 @@
 	module.exports = function () {
 		function hotDownloadUpdateChunk(chunkId) {
 			// eslint-disable-line no-unused-vars
-			var filename = __webpack_require__(272).join(__dirname, $hotChunkFilename$);
-			__webpack_require__(489).readFile(filename, "utf-8", function (err, content) {
+			var filename = __webpack_require__(274).join(__dirname, $hotChunkFilename$);
+			__webpack_require__(491).readFile(filename, "utf-8", function (err, content) {
 				if (err) {
 					if ($require$.onError) return $require$.onError(err);else throw err;
 				}
 				var chunk = {};
-				__webpack_require__(490).runInThisContext("(function(exports) {" + content + "\n})", filename)(chunk);
+				__webpack_require__(492).runInThisContext("(function(exports) {" + content + "\n})", filename)(chunk);
 				hotAddUpdateChunk(chunk.id, chunk.modules);
 			});
 		}
 
 		function hotDownloadManifest(callback) {
 			// eslint-disable-line no-unused-vars
-			var filename = __webpack_require__(272).join(__dirname, $hotMainFilename$);
-			__webpack_require__(489).readFile(filename, "utf-8", function (err, content) {
+			var filename = __webpack_require__(274).join(__dirname, $hotMainFilename$);
+			__webpack_require__(491).readFile(filename, "utf-8", function (err, content) {
 				if (err) return callback();
 				try {
 					var update = JSON.parse(content);
@@ -51288,7 +51661,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, "/"))
 
 /***/ },
-/* 489 */
+/* 491 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -51296,14 +51669,14 @@
 	console.log("I'm `fs` modules");
 
 /***/ },
-/* 490 */
+/* 492 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
-	var indexOf = __webpack_require__(491);
+	var indexOf = __webpack_require__(493);
 
 	var Object_keys = function Object_keys(obj) {
 	    if (Object.keys) return Object.keys(obj);else {
@@ -51439,7 +51812,7 @@
 	};
 
 /***/ },
-/* 491 */
+/* 493 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -51455,7 +51828,7 @@
 	};
 
 /***/ },
-/* 492 */
+/* 494 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51468,14 +51841,14 @@
 	module.exports = function () {
 		function hotDownloadUpdateChunk(chunkId) {
 			// eslint-disable-line no-unused-vars
-			var chunk = __webpack_require__(493)("./" + $hotChunkFilename$);
+			var chunk = __webpack_require__(495)("./" + $hotChunkFilename$);
 			hotAddUpdateChunk(chunk.id, chunk.modules);
 		}
 
 		function hotDownloadManifest(callback) {
 			// eslint-disable-line no-unused-vars
 			try {
-				var update = __webpack_require__(493)("./" + $hotMainFilename$);
+				var update = __webpack_require__(495)("./" + $hotMainFilename$);
 			} catch (e) {
 				return callback();
 			}
@@ -51484,34 +51857,34 @@
 	};
 
 /***/ },
-/* 493 */
+/* 495 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./NodeChunkTemplatePlugin": 494,
-		"./NodeChunkTemplatePlugin.js": 494,
-		"./NodeEnvironmentPlugin": 495,
-		"./NodeEnvironmentPlugin.js": 495,
-		"./NodeHotUpdateChunkTemplatePlugin": 589,
-		"./NodeHotUpdateChunkTemplatePlugin.js": 589,
-		"./NodeMainTemplate.runtime": 492,
-		"./NodeMainTemplate.runtime.js": 492,
-		"./NodeMainTemplateAsync.runtime": 488,
-		"./NodeMainTemplateAsync.runtime.js": 488,
-		"./NodeMainTemplatePlugin": 487,
-		"./NodeMainTemplatePlugin.js": 487,
-		"./NodeOutputFileSystem": 585,
-		"./NodeOutputFileSystem.js": 585,
-		"./NodeSourcePlugin": 471,
-		"./NodeSourcePlugin.js": 471,
-		"./NodeTargetPlugin": 590,
-		"./NodeTargetPlugin.js": 590,
-		"./NodeTemplatePlugin": 486,
-		"./NodeTemplatePlugin.js": 486,
-		"./NodeWatchFileSystem": 496,
-		"./NodeWatchFileSystem.js": 496,
-		"./OldNodeWatchFileSystem": 594,
-		"./OldNodeWatchFileSystem.js": 594
+		"./NodeChunkTemplatePlugin": 496,
+		"./NodeChunkTemplatePlugin.js": 496,
+		"./NodeEnvironmentPlugin": 497,
+		"./NodeEnvironmentPlugin.js": 497,
+		"./NodeHotUpdateChunkTemplatePlugin": 592,
+		"./NodeHotUpdateChunkTemplatePlugin.js": 592,
+		"./NodeMainTemplate.runtime": 494,
+		"./NodeMainTemplate.runtime.js": 494,
+		"./NodeMainTemplateAsync.runtime": 490,
+		"./NodeMainTemplateAsync.runtime.js": 490,
+		"./NodeMainTemplatePlugin": 489,
+		"./NodeMainTemplatePlugin.js": 489,
+		"./NodeOutputFileSystem": 588,
+		"./NodeOutputFileSystem.js": 588,
+		"./NodeSourcePlugin": 473,
+		"./NodeSourcePlugin.js": 473,
+		"./NodeTargetPlugin": 593,
+		"./NodeTargetPlugin.js": 593,
+		"./NodeTemplatePlugin": 488,
+		"./NodeTemplatePlugin.js": 488,
+		"./NodeWatchFileSystem": 498,
+		"./NodeWatchFileSystem.js": 498,
+		"./OldNodeWatchFileSystem": 597,
+		"./OldNodeWatchFileSystem.js": 597
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -51524,11 +51897,11 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 493;
+	webpackContext.id = 495;
 
 
 /***/ },
-/* 494 */
+/* 496 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51537,7 +51910,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ConcatSource = __webpack_require__(315);
+	var ConcatSource = __webpack_require__(317);
 
 	function NodeChunkTemplatePlugin() {}
 	module.exports = NodeChunkTemplatePlugin;
@@ -51557,7 +51930,7 @@
 	};
 
 /***/ },
-/* 495 */
+/* 497 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51566,10 +51939,10 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var NodeWatchFileSystem = __webpack_require__(496);
-	var NodeOutputFileSystem = __webpack_require__(585);
-	var NodeJsInputFileSystem = __webpack_require__(587);
-	var CachedInputFileSystem = __webpack_require__(588);
+	var NodeWatchFileSystem = __webpack_require__(498);
+	var NodeOutputFileSystem = __webpack_require__(588);
+	var NodeJsInputFileSystem = __webpack_require__(590);
+	var CachedInputFileSystem = __webpack_require__(591);
 
 	function NodeEnvironmentPlugin() {}
 	module.exports = NodeEnvironmentPlugin;
@@ -51588,7 +51961,7 @@
 	};
 
 /***/ },
-/* 496 */
+/* 498 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51599,7 +51972,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var Watchpack = __webpack_require__(497);
+	var Watchpack = __webpack_require__(499);
 
 	function NodeWatchFileSystem(inputFileSystem) {
 		this.inputFileSystem = inputFileSystem;
@@ -51654,7 +52027,7 @@
 	};
 
 /***/ },
-/* 497 */
+/* 499 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51663,8 +52036,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var watcherManager = __webpack_require__(498);
-	var EventEmitter = __webpack_require__(500).EventEmitter;
+	var watcherManager = __webpack_require__(500);
+	var EventEmitter = __webpack_require__(502).EventEmitter;
 
 	function Watchpack(options) {
 		EventEmitter.call(this);
@@ -51778,7 +52151,7 @@
 	};
 
 /***/ },
-/* 498 */
+/* 500 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -51787,14 +52160,14 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var path = __webpack_require__(272);
+	var path = __webpack_require__(274);
 
 	function WatcherManager() {
 		this.directoryWatchers = {};
 	}
 
 	WatcherManager.prototype.getDirectoryWatcher = function (directory, options) {
-		var DirectoryWatcher = __webpack_require__(499);
+		var DirectoryWatcher = __webpack_require__(501);
 		options = options || {};
 		var key = directory + " " + JSON.stringify(options);
 		if (!this.directoryWatchers[key]) {
@@ -51818,7 +52191,7 @@
 	module.exports = new WatcherManager();
 
 /***/ },
-/* 499 */
+/* 501 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
@@ -51827,13 +52200,13 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var EventEmitter = __webpack_require__(500).EventEmitter;
-	var async = __webpack_require__(501);
-	var chokidar = __webpack_require__(502);
-	var fs = __webpack_require__(546);
-	var path = __webpack_require__(272);
+	var EventEmitter = __webpack_require__(502).EventEmitter;
+	var async = __webpack_require__(503);
+	var chokidar = __webpack_require__(504);
+	var fs = __webpack_require__(548);
+	var path = __webpack_require__(274);
 
-	var watcherManager = __webpack_require__(498);
+	var watcherManager = __webpack_require__(500);
 
 	var FS_ACCURENCY = 10000;
 
@@ -52127,7 +52500,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 500 */
+/* 502 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -52191,11 +52564,11 @@
 	      if (er instanceof Error) {
 	        throw er; // Unhandled 'error' event
 	      } else {
-	          // At least give some kind of context to the user
-	          var err = new Error('Uncaught, unspecified "error" event. (' + er + ')');
-	          err.context = er;
-	          throw err;
-	        }
+	        // At least give some kind of context to the user
+	        var err = new Error('Uncaught, unspecified "error" event. (' + er + ')');
+	        err.context = er;
+	        throw err;
+	      }
 	    }
 	  }
 
@@ -52405,7 +52778,7 @@
 	}
 
 /***/ },
-/* 501 */
+/* 503 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(process, setImmediate) {'use strict';
@@ -53504,26 +53877,26 @@
 	                root.async = async;
 	            }
 	})();
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9), __webpack_require__(276).setImmediate))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9), __webpack_require__(278).setImmediate))
 
 /***/ },
-/* 502 */
+/* 504 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var EventEmitter = __webpack_require__(500).EventEmitter;
-	var fs = __webpack_require__(489);
-	var sysPath = __webpack_require__(272);
-	var asyncEach = __webpack_require__(503);
-	var anymatch = __webpack_require__(504);
-	var globParent = __webpack_require__(536);
-	var isGlob = __webpack_require__(528);
-	var isAbsolute = __webpack_require__(543);
-	var inherits = __webpack_require__(334);
+	var EventEmitter = __webpack_require__(502).EventEmitter;
+	var fs = __webpack_require__(491);
+	var sysPath = __webpack_require__(274);
+	var asyncEach = __webpack_require__(505);
+	var anymatch = __webpack_require__(506);
+	var globParent = __webpack_require__(538);
+	var isGlob = __webpack_require__(530);
+	var isAbsolute = __webpack_require__(545);
+	var inherits = __webpack_require__(336);
 
-	var NodeFsHandler = __webpack_require__(544);
-	var FsEventsHandler = __webpack_require__(584);
+	var NodeFsHandler = __webpack_require__(546);
+	var FsEventsHandler = __webpack_require__(587);
 
 	var arrify = function arrify(value) {
 	  if (value == null) return [];
@@ -54206,7 +54579,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 503 */
+/* 505 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -54245,21 +54618,21 @@
 	      return each;
 	    }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)); // RequireJS
 	  } else if (typeof module !== 'undefined' && module.exports) {
-	      module.exports = each; // CommonJS
-	    } else {
-	        globals.asyncEach = each; // <script>
-	      }
+	    module.exports = each; // CommonJS
+	  } else {
+	    globals.asyncEach = each; // <script>
+	  }
 	})(undefined);
 
 /***/ },
-/* 504 */
+/* 506 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var arrify = __webpack_require__(505);
-	var micromatch = __webpack_require__(506);
-	var path = __webpack_require__(272);
+	var arrify = __webpack_require__(507);
+	var micromatch = __webpack_require__(508);
+	var path = __webpack_require__(274);
 
 	var anymatch = function anymatch(criteria, value, returnIndex, startIndex, endIndex) {
 	  criteria = arrify(criteria);
@@ -54320,7 +54693,7 @@
 	module.exports = anymatch;
 
 /***/ },
-/* 505 */
+/* 507 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -54334,7 +54707,7 @@
 	};
 
 /***/ },
-/* 506 */
+/* 508 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -54346,8 +54719,8 @@
 
 	'use strict';
 
-	var expand = __webpack_require__(507);
-	var utils = __webpack_require__(508);
+	var expand = __webpack_require__(509);
+	var utils = __webpack_require__(510);
 
 	/**
 	 * The main function. Pass an array of filepaths,
@@ -54780,7 +55153,7 @@
 	module.exports = micromatch;
 
 /***/ },
-/* 507 */
+/* 509 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -54792,8 +55165,8 @@
 
 	'use strict';
 
-	var utils = __webpack_require__(508);
-	var Glob = __webpack_require__(541);
+	var utils = __webpack_require__(510);
+	var Glob = __webpack_require__(543);
 
 	/**
 	 * Expose `expand`
@@ -55099,32 +55472,32 @@
 	}
 
 /***/ },
-/* 508 */
+/* 510 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
 	var win32 = process && process.platform === 'win32';
-	var path = __webpack_require__(272);
-	var fileRe = __webpack_require__(509);
+	var path = __webpack_require__(274);
+	var fileRe = __webpack_require__(511);
 	var utils = module.exports;
 
 	/**
 	 * Module dependencies
 	 */
 
-	utils.diff = __webpack_require__(510);
-	utils.unique = __webpack_require__(512);
-	utils.braces = __webpack_require__(513);
-	utils.brackets = __webpack_require__(524);
-	utils.extglob = __webpack_require__(526);
-	utils.isExtglob = __webpack_require__(527);
-	utils.isGlob = __webpack_require__(528);
-	utils.typeOf = __webpack_require__(518);
-	utils.normalize = __webpack_require__(529);
-	utils.omit = __webpack_require__(530);
-	utils.parseGlob = __webpack_require__(534);
-	utils.cache = __webpack_require__(538);
+	utils.diff = __webpack_require__(512);
+	utils.unique = __webpack_require__(514);
+	utils.braces = __webpack_require__(515);
+	utils.brackets = __webpack_require__(526);
+	utils.extglob = __webpack_require__(528);
+	utils.isExtglob = __webpack_require__(529);
+	utils.isGlob = __webpack_require__(530);
+	utils.typeOf = __webpack_require__(520);
+	utils.normalize = __webpack_require__(531);
+	utils.omit = __webpack_require__(532);
+	utils.parseGlob = __webpack_require__(536);
+	utils.cache = __webpack_require__(540);
 
 	/**
 	 * Get the filename of a filepath
@@ -55250,7 +55623,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 509 */
+/* 511 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -55268,7 +55641,7 @@
 	};
 
 /***/ },
-/* 510 */
+/* 512 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -55280,7 +55653,7 @@
 
 	'use strict';
 
-	var flatten = __webpack_require__(511);
+	var flatten = __webpack_require__(513);
 	var slice = [].slice;
 
 	/**
@@ -55333,7 +55706,7 @@
 	module.exports = diff;
 
 /***/ },
-/* 511 */
+/* 513 */
 /***/ function(module, exports) {
 
 	/*!
@@ -55365,7 +55738,7 @@
 	}
 
 /***/ },
-/* 512 */
+/* 514 */
 /***/ function(module, exports) {
 
 	/*!
@@ -55398,7 +55771,7 @@
 	};
 
 /***/ },
-/* 513 */
+/* 515 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -55414,9 +55787,9 @@
 	 * Module dependencies
 	 */
 
-	var expand = __webpack_require__(514);
-	var repeat = __webpack_require__(522);
-	var tokens = __webpack_require__(523);
+	var expand = __webpack_require__(516);
+	var repeat = __webpack_require__(524);
+	var tokens = __webpack_require__(525);
 
 	/**
 	 * Expose `braces`
@@ -55807,7 +56180,7 @@
 	}
 
 /***/ },
-/* 514 */
+/* 516 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -55819,7 +56192,7 @@
 
 	'use strict';
 
-	var fill = __webpack_require__(515);
+	var fill = __webpack_require__(517);
 
 	module.exports = function expandRange(str, options, fn) {
 	  if (typeof str !== 'string') {
@@ -55859,7 +56232,7 @@
 	};
 
 /***/ },
-/* 515 */
+/* 517 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -55871,11 +56244,11 @@
 
 	'use strict';
 
-	var isObject = __webpack_require__(516);
-	var isNumber = __webpack_require__(517);
-	var randomize = __webpack_require__(520);
-	var repeatStr = __webpack_require__(521);
-	var repeat = __webpack_require__(522);
+	var isObject = __webpack_require__(518);
+	var isNumber = __webpack_require__(519);
+	var randomize = __webpack_require__(522);
+	var repeatStr = __webpack_require__(523);
+	var repeat = __webpack_require__(524);
 
 	/**
 	 * Expose `fillRange`
@@ -55948,29 +56321,29 @@
 
 	        // randomize a, `b` times
 	      } else if (m === '?') {
-	          return [randomize(a, b)];
+	        return [randomize(a, b)];
 
-	          // expand right, no regex reduction
-	        } else if (m === '>') {
-	            step = step.substr(0, i) + step.substr(i + 1);
-	            expand = true;
+	        // expand right, no regex reduction
+	      } else if (m === '>') {
+	        step = step.substr(0, i) + step.substr(i + 1);
+	        expand = true;
 
-	            // expand to an array, or if valid create a reduced
-	            // string for a regex logic `or`
-	          } else if (m === '|') {
-	              step = step.substr(0, i) + step.substr(i + 1);
-	              expand = true;
-	              regex = true;
-	              sep = m;
+	        // expand to an array, or if valid create a reduced
+	        // string for a regex logic `or`
+	      } else if (m === '|') {
+	        step = step.substr(0, i) + step.substr(i + 1);
+	        expand = true;
+	        regex = true;
+	        sep = m;
 
-	              // expand to an array, or if valid create a reduced
-	              // string for a regex range
-	            } else if (m === '~') {
-	                step = step.substr(0, i) + step.substr(i + 1);
-	                expand = true;
-	                regex = true;
-	                sep = m;
-	              }
+	        // expand to an array, or if valid create a reduced
+	        // string for a regex range
+	      } else if (m === '~') {
+	        step = step.substr(0, i) + step.substr(i + 1);
+	        expand = true;
+	        regex = true;
+	        sep = m;
+	      }
 	    } else if (!isNumber(step)) {
 	      if (!opts.silent) {
 	        throw new TypeError('fill-range: invalid step.');
@@ -56059,16 +56432,16 @@
 
 	      // letters
 	    } else if (!isNum) {
-	        if (regex && isInvalidChar(a)) {
-	          res = null;
-	        } else {
-	          res = String.fromCharCode(a);
-	        }
-
-	        // numbers
+	      if (regex && isInvalidChar(a)) {
+	        res = null;
 	      } else {
-	          res = formatPadding(a, pad);
-	        }
+	        res = String.fromCharCode(a);
+	      }
+
+	      // numbers
+	    } else {
+	      res = formatPadding(a, pad);
+	    }
 
 	    // add result to the array, filtering any nulled values
 	    if (res !== null) arr.push(res);
@@ -56282,7 +56655,7 @@
 	}
 
 /***/ },
-/* 516 */
+/* 518 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -56296,14 +56669,14 @@
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
-	var isArray = __webpack_require__(271);
+	var isArray = __webpack_require__(273);
 
 	module.exports = function isObject(val) {
 	  return val != null && (typeof val === 'undefined' ? 'undefined' : _typeof(val)) === 'object' && isArray(val) === false;
 	};
 
 /***/ },
-/* 517 */
+/* 519 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -56315,7 +56688,7 @@
 
 	'use strict';
 
-	var typeOf = __webpack_require__(518);
+	var typeOf = __webpack_require__(520);
 
 	module.exports = function isNumber(num) {
 	  var type = typeOf(num);
@@ -56327,12 +56700,12 @@
 	};
 
 /***/ },
-/* 518 */
+/* 520 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
 
-	var isBuffer = __webpack_require__(519);
+	var isBuffer = __webpack_require__(521);
 	var toString = Object.prototype.toString;
 
 	/**
@@ -56445,10 +56818,10 @@
 	  // must be a plain object
 	  return 'object';
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(268).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(270).Buffer))
 
 /***/ },
-/* 519 */
+/* 521 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -56468,7 +56841,7 @@
 	};
 
 /***/ },
-/* 520 */
+/* 522 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -56481,8 +56854,8 @@
 
 	'use strict';
 
-	var isNumber = __webpack_require__(517);
-	var typeOf = __webpack_require__(518);
+	var isNumber = __webpack_require__(519);
+	var typeOf = __webpack_require__(520);
 
 	/**
 	 * Expose `randomatic`
@@ -56555,7 +56928,7 @@
 	};
 
 /***/ },
-/* 521 */
+/* 523 */
 /***/ function(module, exports) {
 
 	/*!
@@ -56627,7 +57000,7 @@
 	}
 
 /***/ },
-/* 522 */
+/* 524 */
 /***/ function(module, exports) {
 
 	/*!
@@ -56650,7 +57023,7 @@
 	};
 
 /***/ },
-/* 523 */
+/* 525 */
 /***/ function(module, exports) {
 
 	/*!
@@ -56709,7 +57082,7 @@
 	var cache = {};
 
 /***/ },
-/* 524 */
+/* 526 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -56721,7 +57094,7 @@
 
 	'use strict';
 
-	var isPosixBracket = __webpack_require__(525);
+	var isPosixBracket = __webpack_require__(527);
 
 	/**
 	 * POSIX character classes
@@ -56880,7 +57253,7 @@
 	};
 
 /***/ },
-/* 525 */
+/* 527 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -56897,7 +57270,7 @@
 	};
 
 /***/ },
-/* 526 */
+/* 528 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -56913,7 +57286,7 @@
 	 * Module dependencies
 	 */
 
-	var isExtglob = __webpack_require__(527);
+	var isExtglob = __webpack_require__(529);
 	var re,
 	    cache = {};
 
@@ -57077,7 +57450,7 @@
 	}
 
 /***/ },
-/* 527 */
+/* 529 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -57094,7 +57467,7 @@
 	};
 
 /***/ },
-/* 528 */
+/* 530 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -57106,14 +57479,14 @@
 	 * Licensed under the MIT License.
 	 */
 
-	var isExtglob = __webpack_require__(527);
+	var isExtglob = __webpack_require__(529);
 
 	module.exports = function isGlob(str) {
 	  return typeof str === 'string' && (/[*!?{}(|)[\]]/.test(str) || isExtglob(str));
 	};
 
 /***/ },
-/* 529 */
+/* 531 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -57137,7 +57510,7 @@
 	};
 
 /***/ },
-/* 530 */
+/* 532 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -57149,8 +57522,8 @@
 
 	'use strict';
 
-	var isObject = __webpack_require__(531);
-	var forOwn = __webpack_require__(532);
+	var isObject = __webpack_require__(533);
+	var forOwn = __webpack_require__(534);
 
 	module.exports = function omit(obj, keys) {
 	  if (!isObject(obj)) return {};
@@ -57183,7 +57556,7 @@
 	};
 
 /***/ },
-/* 531 */
+/* 533 */
 /***/ function(module, exports) {
 
 	/*!
@@ -57202,7 +57575,7 @@
 	};
 
 /***/ },
-/* 532 */
+/* 534 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -57214,7 +57587,7 @@
 
 	'use strict';
 
-	var forIn = __webpack_require__(533);
+	var forIn = __webpack_require__(535);
 	var hasOwn = Object.prototype.hasOwnProperty;
 
 	module.exports = function forOwn(o, fn, thisArg) {
@@ -57226,7 +57599,7 @@
 	};
 
 /***/ },
-/* 533 */
+/* 535 */
 /***/ function(module, exports) {
 
 	/*!
@@ -57247,7 +57620,7 @@
 	};
 
 /***/ },
-/* 534 */
+/* 536 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -57259,10 +57632,10 @@
 
 	'use strict';
 
-	var isGlob = __webpack_require__(528);
-	var findBase = __webpack_require__(535);
-	var extglob = __webpack_require__(527);
-	var dotfile = __webpack_require__(537);
+	var isGlob = __webpack_require__(530);
+	var findBase = __webpack_require__(537);
+	var extglob = __webpack_require__(529);
+	var dotfile = __webpack_require__(539);
 
 	/**
 	 * Expose `cache`
@@ -57410,7 +57783,7 @@
 	}
 
 /***/ },
-/* 535 */
+/* 537 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -57422,9 +57795,9 @@
 
 	'use strict';
 
-	var path = __webpack_require__(272);
-	var parent = __webpack_require__(536);
-	var isGlob = __webpack_require__(528);
+	var path = __webpack_require__(274);
+	var parent = __webpack_require__(538);
+	var isGlob = __webpack_require__(530);
 
 	module.exports = function globBase(pattern) {
 	  if (typeof pattern !== 'string') {
@@ -57464,13 +57837,13 @@
 	}
 
 /***/ },
-/* 536 */
+/* 538 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var path = __webpack_require__(272);
-	var isglob = __webpack_require__(528);
+	var path = __webpack_require__(274);
+	var isglob = __webpack_require__(530);
 
 	module.exports = function globParent(str) {
 		str += 'a'; // preserves full path in case of trailing path separator
@@ -57481,7 +57854,7 @@
 	};
 
 /***/ },
-/* 537 */
+/* 539 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -57503,7 +57876,7 @@
 	};
 
 /***/ },
-/* 538 */
+/* 540 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -57515,8 +57888,8 @@
 
 	'use strict';
 
-	var isPrimitive = __webpack_require__(539);
-	var equal = __webpack_require__(540);
+	var isPrimitive = __webpack_require__(541);
+	var equal = __webpack_require__(542);
 	var basic = {};
 	var cache = {};
 
@@ -57579,7 +57952,7 @@
 	module.exports.basic = basic;
 
 /***/ },
-/* 539 */
+/* 541 */
 /***/ function(module, exports) {
 
 	/*!
@@ -57600,7 +57973,7 @@
 	};
 
 /***/ },
-/* 540 */
+/* 542 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -57612,7 +57985,7 @@
 
 	'use strict';
 
-	var isPrimitive = __webpack_require__(539);
+	var isPrimitive = __webpack_require__(541);
 
 	module.exports = function isEqual(a, b) {
 	  if (!a && !b) {
@@ -57638,13 +58011,13 @@
 	};
 
 /***/ },
-/* 541 */
+/* 543 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var chars = __webpack_require__(542);
-	var utils = __webpack_require__(508);
+	var chars = __webpack_require__(544);
+	var utils = __webpack_require__(510);
 
 	/**
 	 * Expose `Glob`
@@ -57836,7 +58209,7 @@
 	}
 
 /***/ },
-/* 542 */
+/* 544 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -57910,7 +58283,7 @@
 	module.exports = chars;
 
 /***/ },
-/* 543 */
+/* 545 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -57936,15 +58309,15 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 544 */
+/* 546 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var fs = __webpack_require__(489);
-	var sysPath = __webpack_require__(272);
-	var readdirp = __webpack_require__(545);
-	var isBinaryPath = __webpack_require__(582);
+	var fs = __webpack_require__(491);
+	var sysPath = __webpack_require__(274);
+	var readdirp = __webpack_require__(547);
+	var isBinaryPath = __webpack_require__(585);
 
 	// fs.watch helpers
 
@@ -58189,8 +58562,8 @@
 	      }.bind(this));
 	      // add is about to be emitted if file not already tracked in parent
 	    } else if (parent.has(basename)) {
-	        this._emit('change', file, newStats);
-	      }
+	      this._emit('change', file, newStats);
+	    }
 	  }.bind(this));
 
 	  // emit an add event if we're supposed to
@@ -58400,15 +58773,16 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 545 */
+/* 547 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var fs = __webpack_require__(546),
-	    path = __webpack_require__(272),
-	    minimatch = __webpack_require__(567),
-	    toString = Object.prototype.toString;
+	var fs = __webpack_require__(548),
+	    path = __webpack_require__(274),
+	    minimatch = __webpack_require__(569),
+	    toString = Object.prototype.toString,
+	    si = __webpack_require__(573);
 
 	// Standard helpers
 	function isFunction(obj) {
@@ -58448,11 +58822,12 @@
 	      fileProcessed,
 	      allProcessed,
 	      realRoot,
-	      aborted = false;
+	      aborted = false,
+	      paused = false;
 
 	  // If no callbacks were given we will use a streaming interface
 	  if (isUndefined(callback1)) {
-	    var api = __webpack_require__(571)();
+	    var api = __webpack_require__(574)();
 	    stream = api.stream;
 	    callback1 = api.processEntry;
 	    callback2 = api.done;
@@ -58461,6 +58836,12 @@
 
 	    stream.on('close', function () {
 	      aborted = true;
+	    });
+	    stream.on('pause', function () {
+	      paused = true;
+	    });
+	    stream.on('resume', function () {
+	      paused = false;
 	    });
 	  } else {
 	    handleError = function handleError(err) {
@@ -58599,7 +58980,14 @@
 	  }
 
 	  function readdirRec(currentDir, depth, callCurrentDirProcessed) {
+	    var args = arguments;
 	    if (aborted) return;
+	    if (paused) {
+	      si(function () {
+	        readdirRec.apply(null, args);
+	      });
+	      return;
+	    }
 
 	    fs.readdir(currentDir, function (err, entries) {
 	      if (err) {
@@ -58686,17 +59074,17 @@
 	module.exports = readdir;
 
 /***/ },
-/* 546 */
+/* 548 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var fs = __webpack_require__(489);
-	var polyfills = __webpack_require__(547);
-	var legacy = __webpack_require__(550);
+	var fs = __webpack_require__(491);
+	var polyfills = __webpack_require__(549);
+	var legacy = __webpack_require__(552);
 	var queue = [];
 
-	var util = __webpack_require__(332);
+	var util = __webpack_require__(334);
 
 	function noop() {}
 
@@ -58710,11 +59098,11 @@
 	if (/\bgfs4\b/i.test(process.env.NODE_DEBUG || '')) {
 	  process.on('exit', function () {
 	    debug(queue);
-	    __webpack_require__(566).equal(queue.length, 0);
+	    __webpack_require__(568).equal(queue.length, 0);
 	  });
 	}
 
-	module.exports = patch(__webpack_require__(548));
+	module.exports = patch(__webpack_require__(550));
 	if (process.env.TEST_GRACEFUL_FS_GLOBAL_PATCH) {
 	  module.exports = patch(fs);
 	}
@@ -58915,13 +59303,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 547 */
+/* 549 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var fs = __webpack_require__(548);
-	var constants = __webpack_require__(549);
+	var fs = __webpack_require__(550);
+	var constants = __webpack_require__(551);
 
 	var origCwd = process.cwd;
 	var cwd = null;
@@ -59172,14 +59560,14 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 548 */
+/* 550 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
-	var fs = __webpack_require__(489);
+	var fs = __webpack_require__(491);
 
 	module.exports = clone(fs);
 
@@ -59196,7 +59584,7 @@
 	}
 
 /***/ },
-/* 549 */
+/* 551 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -59379,12 +59767,12 @@
 	};
 
 /***/ },
-/* 550 */
+/* 552 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var Stream = __webpack_require__(551).Stream;
+	var Stream = __webpack_require__(553).Stream;
 
 	module.exports = legacy;
 
@@ -59505,7 +59893,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 551 */
+/* 553 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -59533,15 +59921,15 @@
 
 	module.exports = Stream;
 
-	var EE = __webpack_require__(500).EventEmitter;
-	var inherits = __webpack_require__(334);
+	var EE = __webpack_require__(502).EventEmitter;
+	var inherits = __webpack_require__(336);
 
 	inherits(Stream, EE);
-	Stream.Readable = __webpack_require__(552);
-	Stream.Writable = __webpack_require__(562);
-	Stream.Duplex = __webpack_require__(563);
-	Stream.Transform = __webpack_require__(564);
-	Stream.PassThrough = __webpack_require__(565);
+	Stream.Readable = __webpack_require__(554);
+	Stream.Writable = __webpack_require__(564);
+	Stream.Duplex = __webpack_require__(565);
+	Stream.Transform = __webpack_require__(566);
+	Stream.PassThrough = __webpack_require__(567);
 
 	// Backwards-compat with node 0.4.x
 	Stream.Stream = Stream;
@@ -59636,25 +60024,25 @@
 	};
 
 /***/ },
-/* 552 */
+/* 554 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	exports = module.exports = __webpack_require__(553);
-	exports.Stream = __webpack_require__(551);
+	exports = module.exports = __webpack_require__(555);
+	exports.Stream = __webpack_require__(553);
 	exports.Readable = exports;
-	exports.Writable = __webpack_require__(558);
-	exports.Duplex = __webpack_require__(557);
-	exports.Transform = __webpack_require__(560);
-	exports.PassThrough = __webpack_require__(561);
+	exports.Writable = __webpack_require__(560);
+	exports.Duplex = __webpack_require__(559);
+	exports.Transform = __webpack_require__(562);
+	exports.PassThrough = __webpack_require__(563);
 	if (!process.browser && process.env.READABLE_STREAM === 'disable') {
-	  module.exports = __webpack_require__(551);
+	  module.exports = __webpack_require__(553);
 	}
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 553 */
+/* 555 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -59683,16 +60071,16 @@
 	module.exports = Readable;
 
 	/*<replacement>*/
-	var isArray = __webpack_require__(554);
+	var isArray = __webpack_require__(556);
 	/*</replacement>*/
 
 	/*<replacement>*/
-	var Buffer = __webpack_require__(268).Buffer;
+	var Buffer = __webpack_require__(270).Buffer;
 	/*</replacement>*/
 
 	Readable.ReadableState = ReadableState;
 
-	var EE = __webpack_require__(500).EventEmitter;
+	var EE = __webpack_require__(502).EventEmitter;
 
 	/*<replacement>*/
 	if (!EE.listenerCount) EE.listenerCount = function (emitter, type) {
@@ -59700,17 +60088,17 @@
 	};
 	/*</replacement>*/
 
-	var Stream = __webpack_require__(551);
+	var Stream = __webpack_require__(553);
 
 	/*<replacement>*/
-	var util = __webpack_require__(555);
-	util.inherits = __webpack_require__(334);
+	var util = __webpack_require__(557);
+	util.inherits = __webpack_require__(336);
 	/*</replacement>*/
 
 	var StringDecoder;
 
 	/*<replacement>*/
-	var debug = __webpack_require__(556);
+	var debug = __webpack_require__(558);
 	if (debug && debug.debuglog) {
 	  debug = debug.debuglog('stream');
 	} else {
@@ -59721,7 +60109,7 @@
 	util.inherits(Readable, Stream);
 
 	function ReadableState(options, stream) {
-	  var Duplex = __webpack_require__(557);
+	  var Duplex = __webpack_require__(559);
 
 	  options = options || {};
 
@@ -59779,14 +60167,14 @@
 	  this.decoder = null;
 	  this.encoding = null;
 	  if (options.encoding) {
-	    if (!StringDecoder) StringDecoder = __webpack_require__(559).StringDecoder;
+	    if (!StringDecoder) StringDecoder = __webpack_require__(561).StringDecoder;
 	    this.decoder = new StringDecoder(options.encoding);
 	    this.encoding = options.encoding;
 	  }
 	}
 
 	function Readable(options) {
-	  var Duplex = __webpack_require__(557);
+	  var Duplex = __webpack_require__(559);
 
 	  if (!(this instanceof Readable)) return new Readable(options);
 
@@ -59875,7 +60263,7 @@
 
 	// backwards compatibility.
 	Readable.prototype.setEncoding = function (enc) {
-	  if (!StringDecoder) StringDecoder = __webpack_require__(559).StringDecoder;
+	  if (!StringDecoder) StringDecoder = __webpack_require__(561).StringDecoder;
 	  this._readableState.decoder = new StringDecoder(enc);
 	  this._readableState.encoding = enc;
 	  return this;
@@ -60514,7 +60902,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 554 */
+/* 556 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -60524,7 +60912,7 @@
 	};
 
 /***/ },
-/* 555 */
+/* 557 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {'use strict';
@@ -60634,16 +61022,16 @@
 	function objectToString(o) {
 	  return Object.prototype.toString.call(o);
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(268).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(270).Buffer))
 
 /***/ },
-/* 556 */
+/* 558 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 557 */
+/* 559 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -60686,12 +61074,12 @@
 	/*</replacement>*/
 
 	/*<replacement>*/
-	var util = __webpack_require__(555);
-	util.inherits = __webpack_require__(334);
+	var util = __webpack_require__(557);
+	util.inherits = __webpack_require__(336);
 	/*</replacement>*/
 
-	var Readable = __webpack_require__(553);
-	var Writable = __webpack_require__(558);
+	var Readable = __webpack_require__(555);
+	var Writable = __webpack_require__(560);
 
 	util.inherits(Duplex, Readable);
 
@@ -60734,7 +61122,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 558 */
+/* 560 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -60767,17 +61155,17 @@
 	module.exports = Writable;
 
 	/*<replacement>*/
-	var Buffer = __webpack_require__(268).Buffer;
+	var Buffer = __webpack_require__(270).Buffer;
 	/*</replacement>*/
 
 	Writable.WritableState = WritableState;
 
 	/*<replacement>*/
-	var util = __webpack_require__(555);
-	util.inherits = __webpack_require__(334);
+	var util = __webpack_require__(557);
+	util.inherits = __webpack_require__(336);
 	/*</replacement>*/
 
-	var Stream = __webpack_require__(551);
+	var Stream = __webpack_require__(553);
 
 	util.inherits(Writable, Stream);
 
@@ -60788,7 +61176,7 @@
 	}
 
 	function WritableState(options, stream) {
-	  var Duplex = __webpack_require__(557);
+	  var Duplex = __webpack_require__(559);
 
 	  options = options || {};
 
@@ -60875,7 +61263,7 @@
 	}
 
 	function Writable(options) {
-	  var Duplex = __webpack_require__(557);
+	  var Duplex = __webpack_require__(559);
 
 	  // Writable ctor is applied to Duplexes, though they're not
 	  // instanceof Writable, they're instanceof Readable.
@@ -61167,7 +61555,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 559 */
+/* 561 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61193,7 +61581,7 @@
 	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 	// USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-	var Buffer = __webpack_require__(268).Buffer;
+	var Buffer = __webpack_require__(270).Buffer;
 
 	var isBufferEncoding = Buffer.isEncoding || function (encoding) {
 	  switch (encoding && encoding.toLowerCase()) {
@@ -61391,7 +61779,7 @@
 	}
 
 /***/ },
-/* 560 */
+/* 562 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61461,11 +61849,11 @@
 
 	module.exports = Transform;
 
-	var Duplex = __webpack_require__(557);
+	var Duplex = __webpack_require__(559);
 
 	/*<replacement>*/
-	var util = __webpack_require__(555);
-	util.inherits = __webpack_require__(334);
+	var util = __webpack_require__(557);
+	util.inherits = __webpack_require__(336);
 	/*</replacement>*/
 
 	util.inherits(Transform, Duplex);
@@ -61590,7 +61978,7 @@
 	}
 
 /***/ },
-/* 561 */
+/* 563 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61622,11 +62010,11 @@
 
 	module.exports = PassThrough;
 
-	var Transform = __webpack_require__(560);
+	var Transform = __webpack_require__(562);
 
 	/*<replacement>*/
-	var util = __webpack_require__(555);
-	util.inherits = __webpack_require__(334);
+	var util = __webpack_require__(557);
+	util.inherits = __webpack_require__(336);
 	/*</replacement>*/
 
 	util.inherits(PassThrough, Transform);
@@ -61642,22 +62030,6 @@
 	};
 
 /***/ },
-/* 562 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	module.exports = __webpack_require__(558);
-
-/***/ },
-/* 563 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	module.exports = __webpack_require__(557);
-
-/***/ },
 /* 564 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -61671,10 +62043,26 @@
 
 	"use strict";
 
-	module.exports = __webpack_require__(561);
+	module.exports = __webpack_require__(559);
 
 /***/ },
 /* 566 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	module.exports = __webpack_require__(562);
+
+/***/ },
+/* 567 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	module.exports = __webpack_require__(563);
+
+/***/ },
+/* 568 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
@@ -61748,7 +62136,7 @@
 	// ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 	// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-	var util = __webpack_require__(332);
+	var util = __webpack_require__(334);
 	var hasOwn = Object.prototype.hasOwnProperty;
 	var pSlice = Array.prototype.slice;
 	var functionsHaveNames = function () {
@@ -61938,51 +62326,51 @@
 	    // 7.2. If the expected value is a Date object, the actual value is
 	    // equivalent if it is also a Date object that refers to the same time.
 	  } else if (util.isDate(actual) && util.isDate(expected)) {
-	      return actual.getTime() === expected.getTime();
+	    return actual.getTime() === expected.getTime();
 
-	      // 7.3 If the expected value is a RegExp object, the actual value is
-	      // equivalent if it is also a RegExp object with the same source and
-	      // properties (`global`, `multiline`, `lastIndex`, `ignoreCase`).
-	    } else if (util.isRegExp(actual) && util.isRegExp(expected)) {
-	        return actual.source === expected.source && actual.global === expected.global && actual.multiline === expected.multiline && actual.lastIndex === expected.lastIndex && actual.ignoreCase === expected.ignoreCase;
+	    // 7.3 If the expected value is a RegExp object, the actual value is
+	    // equivalent if it is also a RegExp object with the same source and
+	    // properties (`global`, `multiline`, `lastIndex`, `ignoreCase`).
+	  } else if (util.isRegExp(actual) && util.isRegExp(expected)) {
+	    return actual.source === expected.source && actual.global === expected.global && actual.multiline === expected.multiline && actual.lastIndex === expected.lastIndex && actual.ignoreCase === expected.ignoreCase;
 
-	        // 7.4. Other pairs that do not both pass typeof value == 'object',
-	        // equivalence is determined by ==.
-	      } else if ((actual === null || (typeof actual === 'undefined' ? 'undefined' : _typeof(actual)) !== 'object') && (expected === null || (typeof expected === 'undefined' ? 'undefined' : _typeof(expected)) !== 'object')) {
-	          return strict ? actual === expected : actual == expected;
+	    // 7.4. Other pairs that do not both pass typeof value == 'object',
+	    // equivalence is determined by ==.
+	  } else if ((actual === null || (typeof actual === 'undefined' ? 'undefined' : _typeof(actual)) !== 'object') && (expected === null || (typeof expected === 'undefined' ? 'undefined' : _typeof(expected)) !== 'object')) {
+	    return strict ? actual === expected : actual == expected;
 
-	          // If both values are instances of typed arrays, wrap their underlying
-	          // ArrayBuffers in a Buffer each to increase performance
-	          // This optimization requires the arrays to have the same type as checked by
-	          // Object.prototype.toString (aka pToString). Never perform binary
-	          // comparisons for Float*Arrays, though, since e.g. +0 === -0 but their
-	          // bit patterns are not identical.
-	        } else if (isView(actual) && isView(expected) && pToString(actual) === pToString(expected) && !(actual instanceof Float32Array || actual instanceof Float64Array)) {
-	            return compare(new Uint8Array(actual.buffer), new Uint8Array(expected.buffer)) === 0;
+	    // If both values are instances of typed arrays, wrap their underlying
+	    // ArrayBuffers in a Buffer each to increase performance
+	    // This optimization requires the arrays to have the same type as checked by
+	    // Object.prototype.toString (aka pToString). Never perform binary
+	    // comparisons for Float*Arrays, though, since e.g. +0 === -0 but their
+	    // bit patterns are not identical.
+	  } else if (isView(actual) && isView(expected) && pToString(actual) === pToString(expected) && !(actual instanceof Float32Array || actual instanceof Float64Array)) {
+	    return compare(new Uint8Array(actual.buffer), new Uint8Array(expected.buffer)) === 0;
 
-	            // 7.5 For all other Object pairs, including Array objects, equivalence is
-	            // determined by having the same number of owned properties (as verified
-	            // with Object.prototype.hasOwnProperty.call), the same set of keys
-	            // (although not necessarily the same order), equivalent values for every
-	            // corresponding key, and an identical 'prototype' property. Note: this
-	            // accounts for both named and indexed properties on Arrays.
-	          } else if (isBuffer(actual) !== isBuffer(expected)) {
-	              return false;
-	            } else {
-	              memos = memos || { actual: [], expected: [] };
+	    // 7.5 For all other Object pairs, including Array objects, equivalence is
+	    // determined by having the same number of owned properties (as verified
+	    // with Object.prototype.hasOwnProperty.call), the same set of keys
+	    // (although not necessarily the same order), equivalent values for every
+	    // corresponding key, and an identical 'prototype' property. Note: this
+	    // accounts for both named and indexed properties on Arrays.
+	  } else if (isBuffer(actual) !== isBuffer(expected)) {
+	    return false;
+	  } else {
+	    memos = memos || { actual: [], expected: [] };
 
-	              var actualIndex = memos.actual.indexOf(actual);
-	              if (actualIndex !== -1) {
-	                if (actualIndex === memos.expected.indexOf(expected)) {
-	                  return true;
-	                }
-	              }
+	    var actualIndex = memos.actual.indexOf(actual);
+	    if (actualIndex !== -1) {
+	      if (actualIndex === memos.expected.indexOf(expected)) {
+	        return true;
+	      }
+	    }
 
-	              memos.actual.push(actual);
-	              memos.expected.push(expected);
+	    memos.actual.push(actual);
+	    memos.expected.push(expected);
 
-	              return objEquiv(actual, expected, strict, memos);
-	            }
+	    return objEquiv(actual, expected, strict, memos);
+	  }
 	}
 
 	function isArguments(object) {
@@ -62151,7 +62539,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 567 */
+/* 569 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -62161,11 +62549,11 @@
 
 	var path = { sep: '/' };
 	try {
-	  path = __webpack_require__(272);
+	  path = __webpack_require__(274);
 	} catch (er) {}
 
 	var GLOBSTAR = minimatch.GLOBSTAR = Minimatch.GLOBSTAR = {};
-	var expand = __webpack_require__(568);
+	var expand = __webpack_require__(570);
 
 	// any single thing other than /
 	// don't need to escape / when using new RegExp()
@@ -63062,13 +63450,13 @@
 	}
 
 /***/ },
-/* 568 */
+/* 570 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var concatMap = __webpack_require__(569);
-	var balanced = __webpack_require__(570);
+	var concatMap = __webpack_require__(571);
+	var balanced = __webpack_require__(572);
 
 	module.exports = expandTop;
 
@@ -63237,7 +63625,7 @@
 	}
 
 /***/ },
-/* 569 */
+/* 571 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -63256,7 +63644,7 @@
 	};
 
 /***/ },
-/* 570 */
+/* 572 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -63321,17 +63709,27 @@
 	}
 
 /***/ },
-/* 571 */
+/* 573 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(setImmediate) {'use strict';
 
-	var si = typeof setImmediate !== 'undefined' ? setImmediate : function (fn) {
-	  setTimeout(fn, 0);
+	module.exports = typeof setImmediate === 'function' ? setImmediate : function setImmediate() {
+		var args = [].slice.apply(arguments);
+		args.splice(1, 0, 0);
+		setTimeout.apply(null, args);
 	};
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(278).setImmediate))
 
-	var stream = __webpack_require__(572);
-	var util = __webpack_require__(332);
+/***/ },
+/* 574 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var si = __webpack_require__(573);
+	var stream = __webpack_require__(575);
+	var util = __webpack_require__(334);
 
 	var Readable = stream.Readable;
 
@@ -63432,26 +63830,25 @@
 	}
 
 	module.exports = createStreamAPI;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(276).setImmediate))
 
 /***/ },
-/* 572 */
+/* 575 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
 	var Stream = function () {
 	  try {
-	    return __webpack_require__(551); // hack to fix a circular dependency issue when used with browserify
+	    return __webpack_require__(553); // hack to fix a circular dependency issue when used with browserify
 	  } catch (_) {}
 	}();
-	exports = module.exports = __webpack_require__(573);
+	exports = module.exports = __webpack_require__(576);
 	exports.Stream = Stream || exports;
 	exports.Readable = exports;
-	exports.Writable = __webpack_require__(578);
-	exports.Duplex = __webpack_require__(577);
-	exports.Transform = __webpack_require__(580);
-	exports.PassThrough = __webpack_require__(581);
+	exports.Writable = __webpack_require__(581);
+	exports.Duplex = __webpack_require__(580);
+	exports.Transform = __webpack_require__(583);
+	exports.PassThrough = __webpack_require__(584);
 
 	if (!process.browser && process.env.READABLE_STREAM === 'disable' && Stream) {
 	  module.exports = Stream;
@@ -63459,7 +63856,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 573 */
+/* 576 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -63467,17 +63864,17 @@
 	module.exports = Readable;
 
 	/*<replacement>*/
-	var processNextTick = __webpack_require__(574);
+	var processNextTick = __webpack_require__(577);
 	/*</replacement>*/
 
 	/*<replacement>*/
-	var isArray = __webpack_require__(271);
+	var isArray = __webpack_require__(273);
 	/*</replacement>*/
 
 	Readable.ReadableState = ReadableState;
 
 	/*<replacement>*/
-	var EE = __webpack_require__(500).EventEmitter;
+	var EE = __webpack_require__(502).EventEmitter;
 
 	var EElistenerCount = function EElistenerCount(emitter, type) {
 	  return emitter.listeners(type).length;
@@ -63488,25 +63885,25 @@
 	var Stream;
 	(function () {
 	  try {
-	    Stream = __webpack_require__(551);
+	    Stream = __webpack_require__(553);
 	  } catch (_) {} finally {
-	    if (!Stream) Stream = __webpack_require__(500).EventEmitter;
+	    if (!Stream) Stream = __webpack_require__(502).EventEmitter;
 	  }
 	})();
 	/*</replacement>*/
 
-	var Buffer = __webpack_require__(268).Buffer;
+	var Buffer = __webpack_require__(270).Buffer;
 	/*<replacement>*/
-	var bufferShim = __webpack_require__(575);
+	var bufferShim = __webpack_require__(578);
 	/*</replacement>*/
 
 	/*<replacement>*/
-	var util = __webpack_require__(555);
-	util.inherits = __webpack_require__(334);
+	var util = __webpack_require__(557);
+	util.inherits = __webpack_require__(336);
 	/*</replacement>*/
 
 	/*<replacement>*/
-	var debugUtil = __webpack_require__(576);
+	var debugUtil = __webpack_require__(579);
 	var debug = void 0;
 	if (debugUtil && debugUtil.debuglog) {
 	  debug = debugUtil.debuglog('stream');
@@ -63534,7 +63931,7 @@
 
 	var Duplex;
 	function ReadableState(options, stream) {
-	  Duplex = Duplex || __webpack_require__(577);
+	  Duplex = Duplex || __webpack_require__(580);
 
 	  options = options || {};
 
@@ -63593,7 +63990,7 @@
 	  this.decoder = null;
 	  this.encoding = null;
 	  if (options.encoding) {
-	    if (!StringDecoder) StringDecoder = __webpack_require__(559).StringDecoder;
+	    if (!StringDecoder) StringDecoder = __webpack_require__(561).StringDecoder;
 	    this.decoder = new StringDecoder(options.encoding);
 	    this.encoding = options.encoding;
 	  }
@@ -63601,7 +63998,7 @@
 
 	var Duplex;
 	function Readable(options) {
-	  Duplex = Duplex || __webpack_require__(577);
+	  Duplex = Duplex || __webpack_require__(580);
 
 	  if (!(this instanceof Readable)) return new Readable(options);
 
@@ -63704,7 +64101,7 @@
 
 	// backwards compatibility.
 	Readable.prototype.setEncoding = function (enc) {
-	  if (!StringDecoder) StringDecoder = __webpack_require__(559).StringDecoder;
+	  if (!StringDecoder) StringDecoder = __webpack_require__(561).StringDecoder;
 	  this._readableState.decoder = new StringDecoder(enc);
 	  this._readableState.encoding = enc;
 	  return this;
@@ -64358,7 +64755,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 574 */
+/* 577 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -64405,12 +64802,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 575 */
+/* 578 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 
-	var buffer = __webpack_require__(268);
+	var buffer = __webpack_require__(270);
 	var Buffer = buffer.Buffer;
 	var SlowBuffer = buffer.SlowBuffer;
 	var MAX_LEN = buffer.kMaxLength || 2147483647;
@@ -64519,13 +64916,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 576 */
+/* 579 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 577 */
+/* 580 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// a duplex stream is just a stream that is both readable and writable.
@@ -64548,16 +64945,16 @@
 	module.exports = Duplex;
 
 	/*<replacement>*/
-	var processNextTick = __webpack_require__(574);
+	var processNextTick = __webpack_require__(577);
 	/*</replacement>*/
 
 	/*<replacement>*/
-	var util = __webpack_require__(555);
-	util.inherits = __webpack_require__(334);
+	var util = __webpack_require__(557);
+	util.inherits = __webpack_require__(336);
 	/*</replacement>*/
 
-	var Readable = __webpack_require__(573);
-	var Writable = __webpack_require__(578);
+	var Readable = __webpack_require__(576);
+	var Writable = __webpack_require__(581);
 
 	util.inherits(Duplex, Readable);
 
@@ -64605,7 +65002,7 @@
 	}
 
 /***/ },
-/* 578 */
+/* 581 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process, setImmediate) {// A bit simpler than readable streams.
@@ -64617,7 +65014,7 @@
 	module.exports = Writable;
 
 	/*<replacement>*/
-	var processNextTick = __webpack_require__(574);
+	var processNextTick = __webpack_require__(577);
 	/*</replacement>*/
 
 	/*<replacement>*/
@@ -64627,13 +65024,13 @@
 	Writable.WritableState = WritableState;
 
 	/*<replacement>*/
-	var util = __webpack_require__(555);
-	util.inherits = __webpack_require__(334);
+	var util = __webpack_require__(557);
+	util.inherits = __webpack_require__(336);
 	/*</replacement>*/
 
 	/*<replacement>*/
 	var internalUtil = {
-	  deprecate: __webpack_require__(579)
+	  deprecate: __webpack_require__(582)
 	};
 	/*</replacement>*/
 
@@ -64641,16 +65038,16 @@
 	var Stream;
 	(function () {
 	  try {
-	    Stream = __webpack_require__(551);
+	    Stream = __webpack_require__(553);
 	  } catch (_) {} finally {
-	    if (!Stream) Stream = __webpack_require__(500).EventEmitter;
+	    if (!Stream) Stream = __webpack_require__(502).EventEmitter;
 	  }
 	})();
 	/*</replacement>*/
 
-	var Buffer = __webpack_require__(268).Buffer;
+	var Buffer = __webpack_require__(270).Buffer;
 	/*<replacement>*/
-	var bufferShim = __webpack_require__(575);
+	var bufferShim = __webpack_require__(578);
 	/*</replacement>*/
 
 	util.inherits(Writable, Stream);
@@ -64666,7 +65063,7 @@
 
 	var Duplex;
 	function WritableState(options, stream) {
-	  Duplex = Duplex || __webpack_require__(577);
+	  Duplex = Duplex || __webpack_require__(580);
 
 	  options = options || {};
 
@@ -64782,7 +65179,7 @@
 
 	var Duplex;
 	function Writable(options) {
-	  Duplex = Duplex || __webpack_require__(577);
+	  Duplex = Duplex || __webpack_require__(580);
 
 	  // Writable ctor is applied to Duplexes, though they're not
 	  // instanceof Writable, they're instanceof Readable.
@@ -64965,8 +65362,8 @@
 	      asyncWrite(afterWrite, stream, state, finished, cb);
 	      /*</replacement>*/
 	    } else {
-	        afterWrite(stream, state, finished, cb);
-	      }
+	      afterWrite(stream, state, finished, cb);
+	    }
 	  }
 	}
 
@@ -65134,10 +65531,10 @@
 	    }
 	  };
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9), __webpack_require__(276).setImmediate))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9), __webpack_require__(278).setImmediate))
 
 /***/ },
-/* 579 */
+/* 582 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
@@ -65211,7 +65608,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 580 */
+/* 583 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// a transform stream is a readable/writable stream where you do
@@ -65260,11 +65657,11 @@
 
 	module.exports = Transform;
 
-	var Duplex = __webpack_require__(577);
+	var Duplex = __webpack_require__(580);
 
 	/*<replacement>*/
-	var util = __webpack_require__(555);
-	util.inherits = __webpack_require__(334);
+	var util = __webpack_require__(557);
+	util.inherits = __webpack_require__(336);
 	/*</replacement>*/
 
 	util.inherits(Transform, Duplex);
@@ -65396,7 +65793,7 @@
 	}
 
 /***/ },
-/* 581 */
+/* 584 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// a passthrough stream.
@@ -65407,11 +65804,11 @@
 
 	module.exports = PassThrough;
 
-	var Transform = __webpack_require__(580);
+	var Transform = __webpack_require__(583);
 
 	/*<replacement>*/
-	var util = __webpack_require__(555);
-	util.inherits = __webpack_require__(334);
+	var util = __webpack_require__(557);
+	util.inherits = __webpack_require__(336);
 	/*</replacement>*/
 
 	util.inherits(PassThrough, Transform);
@@ -65427,13 +65824,13 @@
 	};
 
 /***/ },
-/* 582 */
+/* 585 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var path = __webpack_require__(272);
-	var binaryExtensions = __webpack_require__(583);
+	var path = __webpack_require__(274);
+	var binaryExtensions = __webpack_require__(586);
 	var exts = Object.create(null);
 
 	binaryExtensions.forEach(function (el) {
@@ -65445,7 +65842,7 @@
 	};
 
 /***/ },
-/* 583 */
+/* 586 */
 /***/ function(module, exports) {
 
 	module.exports = [
@@ -65639,14 +66036,14 @@
 	];
 
 /***/ },
-/* 584 */
+/* 587 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var fs = __webpack_require__(489);
-	var sysPath = __webpack_require__(272);
-	var readdirp = __webpack_require__(545);
+	var fs = __webpack_require__(491);
+	var sysPath = __webpack_require__(274);
+	var readdirp = __webpack_require__(547);
 	var fsevents;
 	try {
 	  fsevents = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"fsevents\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
@@ -66015,7 +66412,7 @@
 	module.exports.canUse = canUse;
 
 /***/ },
-/* 585 */
+/* 588 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66024,9 +66421,9 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var fs = __webpack_require__(489);
-	var path = __webpack_require__(272);
-	var mkdirp = __webpack_require__(586);
+	var fs = __webpack_require__(491);
+	var path = __webpack_require__(274);
+	var mkdirp = __webpack_require__(589);
 
 	function NodeOutputFileSystem() {}
 	module.exports = NodeOutputFileSystem;
@@ -66039,15 +66436,15 @@
 	NodeOutputFileSystem.prototype.join = path.join.bind(path);
 
 /***/ },
-/* 586 */
+/* 589 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
-	var path = __webpack_require__(272);
-	var fs = __webpack_require__(489);
+	var path = __webpack_require__(274);
+	var fs = __webpack_require__(491);
 	var _0777 = parseInt('0777', 8);
 
 	module.exports = mkdirP.mkdirp = mkdirP.mkdirP = mkdirP;
@@ -66142,7 +66539,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 587 */
+/* 590 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66151,7 +66548,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var fs = __webpack_require__(546);
+	var fs = __webpack_require__(548);
 
 	function NodeJsInputFileSystem() {}
 	module.exports = NodeJsInputFileSystem;
@@ -66172,7 +66569,7 @@
 	NodeJsInputFileSystem.prototype.readlink = fs.readlink.bind(fs);
 
 /***/ },
-/* 588 */
+/* 591 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -66329,7 +66726,7 @@
 	};
 
 /***/ },
-/* 589 */
+/* 592 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66338,7 +66735,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ConcatSource = __webpack_require__(315);
+	var ConcatSource = __webpack_require__(317);
 
 	function NodeHotUpdateChunkTemplatePlugin() {}
 	module.exports = NodeHotUpdateChunkTemplatePlugin;
@@ -66360,7 +66757,7 @@
 	};
 
 /***/ },
-/* 590 */
+/* 593 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
@@ -66369,7 +66766,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ExternalsPlugin = __webpack_require__(591);
+	var ExternalsPlugin = __webpack_require__(594);
 
 	function NodeTargetPlugin() {}
 
@@ -66380,7 +66777,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 591 */
+/* 594 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66389,7 +66786,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ExternalModuleFactoryPlugin = __webpack_require__(592);
+	var ExternalModuleFactoryPlugin = __webpack_require__(595);
 
 	function ExternalsPlugin(type, externals) {
 		this.type = type;
@@ -66403,7 +66800,7 @@
 	};
 
 /***/ },
-/* 592 */
+/* 595 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66414,7 +66811,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ExternalModule = __webpack_require__(593);
+	var ExternalModule = __webpack_require__(596);
 
 	function ExternalModuleFactoryPlugin(type, externals) {
 		this.type = type;
@@ -66498,7 +66895,7 @@
 	};
 
 /***/ },
-/* 593 */
+/* 596 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66509,10 +66906,10 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var Module = __webpack_require__(281);
-	var OriginalSource = __webpack_require__(316);
-	var RawSource = __webpack_require__(306);
-	var WebpackMissingModule = __webpack_require__(409);
+	var Module = __webpack_require__(283);
+	var OriginalSource = __webpack_require__(318);
+	var RawSource = __webpack_require__(308);
+	var WebpackMissingModule = __webpack_require__(411);
 
 	function ExternalModule(request, type) {
 		Module.call(this);
@@ -66594,7 +66991,7 @@
 	};
 
 /***/ },
-/* 594 */
+/* 597 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66603,9 +67000,9 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var fs = __webpack_require__(489);
-	var path = __webpack_require__(272);
-	var async = __webpack_require__(275);
+	var fs = __webpack_require__(491);
+	var path = __webpack_require__(274);
+	var async = __webpack_require__(277);
 
 	function OldNodeWatchFileSystem(inputFileSystem) {
 		this.inputFileSystem = inputFileSystem;
@@ -66861,7 +67258,7 @@
 	}
 
 /***/ },
-/* 595 */
+/* 598 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66870,7 +67267,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var SetVarMainTemplatePlugin = __webpack_require__(596);
+	var SetVarMainTemplatePlugin = __webpack_require__(599);
 
 	function accessorToObjectAccess(accessor) {
 		return accessor.map(function (a) {
@@ -66915,19 +67312,19 @@
 					compilation.apply(new SetVarMainTemplatePlugin("module.exports"));
 					break;
 				case "amd":
-					var AmdMainTemplatePlugin = __webpack_require__(597);
+					var AmdMainTemplatePlugin = __webpack_require__(600);
 					compilation.apply(new AmdMainTemplatePlugin(this.name));
 					break;
 				case "umd":
 				case "umd2":
-					var UmdMainTemplatePlugin = __webpack_require__(598);
+					var UmdMainTemplatePlugin = __webpack_require__(601);
 					compilation.apply(new UmdMainTemplatePlugin(this.name, {
 						optionalAmdExternalAsGlobal: this.target === "umd2",
 						namedDefine: this.umdNamedDefine
 					}));
 					break;
 				case "jsonp":
-					var JsonpExportMainTemplatePlugin = __webpack_require__(599);
+					var JsonpExportMainTemplatePlugin = __webpack_require__(602);
 					compilation.apply(new JsonpExportMainTemplatePlugin(this.name));
 					break;
 				default:
@@ -66937,7 +67334,7 @@
 	};
 
 /***/ },
-/* 596 */
+/* 599 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66946,7 +67343,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ConcatSource = __webpack_require__(315);
+	var ConcatSource = __webpack_require__(317);
 
 	function SetVarMainTemplatePlugin(varExpression, copyObject) {
 		this.varExpression = varExpression;
@@ -66979,7 +67376,7 @@
 	};
 
 /***/ },
-/* 597 */
+/* 600 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -66990,7 +67387,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ConcatSource = __webpack_require__(315);
+	var ConcatSource = __webpack_require__(317);
 
 	function AmdMainTemplatePlugin(name) {
 		this.name = name;
@@ -67031,7 +67428,7 @@
 	};
 
 /***/ },
-/* 598 */
+/* 601 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67042,8 +67439,8 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ConcatSource = __webpack_require__(315);
-	var OriginalSource = __webpack_require__(316);
+	var ConcatSource = __webpack_require__(317);
+	var OriginalSource = __webpack_require__(318);
 
 	function accessorToObjectAccess(accessor) {
 		return accessor.map(function (a) {
@@ -67151,7 +67548,7 @@
 	};
 
 /***/ },
-/* 599 */
+/* 602 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67160,7 +67557,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ConcatSource = __webpack_require__(315);
+	var ConcatSource = __webpack_require__(317);
 
 	function JsonpExportMainTemplatePlugin(name) {
 		this.name = name;
@@ -67186,7 +67583,7 @@
 	};
 
 /***/ },
-/* 600 */
+/* 603 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67195,13 +67592,13 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var Template = __webpack_require__(318);
-	var BasicEvaluatedExpression = __webpack_require__(345);
-	var ModuleHotAcceptDependency = __webpack_require__(601);
-	var ModuleHotDeclineDependency = __webpack_require__(602);
-	var RawSource = __webpack_require__(306);
-	var ConstDependency = __webpack_require__(389);
-	var NullFactory = __webpack_require__(391);
+	var Template = __webpack_require__(320);
+	var BasicEvaluatedExpression = __webpack_require__(347);
+	var ModuleHotAcceptDependency = __webpack_require__(604);
+	var ModuleHotDeclineDependency = __webpack_require__(605);
+	var RawSource = __webpack_require__(308);
+	var ConstDependency = __webpack_require__(391);
+	var NullFactory = __webpack_require__(393);
 
 	function HotModuleReplacementPlugin() {}
 	module.exports = HotModuleReplacementPlugin;
@@ -67230,7 +67627,7 @@
 				records.moduleHashs = {};
 				this.modules.forEach(function (module) {
 					var identifier = module.identifier();
-					var hash = __webpack_require__(325).createHash("md5");
+					var hash = __webpack_require__(327).createHash("md5");
 					module.updateHash(hash);
 					records.moduleHashs[identifier] = hash.digest("hex");
 				});
@@ -67264,7 +67661,7 @@
 				if (!records.moduleHashs || !records.chunkHashs || !records.chunkModuleIds) return;
 				this.modules.forEach(function (module) {
 					var identifier = module.identifier();
-					var hash = __webpack_require__(325).createHash("md5");
+					var hash = __webpack_require__(327).createHash("md5");
 					module.updateHash(hash);
 					hash = hash.digest("hex");
 					module.hotUpdate = records.moduleHashs[identifier] !== hash;
@@ -67395,10 +67792,10 @@
 		});
 	};
 
-	var hotInitCode = Template.getFunctionContent(__webpack_require__(603));
+	var hotInitCode = Template.getFunctionContent(__webpack_require__(606));
 
 /***/ },
-/* 601 */
+/* 604 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67407,7 +67804,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ModuleDependency = __webpack_require__(366);
+	var ModuleDependency = __webpack_require__(368);
 
 	function ModuleHotAcceptDependency(request, range) {
 		ModuleDependency.call(this, request);
@@ -67420,10 +67817,10 @@
 	ModuleHotAcceptDependency.prototype.constructor = ModuleHotAcceptDependency;
 	ModuleHotAcceptDependency.prototype.type = "module.hot.accept";
 
-	ModuleHotAcceptDependency.Template = __webpack_require__(408);
+	ModuleHotAcceptDependency.Template = __webpack_require__(410);
 
 /***/ },
-/* 602 */
+/* 605 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67432,7 +67829,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ModuleDependency = __webpack_require__(366);
+	var ModuleDependency = __webpack_require__(368);
 
 	function ModuleHotDeclineDependency(request, range) {
 		ModuleDependency.call(this, request);
@@ -67445,10 +67842,10 @@
 	ModuleHotDeclineDependency.prototype.constructor = ModuleHotDeclineDependency;
 	ModuleHotDeclineDependency.prototype.type = "module.hot.decline";
 
-	ModuleHotDeclineDependency.Template = __webpack_require__(408);
+	ModuleHotDeclineDependency.Template = __webpack_require__(410);
 
 /***/ },
-/* 603 */
+/* 606 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -67925,7 +68322,7 @@
 	};
 
 /***/ },
-/* 604 */
+/* 607 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67934,7 +68331,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var PrefetchDependency = __webpack_require__(605);
+	var PrefetchDependency = __webpack_require__(608);
 
 	function PrefetchPlugin(context, request) {
 		if (!request) {
@@ -67957,7 +68354,7 @@
 	};
 
 /***/ },
-/* 605 */
+/* 608 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -67966,7 +68363,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ModuleDependency = __webpack_require__(366);
+	var ModuleDependency = __webpack_require__(368);
 
 	function PrefetchDependency(request) {
 		ModuleDependency.call(this, request);
@@ -67978,7 +68375,7 @@
 	PrefetchDependency.prototype.type = "prefetch";
 
 /***/ },
-/* 606 */
+/* 609 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -68076,7 +68473,7 @@
 	};
 
 /***/ },
-/* 607 */
+/* 610 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -68146,7 +68543,7 @@
 	};
 
 /***/ },
-/* 608 */
+/* 611 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -68210,7 +68607,7 @@
 	};
 
 /***/ },
-/* 609 */
+/* 612 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -68221,12 +68618,12 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var SourceMapConsumer = __webpack_require__(610).SourceMapConsumer;
-	var SourceMapSource = __webpack_require__(353);
-	var RawSource = __webpack_require__(306);
-	var RequestShortener = __webpack_require__(312);
-	var ModuleFilenameHelpers = __webpack_require__(375);
-	var uglify = __webpack_require__(611);
+	var SourceMapConsumer = __webpack_require__(613).SourceMapConsumer;
+	var SourceMapSource = __webpack_require__(355);
+	var RawSource = __webpack_require__(308);
+	var RequestShortener = __webpack_require__(314);
+	var ModuleFilenameHelpers = __webpack_require__(377);
+	var uglify = __webpack_require__(614);
 
 	function UglifyJsPlugin(options) {
 		if ((typeof options === "undefined" ? "undefined" : _typeof(options)) !== "object") options = {};
@@ -68363,7 +68760,7 @@
 	};
 
 /***/ },
-/* 610 */
+/* 613 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -68372,10 +68769,10 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	module.exports = __webpack_require__(286);
+	module.exports = __webpack_require__(288);
 
 /***/ },
-/* 611 */
+/* 614 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process, __filename, global, __dirname) {"use strict";
@@ -68385,8 +68782,8 @@
 	    if (stream._handle && stream._handle.setBlocking) stream._handle.setBlocking(true);
 	});
 
-	var path = __webpack_require__(272);
-	var fs = __webpack_require__(489);
+	var path = __webpack_require__(274);
+	var fs = __webpack_require__(491);
 
 	var FILES = exports.FILES = ["../lib/utils.js", "../lib/ast.js", "../lib/parse.js", "../lib/transform.js", "../lib/scope.js", "../lib/output.js", "../lib/compress.js", "../lib/sourcemap.js", "../lib/mozilla-ast.js", "../lib/propmangle.js", "./exports.js"].map(function (file) {
 	    return fs.realpathSync(path.join(path.dirname(__filename), file));
@@ -68396,7 +68793,7 @@
 
 	new Function("MOZ_SourceMap", "exports", "DEBUG", FILES.map(function (file) {
 	    return fs.readFileSync(file, "utf8");
-	}).join("\n\n"))(__webpack_require__(612), UglifyJS, !!global.UGLIFY_DEBUG);
+	}).join("\n\n"))(__webpack_require__(615), UglifyJS, !!global.UGLIFY_DEBUG);
 
 	UglifyJS.AST_Node.warn_function = function (txt) {
 	    console.error("WARN: %s", txt);
@@ -68616,7 +69013,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9), "/index.js", (function() { return this; }()), "/"))
 
 /***/ },
-/* 612 */
+/* 615 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68626,12 +69023,12 @@
 	 * Licensed under the New BSD license. See LICENSE.txt or:
 	 * http://opensource.org/licenses/BSD-3-Clause
 	 */
-	exports.SourceMapGenerator = __webpack_require__(613).SourceMapGenerator;
-	exports.SourceMapConsumer = __webpack_require__(619).SourceMapConsumer;
-	exports.SourceNode = __webpack_require__(622).SourceNode;
+	exports.SourceMapGenerator = __webpack_require__(616).SourceMapGenerator;
+	exports.SourceMapConsumer = __webpack_require__(622).SourceMapConsumer;
+	exports.SourceNode = __webpack_require__(625).SourceNode;
 
 /***/ },
-/* 613 */
+/* 616 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68643,10 +69040,10 @@
 	 * http://opensource.org/licenses/BSD-3-Clause
 	 */
 
-	var base64VLQ = __webpack_require__(614);
-	var util = __webpack_require__(616);
-	var ArraySet = __webpack_require__(617).ArraySet;
-	var MappingList = __webpack_require__(618).MappingList;
+	var base64VLQ = __webpack_require__(617);
+	var util = __webpack_require__(619);
+	var ArraySet = __webpack_require__(620).ArraySet;
+	var MappingList = __webpack_require__(621).MappingList;
 
 	/**
 	 * An instance of the SourceMapGenerator represents a source map which is
@@ -69014,7 +69411,7 @@
 	exports.SourceMapGenerator = SourceMapGenerator;
 
 /***/ },
-/* 614 */
+/* 617 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -69056,7 +69453,7 @@
 	 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 	 */
 
-	var base64 = __webpack_require__(615);
+	var base64 = __webpack_require__(618);
 
 	// A single base 64 digit can contain 6 bits of data. For the base 64 variable
 	// length quantities we use in the source map spec, the first bit is the sign,
@@ -69157,7 +69554,7 @@
 	};
 
 /***/ },
-/* 615 */
+/* 618 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -69231,7 +69628,7 @@
 	};
 
 /***/ },
-/* 616 */
+/* 619 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -69645,7 +70042,7 @@
 	exports.compareByGeneratedPositionsInflated = compareByGeneratedPositionsInflated;
 
 /***/ },
-/* 617 */
+/* 620 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -69657,7 +70054,7 @@
 	 * http://opensource.org/licenses/BSD-3-Clause
 	 */
 
-	var util = __webpack_require__(616);
+	var util = __webpack_require__(619);
 	var has = Object.prototype.hasOwnProperty;
 
 	/**
@@ -69756,7 +70153,7 @@
 	exports.ArraySet = ArraySet;
 
 /***/ },
-/* 618 */
+/* 621 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -69768,7 +70165,7 @@
 	 * http://opensource.org/licenses/BSD-3-Clause
 	 */
 
-	var util = __webpack_require__(616);
+	var util = __webpack_require__(619);
 
 	/**
 	 * Determine whether mappingB is after mappingA with respect to generated
@@ -69840,7 +70237,7 @@
 	exports.MappingList = MappingList;
 
 /***/ },
-/* 619 */
+/* 622 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -69852,11 +70249,11 @@
 	 * http://opensource.org/licenses/BSD-3-Clause
 	 */
 
-	var util = __webpack_require__(616);
-	var binarySearch = __webpack_require__(620);
-	var ArraySet = __webpack_require__(617).ArraySet;
-	var base64VLQ = __webpack_require__(614);
-	var quickSort = __webpack_require__(621).quickSort;
+	var util = __webpack_require__(619);
+	var binarySearch = __webpack_require__(623);
+	var ArraySet = __webpack_require__(620).ArraySet;
+	var base64VLQ = __webpack_require__(617);
+	var quickSort = __webpack_require__(624).quickSort;
 
 	function SourceMapConsumer(aSourceMap) {
 	  var sourceMap = aSourceMap;
@@ -70861,7 +71258,7 @@
 	exports.IndexedSourceMapConsumer = IndexedSourceMapConsumer;
 
 /***/ },
-/* 620 */
+/* 623 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -70976,7 +71373,7 @@
 	};
 
 /***/ },
-/* 621 */
+/* 624 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -71097,7 +71494,7 @@
 	};
 
 /***/ },
-/* 622 */
+/* 625 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -71109,8 +71506,8 @@
 	 * http://opensource.org/licenses/BSD-3-Clause
 	 */
 
-	var SourceMapGenerator = __webpack_require__(613).SourceMapGenerator;
-	var util = __webpack_require__(616);
+	var SourceMapGenerator = __webpack_require__(616).SourceMapGenerator;
+	var util = __webpack_require__(619);
 
 	// Matches a Windows-style `\r\n` newline or a `\n` newline used by all other
 	// operating systems these days (capturing the result).
@@ -71192,18 +71589,18 @@
 	        lastGeneratedColumn = 0;
 	        // The remaining code is added without mapping
 	      } else {
-	          // There is no new line in between.
-	          // Associate the code between "lastGeneratedColumn" and
-	          // "mapping.generatedColumn" with "lastMapping"
-	          var nextLine = remainingLines[0];
-	          var code = nextLine.substr(0, mapping.generatedColumn - lastGeneratedColumn);
-	          remainingLines[0] = nextLine.substr(mapping.generatedColumn - lastGeneratedColumn);
-	          lastGeneratedColumn = mapping.generatedColumn;
-	          addMappingWithCode(lastMapping, code);
-	          // No more remaining code, continue
-	          lastMapping = mapping;
-	          return;
-	        }
+	        // There is no new line in between.
+	        // Associate the code between "lastGeneratedColumn" and
+	        // "mapping.generatedColumn" with "lastMapping"
+	        var nextLine = remainingLines[0];
+	        var code = nextLine.substr(0, mapping.generatedColumn - lastGeneratedColumn);
+	        remainingLines[0] = nextLine.substr(mapping.generatedColumn - lastGeneratedColumn);
+	        lastGeneratedColumn = mapping.generatedColumn;
+	        addMappingWithCode(lastMapping, code);
+	        // No more remaining code, continue
+	        lastMapping = mapping;
+	        return;
+	      }
 	    }
 	    // We add the generated code until the first mapping
 	    // to the SourceNode without any mapping.
@@ -71485,7 +71882,7 @@
 	exports.SourceNode = SourceNode;
 
 /***/ },
-/* 623 */
+/* 626 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -71494,7 +71891,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var async = __webpack_require__(275);
+	var async = __webpack_require__(277);
 
 	function CachePlugin(cache) {
 		this.cache = cache || {};
@@ -71535,7 +71932,7 @@
 	};
 
 /***/ },
-/* 624 */
+/* 627 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -71544,10 +71941,10 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var ModuleParserHelpers = __webpack_require__(395);
-	var ConstDependency = __webpack_require__(389);
+	var ModuleParserHelpers = __webpack_require__(397);
+	var ConstDependency = __webpack_require__(391);
 
-	var NullFactory = __webpack_require__(391);
+	var NullFactory = __webpack_require__(393);
 
 	function ProvidePlugin(definitions) {
 		this.definitions = definitions;
@@ -71590,7 +71987,7 @@
 	};
 
 /***/ },
-/* 625 */
+/* 628 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
@@ -71599,7 +71996,7 @@
 		MIT License http://www.opensource.org/licenses/mit-license.php
 		Author Tobias Koppers @sokra
 	*/
-	var OptionsDefaulter = __webpack_require__(626);
+	var OptionsDefaulter = __webpack_require__(629);
 
 	function WebpackOptionsDefaulter() {
 		OptionsDefaulter.call(this);
@@ -71704,7 +72101,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 626 */
+/* 629 */
 /***/ function(module, exports) {
 
 	"use strict";
