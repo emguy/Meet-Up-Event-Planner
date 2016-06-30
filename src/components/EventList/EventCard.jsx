@@ -1,6 +1,6 @@
-var React = require("react");
-var Modal = require("../../ui/Modal.jsx");
-var Button = require("../../ui/Button.jsx");
+var React = require('react');
+var Modal = require('../../ui/Modal.jsx');
+var Button = require('../../ui/Button.jsx');
 
 
 
@@ -25,7 +25,7 @@ var EventCard = React.createClass({
       return false;
     }
     return (
-      <Modal className={"event-card"} visible={this.props.visible} 
+      <Modal className={'event-card'} visible={this.props.visible} 
         closeMe={this.props.closeMe}>
         <ModalHeader eventName={this.props.event.name} 
           eventTime={this.props.event.startTime} />
@@ -54,11 +54,11 @@ var ModalHeader = React.createClass({
   /* the render method */
   render: function() {
     return (
-      <div className="event-header">
-        <p className="event-name"> 
+      <div className='event-header'>
+        <p className='event-name'> 
           {this.props.eventName} 
         </p>
-        <p className="event-time"> 
+        <p className='event-time'> 
           {new Date(this.props.eventTime).toLocaleString()} 
         </p>
       </div>
@@ -77,13 +77,13 @@ var ModalFooter = React.createClass({
   },
   render: function() {
     return (
-      <div className="event-footer">
+      <div className='event-footer'>
         <ul>
-          <Button tooltip="Delete" action="#"> 
-            <i className="fa fa-trash-o"></i> 
+          <Button tooltip='Delete' action='#'> 
+            <i className='fa fa-trash-o'></i> 
           </Button>
-          <Button tooltip="Edit" action="#"> 
-            <i className="fa fa-pencil"></i> 
+          <Button tooltip='Edit' action='#'> 
+            <i className='fa fa-pencil'></i> 
           </Button>
         </ul>
       </div>
@@ -108,39 +108,39 @@ var ModalContent = React.createClass({
   /* the render method */
   render: function() {
     return (
-      <div className="event-content">
-        <div className="event-attribute"> 
-          <p className="event-label"> Location: </p>
-          <p className="event-value"> 
-            {this.props.event.location || "N/A"} 
+      <div className='event-content'>
+        <div className='event-attribute'> 
+          <p className='event-label'> Location: </p>
+          <p className='event-value'> 
+            {this.props.event.location || 'N/A'} 
           </p>
         </div>
 
-        <div className="event-attribute"> 
-          <p className="event-label"> End time: </p>
-          <p className="event-value"> 
-            {new Date(this.props.event.endTime).toLocaleString() || "N/A"} 
+        <div className='event-attribute'> 
+          <p className='event-label'> End time: </p>
+          <p className='event-value'> 
+            {new Date(this.props.event.endTime).toLocaleString() || 'N/A'} 
           </p>
         </div>
 
-        <div className="event-attribute"> 
-          <p className="event-label"> Host: </p>
-          <p className="event-value"> 
-            {this.props.event.host || "N/A"} 
+        <div className='event-attribute'> 
+          <p className='event-label'> Host: </p>
+          <p className='event-value'> 
+            {this.props.event.host || 'N/A'} 
           </p>
         </div>
 
-        <div className="event-attribute"> 
-          <p className="event-label"> Type: </p>
-          <p className="event-value"> 
-            {this.props.event.type || "N/A"} 
+        <div className='event-attribute'> 
+          <p className='event-label'> Type: </p>
+          <p className='event-value'> 
+            {this.props.event.type || 'N/A'} 
           </p>
         </div>
 
-        <div className="event-attribute"> 
-          <p className="event-label"> Guests: </p>
-          <p className="event-value"> 
-            {this.props.event.guest || "N/A"} 
+        <div className='event-attribute'> 
+          <p className='event-label'> Guests: </p>
+          <p className='event-value'> 
+            {this.props.event.guest || 'N/A'} 
           </p>
         </div>
       </div>

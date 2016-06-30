@@ -34,7 +34,7 @@ var objectAssign = require('../utils/utils.js').objectAssign;
  */
 
 var defaultInputs = {
-  formPageNumber: 1,
+  formPageNumber: 0,
   inputUid: '',
   inputPassword: '',
   inputRegUid: '',
@@ -42,6 +42,7 @@ var defaultInputs = {
   inputRegPassword2: '',
   inputRegEmail: '',
   inputEventName: '',
+  inputEventDate: '',
   inputEventLocation: '',
   inputEventType: '',
   inputEventStartTime: '',
@@ -129,6 +130,9 @@ var reducer = function(state, action) {
     case 'CAPTURE_EVENT_HOST':
       return objectAssign({}, state, {inputEventHost: action.operand});
 
+    case 'CAPTURE_EVENT_DATE':
+      return objectAssign({}, state, {inputEventDate: action.operand});
+
     case 'CAPTURE_EVENT_GUESTS':
       return objectAssign({}, state, {inputEventGuests: action.operand});
 
@@ -185,6 +189,27 @@ var reducer = function(state, action) {
         return objectAssign({}, state, {inputRegEmail: action.operand}, {systemResponse: registrationManager.emailMessages[result]});
       }
       return objectAssign({}, state, {systemResponse: ''}, {inputRegEmail: action.operand});
+
+    case 'DO_NEW_EVENT':
+      var event = {
+        name: state.inputEventName,
+        type: state.inputEventType,
+        host: state.inputEventHost,
+        startTime: state.inputEventDate.concat(' ').concat(state.inputEventStartTime),
+        endTime: state.inputEventDate.concat(' ').concat(state.inputEventEndTime),
+        guests: state.inputEventGuests,
+        location: state.inputEventLocation,
+        notes: state.inputEventMemo || 'N/A'
+      };
+      try {
+        var userData = storageManager.getUserData(state.userProfile.uid);
+      } catch(err) {
+        throw 'Cannot retrive user data from the local storage.';
+      }
+      var eventList = userData.eventList;
+      eventList.push(event);
+      console.log(userData);
+      return state;
 
     case 'DO_REGISTRATION':
       var result = registrationManager.validateUid(state.inputRegUid);

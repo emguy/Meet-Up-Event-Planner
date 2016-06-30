@@ -52,7 +52,7 @@ var captureEventLocation = function(userInput) {
 };
 
 /** 
- * store the content of the input box for the event location
+ * store the content of the input box for the event state time
  *
  * @arg key{string} the current user name in the input box
  */
@@ -61,7 +61,16 @@ var captureEventStartTime = function(userInput) {
 };
 
 /** 
- * store the content of the input box for the event duration
+ * store the content of the input box for the event date
+ *
+ * @arg key{string} the current user name in the input box
+ */
+var captureEventDate = function(userInput) {
+  return { type: "CAPTURE_EVENT_DATE", operand: userInput };
+};
+
+/** 
+ * store the content of the input box for the event end time
  *
  * @arg key{string} the current user name in the input box
  */
@@ -160,6 +169,7 @@ module.exports.captureEventEndTime = captureEventEndTime;
 module.exports.captureEventHost = captureEventHost;
 module.exports.captureEventGuests = captureEventGuests;
 module.exports.captureEventMemo = captureEventMemo;
+module.exports.captureEventDate = captureEventDate;
 
 module.exports.processInputLogin = processInputLogin;
 module.exports.processNewEvent = processNewEvent;

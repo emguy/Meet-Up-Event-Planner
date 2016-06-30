@@ -28700,7 +28700,7 @@
 /* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	var React = __webpack_require__(6);
 	var Router = __webpack_require__(164);
@@ -28716,7 +28716,7 @@
 	 * @prop isLoggedIn{boolean} current login status
 	 */
 	var EventCreator = React.createClass({
-	  displayName: "EventCreator",
+	  displayName: 'EventCreator',
 
 	  Prototypes: {
 	    formPageNumber: React.PropTypes.number.isRequired,
@@ -28724,6 +28724,7 @@
 	    decFormPageNumber: React.PropTypes.func.isRequired,
 	    inputResponse: React.PropTypes.string.isRequired,
 	    isLoggedIn: React.PropTypes.bool.isRequired,
+
 	    captureEventName: React.PropTypes.func.isRequired,
 	    captureEventLocation: React.PropTypes.func.isRequired,
 	    captureEventType: React.PropTypes.func.isRequired,
@@ -28732,13 +28733,23 @@
 	    captureEventHost: React.PropTypes.func.isRequired,
 	    captureEventGuests: React.PropTypes.func.isRequired,
 	    captureEventMemo: React.PropTypes.func.isRequired,
-	    processNewEvent: React.PropTypes.func.isRequired
+
+	    processNewEvent: React.PropTypes.func.isRequired,
+
+	    inputEventName: React.PropTypes.string.isRequired,
+	    inputEventLocation: React.PropTypes.string.isRequired,
+	    inputEventType: React.PropTypes.string.isRequired,
+	    inputEventStartTime: React.PropTypes.string.isRequired,
+	    inputEventEndTime: React.PropTypes.string.isRequired,
+	    inputEventHost: React.PropTypes.string.isRequired,
+	    inputEventGuests: React.PropTypes.string.isRequired,
+	    inputEventMemo: React.PropTypes.string.isRequired
 	  },
 
 	  /* if the user if not loggedin, redirect to the login page */
 	  componentWillMount: function componentWillMount() {
 	    if (!this.props.isLoggedIn) {
-	      Router.browserHistory.push("/");
+	      Router.browserHistory.push('/');
 	    }
 	  },
 
@@ -28746,226 +28757,386 @@
 	  render: function render() {
 	    var currentTime = new Date().toISOString().slice(0, -1);
 
-	    var formTitle = [];
-	    formTitle[0] = "New Event (Title)";
-	    formTitle[1] = "New Event (Date and Time)";
-	    formTitle[2] = "New Event (Host and Guests)";
-	    formTitle[3] = "New Event (Additional Infomation)";
+	    var formTitle = 'New Event';
 
 	    var page = [];
-	    page[0] = React.createElement(
-	      "div",
-	      null,
-	      React.createElement(
-	        "label",
-	        { htmlFor: "input-event-name" },
-	        React.createElement(
-	          "span",
-	          null,
-	          " Event name:"
-	        ),
-	        React.createElement("input", { id: "input-event-name", type: "text", placeholder: "Bob's birthday party",
-	          onChange: this.props.captureEventName })
-	      ),
-	      React.createElement(
-	        "label",
-	        { htmlFor: "input-event-type" },
-	        React.createElement(
-	          "span",
-	          null,
-	          " Type:"
-	        ),
-	        React.createElement("input", { id: "input-event-type", type: "text", placeholder: "Birthday party",
-	          onChange: this.props.captureEventType })
-	      ),
-	      React.createElement(
-	        "label",
-	        { htmlFor: "input-event-location" },
-	        React.createElement(
-	          "span",
-	          null,
-	          " Location:"
-	        ),
-	        React.createElement("input", { id: "input-event-location", type: "text", placeholder: "113 Cherry St., Seattle, WA 98104",
-	          onChange: this.props.captureEventLocation })
-	      )
-	    );
-	    page[1] = React.createElement(
-	      "div",
-	      null,
-	      React.createElement(
-	        "label",
-	        { htmlFor: "input-event-date" },
-	        React.createElement(
-	          "span",
-	          null,
-	          " Date:"
-	        ),
-	        React.createElement("input", { id: "input-event-date", type: "date",
-	          onChange: this.props.captureEventStartTime })
-	      ),
-	      React.createElement(
-	        "label",
-	        { htmlFor: "input-event-starttime", className: "label-time" },
-	        React.createElement(
-	          "span",
-	          null,
-	          " Start time:"
-	        ),
-	        React.createElement("input", { id: "input-event-starttime", className: "input-time", type: "time",
-	          onChange: this.props.captureEventStartTime })
-	      ),
-	      React.createElement(
-	        "label",
-	        { htmlFor: "input-event-endtime", className: "label-time" },
-	        React.createElement(
-	          "span",
-	          null,
-	          " End time:"
-	        ),
-	        React.createElement("input", { id: "input-event-endtime", className: "input-time", type: "time",
-	          onChange: this.props.captureEventStartTime })
-	      )
-	    );
-	    page[2] = React.createElement(
-	      "div",
-	      null,
-	      React.createElement(
-	        "label",
-	        { htmlFor: "input-event-host" },
-	        React.createElement(
-	          "span",
-	          null,
-	          " Host:"
-	        ),
-	        React.createElement("input", { id: "input-event-host", type: "text", placeholder: "Bob",
-	          onChange: this.props.captureEventHost })
-	      ),
-	      React.createElement(
-	        "label",
-	        { htmlFor: "input-event-guests" },
-	        React.createElement(
-	          "span",
-	          null,
-	          " Guest list:"
-	        ),
-	        React.createElement("input", { id: "input-event-guests", type: "text", placeholder: "Bill, Tim, Ryan",
-	          onChange: this.props.captureEventGuests })
-	      )
-	    );
-	    page[3] = React.createElement(
-	      "div",
-	      null,
-	      React.createElement(
-	        "label",
-	        { htmlFor: "input-event-additional" },
-	        React.createElement(
-	          "span",
-	          null,
-	          " Additional Infomation:"
-	        ),
-	        React.createElement("input", { id: "input-event-host", type: "textbox", placeholder: "Bob",
-	          onChange: this.props.captureEventMemo })
-	      )
-	    );
 
-	    var controlButtons = [];
+	    if (this.props.formPageNumber === 0) {
+	      page[0] = React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'label',
+	          { htmlFor: 'input-event-name' },
+	          React.createElement(
+	            'span',
+	            null,
+	            ' Event name: '
+	          ),
+	          React.createElement('input', { id: 'input-event-name', type: 'text', placeholder: 'Bob\'s birthday party',
+	            onChange: this.props.captureEventName })
+	        ),
+	        React.createElement(
+	          'label',
+	          { htmlFor: 'input-event-type' },
+	          React.createElement(
+	            'span',
+	            null,
+	            ' Type: '
+	          ),
+	          React.createElement('input', { id: 'input-event-type', type: 'text', placeholder: 'Birthday party',
+	            onChange: this.props.captureEventType })
+	        ),
+	        React.createElement(
+	          'label',
+	          { htmlFor: 'input-event-location' },
+	          React.createElement(
+	            'span',
+	            null,
+	            ' Location: '
+	          ),
+	          React.createElement('input', { id: 'input-event-location', type: 'text', placeholder: '113 Cherry St., Seattle, WA 98104',
+	            onChange: this.props.captureEventLocation })
+	        )
+	      );
+	    } else {
+	      page[0] = React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'div',
+	          null,
+	          React.createElement(
+	            'span',
+	            null,
+	            ' Event name: '
+	          ),
+	          React.createElement(
+	            'span',
+	            null,
+	            ' ',
+	            this.props.inputEventName,
+	            ' '
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          React.createElement(
+	            'span',
+	            null,
+	            ' Type: '
+	          ),
+	          React.createElement(
+	            'span',
+	            null,
+	            ' ',
+	            this.props.inputEventType,
+	            ' '
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          React.createElement(
+	            'span',
+	            null,
+	            ' Location: '
+	          ),
+	          React.createElement(
+	            'span',
+	            null,
+	            ' ',
+	            this.props.inputEventLocation,
+	            ' '
+	          )
+	        )
+	      );
+	    }
 
-	    controlButtons[0] = React.createElement(
-	      "div",
-	      { className: "form-button-list" },
-	      React.createElement(
-	        Button,
-	        { className: "form-button", action: this.props.incPageNumber },
-	        " Next "
-	      ),
-	      React.createElement(
-	        Button,
-	        { className: "form-button", action: "/events" },
-	        " Cancel "
-	      )
-	    );
+	    if (this.props.formPageNumber === 1) {
+	      page[1] = React.createElement(
+	        'div',
+	        null,
+	        React.createElement('hr', null),
+	        React.createElement(
+	          'label',
+	          { htmlFor: 'input-event-date' },
+	          React.createElement(
+	            'span',
+	            null,
+	            ' Date:'
+	          ),
+	          React.createElement('input', { id: 'input-event-date', type: 'date',
+	            onChange: this.props.captureEventStartTime })
+	        ),
+	        React.createElement(
+	          'label',
+	          { htmlFor: 'input-event-starttime', className: 'label-time' },
+	          React.createElement(
+	            'span',
+	            null,
+	            ' Start time:'
+	          ),
+	          React.createElement('input', { id: 'input-event-starttime', className: 'input-time', type: 'time',
+	            onChange: this.props.captureEventStartTime })
+	        ),
+	        React.createElement(
+	          'label',
+	          { htmlFor: 'input-event-endtime', className: 'label-time' },
+	          React.createElement(
+	            'span',
+	            null,
+	            ' End time:'
+	          ),
+	          React.createElement('input', { id: 'input-event-endtime', className: 'input-time', type: 'time',
+	            onChange: this.props.captureEventStartTime })
+	        )
+	      );
+	    } else if (this.props.formPageNumber > 1) {
+	      page[1] = React.createElement(
+	        'div',
+	        null,
+	        React.createElement('hr', null),
+	        React.createElement(
+	          'div',
+	          null,
+	          React.createElement(
+	            'span',
+	            null,
+	            ' Date: '
+	          ),
+	          React.createElement(
+	            'span',
+	            null,
+	            ' ',
+	            this.props.inputEventDate,
+	            ' '
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          React.createElement(
+	            'span',
+	            null,
+	            ' Start time: '
+	          ),
+	          React.createElement(
+	            'span',
+	            null,
+	            ' ',
+	            this.props.inputEventStartTime,
+	            ' '
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          React.createElement(
+	            'span',
+	            null,
+	            ' End time: '
+	          ),
+	          React.createElement(
+	            'span',
+	            null,
+	            ' ',
+	            this.props.inputEventEndTime,
+	            ' '
+	          )
+	        )
+	      );
+	    }
 
-	    controlButtons[1] = React.createElement(
-	      "div",
-	      { className: "form-button-list" },
-	      React.createElement(
-	        Button,
-	        { className: "form-button", action: this.props.decPageNumber },
-	        " Prev "
-	      ),
-	      React.createElement(
-	        Button,
-	        { className: "form-button", action: this.props.incPageNumber },
-	        " Next "
-	      ),
-	      React.createElement(
-	        Button,
-	        { className: "form-button", action: "/events" },
-	        " Cancel "
-	      )
-	    );
+	    if (this.props.formPageNumber === 2) {
+	      page[2] = React.createElement(
+	        'div',
+	        null,
+	        React.createElement('hr', null),
+	        React.createElement(
+	          'label',
+	          { htmlFor: 'input-event-host' },
+	          React.createElement(
+	            'span',
+	            null,
+	            ' Host:'
+	          ),
+	          React.createElement('input', { id: 'input-event-host', type: 'text', placeholder: 'Bob',
+	            onChange: this.props.captureEventHost, readOnly: this.props.formPageNumber > 2 })
+	        ),
+	        React.createElement(
+	          'label',
+	          { htmlFor: 'input-event-guests' },
+	          React.createElement(
+	            'span',
+	            null,
+	            ' Guest list:'
+	          ),
+	          React.createElement('input', { id: 'input-event-guests', type: 'text', placeholder: 'Bill, Tim, Ryan',
+	            onChange: this.props.captureEventGuests, readOnly: this.props.formPageNumber > 2 })
+	        )
+	      );
+	    } else if (this.props.formPageNumber > 2) {
+	      page[2] = React.createElement(
+	        'div',
+	        null,
+	        React.createElement('hr', null),
+	        React.createElement(
+	          'div',
+	          null,
+	          React.createElement(
+	            'span',
+	            null,
+	            ' Host: '
+	          ),
+	          React.createElement(
+	            'span',
+	            null,
+	            ' ',
+	            this.props.inputEventHost,
+	            ' '
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          React.createElement(
+	            'span',
+	            null,
+	            ' Guest list: '
+	          ),
+	          React.createElement(
+	            'span',
+	            null,
+	            ' ',
+	            this.props.inputEventGuests,
+	            ' '
+	          )
+	        )
+	      );
+	    }
 
-	    controlButtons[2] = React.createElement(
-	      "div",
-	      { className: "form-button-list" },
-	      React.createElement(
-	        Button,
-	        { className: "form-button", action: this.props.decPageNumber },
-	        " Prev "
-	      ),
-	      React.createElement(
-	        Button,
-	        { className: "form-button", action: this.props.processNewEvent },
-	        " Finish "
-	      ),
-	      React.createElement(
-	        Button,
-	        { className: "form-button", action: this.props.incPageNumber },
-	        " Optional "
-	      ),
-	      React.createElement(
-	        Button,
-	        { className: "form-button", action: "/events" },
-	        " Cancel "
-	      )
-	    );
+	    if (this.props.formPageNumber > 2) {
+	      page[3] = React.createElement(
+	        'div',
+	        null,
+	        React.createElement('hr', null),
+	        React.createElement(
+	          'label',
+	          { htmlFor: 'input-event-additional' },
+	          React.createElement(
+	            'span',
+	            null,
+	            ' Additional Infomation:'
+	          ),
+	          React.createElement('input', { id: 'input-event-host', type: 'textbox', placeholder: 'Bob',
+	            onChange: this.props.captureEventMemo })
+	        )
+	      );
+	    }
 
-	    controlButtons[3] = React.createElement(
-	      "div",
-	      { className: "form-button-list" },
-	      React.createElement(
-	        Button,
-	        { className: "form-button", action: this.props.decPageNumber },
-	        " Prev "
-	      ),
-	      React.createElement(
-	        Button,
-	        { className: "form-button", action: this.props.processNewEvent },
-	        " Finish "
-	      ),
-	      React.createElement(
-	        Button,
-	        { className: "form-button", action: "/events" },
-	        " Cancel "
-	      )
-	    );
+	    var controlButtons;
+	    switch (this.props.formPageNumber) {
+	      case 0:
+	        controlButtons = React.createElement(
+	          'div',
+	          { className: 'form-button-list' },
+	          React.createElement(
+	            Button,
+	            { className: 'form-button', action: this.props.incPageNumber },
+	            ' Next '
+	          ),
+	          React.createElement(
+	            Button,
+	            { className: 'form-button', action: '/events' },
+	            ' Cancel '
+	          )
+	        );
+	        break;
+	      case 1:
+	        controlButtons = React.createElement(
+	          'div',
+	          { className: 'form-button-list' },
+	          React.createElement(
+	            Button,
+	            { className: 'form-button', action: this.props.decPageNumber },
+	            ' Prev '
+	          ),
+	          React.createElement(
+	            Button,
+	            { className: 'form-button', action: this.props.incPageNumber },
+	            ' Next '
+	          ),
+	          React.createElement(
+	            Button,
+	            { className: 'form-button', action: '/events' },
+	            ' Cancel '
+	          )
+	        );
+	        break;
+	      case 2:
+	        controlButtons = React.createElement(
+	          'div',
+	          { className: 'form-button-list' },
+	          React.createElement(
+	            Button,
+	            { className: 'form-button', action: this.props.decPageNumber },
+	            ' Prev '
+	          ),
+	          React.createElement(
+	            Button,
+	            { className: 'form-button', action: this.props.incPageNumber },
+	            ' Next '
+	          ),
+	          React.createElement(
+	            Button,
+	            { className: 'form-button', action: '/events' },
+	            ' Cancel '
+	          )
+	        );
+	        break;
+	      case 3:
+	        controlButtons = React.createElement(
+	          'div',
+	          { className: 'form-button-list' },
+	          React.createElement(
+	            Button,
+	            { className: 'form-button', action: this.props.decPageNumber },
+	            ' Prev '
+	          ),
+	          React.createElement(
+	            Button,
+	            { className: 'form-button', action: this.props.processNewEvent },
+	            ' Finish '
+	          ),
+	          React.createElement(
+	            Button,
+	            { className: 'form-button', action: '/events' },
+	            ' Cancel '
+	          )
+	        );
+	        break;
+	    }
 
 	    return React.createElement(
-	      "form",
+	      'form',
 	      null,
 	      React.createElement(
-	        "h4",
+	        'h4',
 	        null,
-	        formTitle[this.props.formPageNumber]
+	        formTitle
 	      ),
 	      React.createElement(
-	        "div",
-	        { id: "head-system-message", className: "small-text" },
+	        'div',
+	        { id: 'head-system-message', className: 'small-text' },
 	        this.props.inputResponse
 	      ),
-	      page[this.props.formPageNumber],
-	      controlButtons[this.props.formPageNumber]
+	      page[0],
+	      page[1],
+	      page[2],
+	      page[3],
+	      controlButtons
 	    );
 	  }
 	});
@@ -28974,7 +29145,15 @@
 	  return {
 	    formPageNumber: state.session.formPageNumber,
 	    inputResponse: state.session.inputResponse,
-	    isLoggedIn: state.session.loginStatus === 1
+	    isLoggedIn: state.session.loginStatus === 1,
+	    inputEventName: state.session.inputEventName,
+	    inputEventLocation: state.session.inputEventLocation,
+	    inputEventType: state.session.inputEventType,
+	    inputEventStartTime: state.session.inputEventStartTime,
+	    inputEventEndTime: state.session.inputEventEndTime,
+	    inputEventHost: state.session.inputEventHost,
+	    inputEventGuests: state.session.inputEventGuests,
+	    inputEventMemo: state.session.inputEventMemo
 	  };
 	};
 
@@ -39782,9 +39961,7 @@
 			"name": "sokra"
 		},
 		"_npmVersion": "3.8.3",
-		"_phantomChildren": {
-			"has-flag": "1.0.0"
-		},
+		"_phantomChildren": {},
 		"_requested": {
 			"name": "webpack",
 			"raw": "webpack@^1.12.13",
@@ -65855,23 +66032,31 @@
 		"adp",
 		"ai",
 		"aif",
+		"aiff",
+		"alz",
+		"ape",
 		"apk",
 		"ar",
+		"arj",
 		"asf",
 		"au",
 		"avi",
 		"bak",
+		"bh",
 		"bin",
 		"bk",
 		"bmp",
 		"btif",
 		"bz2",
+		"bzip2",
 		"cab",
 		"caf",
 		"cgm",
 		"cmx",
 		"cpio",
 		"cr2",
+		"csv",
+		"cur",
 		"dat",
 		"deb",
 		"djvu",
@@ -65879,7 +66064,10 @@
 		"dmg",
 		"dng",
 		"doc",
+		"docm",
 		"docx",
+		"dot",
+		"dotm",
 		"dra",
 		"DS_Store",
 		"dsk",
@@ -65908,7 +66096,9 @@
 		"fvt",
 		"g3",
 		"gif",
+		"graffle",
 		"gz",
+		"gzip",
 		"h261",
 		"h263",
 		"h264",
@@ -65923,9 +66113,12 @@
 		"jpgv",
 		"jpm",
 		"jxr",
+		"key",
 		"ktx",
+		"lha",
 		"lvp",
 		"lz",
+		"lzh",
 		"lzma",
 		"lzo",
 		"m3u",
@@ -65933,12 +66126,15 @@
 		"m4v",
 		"mar",
 		"mdi",
+		"mht",
 		"mid",
+		"midi",
 		"mj2",
 		"mka",
 		"mkv",
 		"mmr",
 		"mng",
+		"mobi",
 		"mov",
 		"movie",
 		"mp3",
@@ -65950,11 +66146,13 @@
 		"mxu",
 		"nef",
 		"npx",
+		"numbers",
 		"o",
 		"oga",
 		"ogg",
 		"ogv",
 		"otf",
+		"pages",
 		"pbm",
 		"pcx",
 		"pdf",
@@ -65963,7 +66161,18 @@
 		"pic",
 		"png",
 		"pnm",
+		"pot",
+		"potm",
+		"potx",
+		"ppa",
+		"ppam",
 		"ppm",
+		"pps",
+		"ppsm",
+		"ppsx",
+		"ppt",
+		"pptm",
+		"pptx",
 		"psd",
 		"pya",
 		"pyc",
@@ -65976,6 +66185,9 @@
 		"rgb",
 		"rip",
 		"rlc",
+		"rmf",
+		"rmvb",
+		"rtf",
 		"rz",
 		"s3m",
 		"s7z",
@@ -65983,20 +66195,25 @@
 		"sgi",
 		"shar",
 		"sil",
+		"slk",
 		"smv",
 		"so",
 		"sub",
 		"swf",
 		"tar",
+		"tbz",
 		"tbz2",
 		"tga",
 		"tgz",
+		"thmx",
 		"tif",
 		"tiff",
 		"tlz",
 		"ts",
 		"ttc",
 		"ttf",
+		"txz",
+		"udf",
 		"uvh",
 		"uvi",
 		"uvm",
@@ -66014,6 +66231,7 @@
 		"webm",
 		"webp",
 		"whl",
+		"wim",
 		"wm",
 		"wma",
 		"wmv",
@@ -66023,9 +66241,17 @@
 		"wvx",
 		"xbm",
 		"xif",
+		"xla",
+		"xlam",
 		"xls",
+		"xlsb",
+		"xlsm",
 		"xlsx",
+		"xlt",
+		"xltm",
+		"xltx",
 		"xm",
+		"xmind",
 		"xpi",
 		"xpm",
 		"xwd",

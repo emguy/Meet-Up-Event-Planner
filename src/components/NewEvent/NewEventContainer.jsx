@@ -16,6 +16,7 @@ var EventCreator = React.createClass({
     formPageNumber: React.PropTypes.number.isRequired,
     incFormPageNumber: React.PropTypes.func.isRequired,
     decFormPageNumber: React.PropTypes.func.isRequired,
+    clearEventForm: React.PropTypes.func.isRequired,
     inputResponse: React.PropTypes.string.isRequired,
     isLoggedIn: React.PropTypes.bool.isRequired,
 
@@ -27,10 +28,12 @@ var EventCreator = React.createClass({
     captureEventHost: React.PropTypes.func.isRequired,
     captureEventGuests: React.PropTypes.func.isRequired,
     captureEventMemo: React.PropTypes.func.isRequired,
+    captureEventDate: React.PropTypes.func.isRequired,
 
-    processNewEvent: React.PropTypes.func.isRequired,
+    doNewEvent: React.PropTypes.func.isRequired,
 
     inputEventName: React.PropTypes.string.isRequired,
+    inputEventDate: React.PropTypes.string.isRequired,
     inputEventLocation: React.PropTypes.string.isRequired,
     inputEventType: React.PropTypes.string.isRequired,
     inputEventStartTime: React.PropTypes.string.isRequired,
@@ -45,6 +48,12 @@ var EventCreator = React.createClass({
     if (!this.props.isLoggedIn) {
       Router.browserHistory.push('/');
     }
+    this.props.clearEventForm();
+  },
+
+  /* if the user if not loggedin, redirect to the login page */
+  componentDidMount: function() {
+    this.props.clearEventForm();
   },
 
   /* the render method */
@@ -101,7 +110,7 @@ var EventCreator = React.createClass({
           <label htmlFor='input-event-date'>
             <span> Date:</span>
             <input id='input-event-date' type='date'
-              onChange={this.props.captureEventStartTime} />
+              onChange={this.props.captureEventDate} />
           </label>
           <label htmlFor='input-event-starttime' className='label-time'>
             <span> Start time:</span>
@@ -111,7 +120,7 @@ var EventCreator = React.createClass({
           <label htmlFor='input-event-endtime' className='label-time'>
             <span> End time:</span>
             <input id='input-event-endtime' className='input-time' type='time'
-              onChange={this.props.captureEventStartTime} />
+              onChange={this.props.captureEventEndTime} />
           </label>
         </div>
       );
@@ -212,7 +221,7 @@ var EventCreator = React.createClass({
         controlButtons = (
           <div className='form-button-list'>
             <Button className='form-button' action={this.props.decPageNumber}> Prev </Button>
-            <Button className='form-button' action={this.props.processNewEvent}> Finish </Button>
+            <Button className='form-button' action={this.props.doNewEvent}> Finish </Button>
             <Button className='form-button' action={'/events'}> Cancel </Button>
           </div>
         );
@@ -254,12 +263,19 @@ var mapStateToProps = function(state, ownProps) {
     inputEventEndTime: state.session.inputEventEndTime,
     inputEventHost: state.session.inputEventHost,
     inputEventGuests: state.session.inputEventGuests,
+    inputEventDate: state.session.inputEventDate,
     inputEventMemo: state.session.inputEventMemo
   };
 };
 
 var mapDispatchToProps = function(dispatch, ownProps) {
   return {
+    doNewEvent: function() {
+      return dispatch(actionsSession.doNewEvent());
+    },
+    clearEventForm: function() {
+      return dispatch(actionsInput.clearEventForm());
+    },
     incPageNumber: function() {
       return dispatch(actionsUI.incFormPageNumber());
     },
@@ -268,6 +284,9 @@ var mapDispatchToProps = function(dispatch, ownProps) {
     },
     captureEventName: function(e) {
       return dispatch(actionsInput.captureEventName(e.target.value));
+    },
+    captureEventDate: function(e) {
+      return dispatch(actionsInput.captureEventDate(e.target.value));
     },
     captureEventLocation: function(e) {
       return dispatch(actionsInput.captureEventLocation(e.target.value));

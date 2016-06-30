@@ -22,6 +22,13 @@ var doRegistration = function() {
 };
 
 /** 
+ * add an new event
+ */
+var doNewEvent = function() {
+  return { type: "DO_NEW_EVENT", operand: undefined };
+};
+
+/** 
  * reset the current session using the provided data
  */
 var resetSession = function(data) {
@@ -33,4 +40,5 @@ module.exports.loginAsTrialUser = loginAsTrialUser;
 module.exports.doLogout = doLogout;
 module.exports.doRegistration = doRegistration;
 module.exports.resetSession = resetSession;
+module.exports.doNewEvent = doNewEvent;
 
