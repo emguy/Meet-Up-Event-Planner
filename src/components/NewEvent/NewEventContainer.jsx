@@ -70,17 +70,17 @@ var EventCreator = React.createClass({
           <label htmlFor='input-event-name'>
             <span> Event name: </span>
             <input id='input-event-name' type='text' placeholder="Bob's birthday party" 
-              onChange={this.props.captureEventName} />
+              onChange={this.props.captureEventName} value={this.props.inputEventName} />
           </label>
           <label htmlFor='input-event-type'>
             <span> Type: </span>
             <input id='input-event-type' type='text' placeholder='Birthday party'
-              onChange={this.props.captureEventType} />
+              onChange={this.props.captureEventType} value={this.props.inputEventType} />
           </label>
           <label htmlFor='input-event-location'>
             <span> Location: </span>
             <input id='input-event-location' type='text' placeholder='113 Cherry St., Seattle, WA 98104'
-              onChange={this.props.captureEventLocation} />
+              onChange={this.props.captureEventLocation} value={this.props.inputEventLocation} />
           </label>
         </div>
       ); 
@@ -109,18 +109,18 @@ var EventCreator = React.createClass({
           <hr />
           <label htmlFor='input-event-date'>
             <span> Date:</span>
-            <input id='input-event-date' type='date'
+            <input id='input-event-date' type='date' value={this.props.inputEventDate}
               onChange={this.props.captureEventDate} />
           </label>
           <label htmlFor='input-event-starttime' className='label-time'>
             <span> Start time:</span>
             <input id='input-event-starttime' className='input-time' type='time'
-              onChange={this.props.captureEventStartTime} />
+              onChange={this.props.captureEventStartTime} value={this.props.inputEventStartTime} />
           </label>
           <label htmlFor='input-event-endtime' className='label-time'>
             <span> End time:</span>
             <input id='input-event-endtime' className='input-time' type='time'
-              onChange={this.props.captureEventEndTime} />
+              onChange={this.props.captureEventEndTime} value={this.props.inputEventEndTime} />
           </label>
         </div>
       );

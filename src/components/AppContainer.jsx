@@ -157,7 +157,7 @@ var NavMenu = React.createClass({
       <div id="nav-content">
         <div className="nav-list">
           <Link className="nav-button" to="/events">All events</Link>
-          <Link className="nav-button" to="/new_event">Add new event</Link>
+          <Link className="nav-button" to="/new-event">Add new event</Link>
           <div className="nav-button" onClick={this.props.doLogout}>Logout</div>
         </div>
       </div>

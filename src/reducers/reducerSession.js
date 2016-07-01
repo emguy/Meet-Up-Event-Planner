@@ -1,6 +1,8 @@
 var authenticationManager = require('../utils/authenticationManager.js');
 var storageManager = require('../utils/storageManager.js');
 var registrationManager = require('../utils/registrationManager.js');
+var newEventManager = require('../utils/newEventManager.js');
+var Router = require("react-router");
 
 /* this is equivalent to Object.assign() in ES6  */
 var objectAssign = require('../utils/utils.js').objectAssign;
@@ -56,7 +58,7 @@ var defaultInputs = {
 var defaultState = {
   loginStatus: 0, 
   userProfile: null, 
-  eventList: [],
+  eventList: []
 };
 
 defaultState = objectAssign(defaultState, defaultInputs);
@@ -153,6 +155,16 @@ var reducer = function(state, action) {
       return objectAssign({}, state, {formPageNumber: action.operand});
 
     case 'INC_FORM_PAGE_NUMBER':
+      var result = newEventManager.validateNewEvent(state);
+      if (state.formPageNumber === 0 && result && result < 4) { 
+        return objectAssign({}, state, {inputResponse: newEventManager.messages[result]});
+      }
+      if (state.formPageNumber === 1 && result && result < 7) { 
+        return objectAssign({}, state, {inputResponse: newEventManager.messages[result]});
+      }
+      if (state.formPageNumber === 2 && result && result < 9) { 
+        return objectAssign({}, state, {inputResponse: newEventManager.messages[result]});
+      }
       return objectAssign({}, state, {formPageNumber: state.formPageNumber + 1});
 
     case 'DEC_FORM_PAGE_NUMBER':
@@ -208,8 +220,16 @@ var reducer = function(state, action) {
       }
       var eventList = userData.eventList;
       eventList.push(event);
-      console.log(userData);
-      return state;
+      storageManager.setUserData(userData);
+
+      var newState = objectAssign({}, defaultState, {loginStatus: 1, userProfile: userData,  eventList: eventList});
+      /* here we uniquely index each event entry */
+      newState.eventList.forEach(function(item, index) {
+        item.key = Date.now() - index * 3;
+      });
+
+      Router.browserHistory.push('/new-event');
+      return newState;
 
     case 'DO_REGISTRATION':
       var result = registrationManager.validateUid(state.inputRegUid);

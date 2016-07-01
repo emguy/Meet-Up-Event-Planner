@@ -23,7 +23,7 @@ var EventList = React.createClass({
     }
   },
   render: function() {
-    var parsedEvents = this.props.data.slice(0, 5).map(function(item) {
+    var parsedEvents = this.props.data.map(function(item) {
       return (
         <EventEntryContainer key={item.key} event={item} />
       );

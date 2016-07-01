@@ -9,9 +9,9 @@ var ReactDOM = require('react-dom');
 var ReactRouter = require('react-router');
 var Router = ReactRouter.Router;
 var Route = ReactRouter.Route;
-var browserHistory = ReactRouter.browserHistory;
 var hashHistory = ReactRouter.hashHistory;
 var IndexRoute = ReactRouter.IndexRoute;
+var browserHistory = ReactRouter.browserHistory;
 
 /* import core components */
 var AppContainer = require('./components/AppContainer.jsx');
@@ -32,6 +32,10 @@ var storageManager = require('./utils/storageManager.js');
 /* create the Redux store with middleware */
 var pushToSessionStorage = require('./middleware/pushToSessionStorage.js');
 var store = Redux.createStore(reducer, applyMiddleware(pushToSessionStorage));
+
+/* chrome extension for redux */
+var compose = require('redux').compose;
+var store = Redux.createStore(reducer, compose(applyMiddleware(pushToSessionStorage), window.devToolsExtension ? window.devToolsExtension() : function() {}));
 
 /* this is the initialization script */
 var init = function() {
@@ -57,7 +61,7 @@ ReactDOM.render((
         <IndexRoute component={LoginContainer} />
         <Route path='/register' component={RegisterContainer} />
         <Route path='/events' component={EventListContainer} />
-        <Route path='/new_event' component={NewEventContainer} />
+        <Route path='/new-event' component={NewEventContainer} />
       </Route>
     </Router>
   </Provider>

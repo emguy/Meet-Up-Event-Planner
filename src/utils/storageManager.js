@@ -5,29 +5,29 @@
  */
 
 /* this the key for accessing application data from the local storage */
-var key = "meet_up_event_planner";
+var key = 'meet_up_event_planner';
 
 /* this is equivalent to Object.assign() in ES6  */
-var objectAssign = require("../utils/utils.js").objectAssign;
+var objectAssign = require('../utils/utils.js').objectAssign;
 
 /* initialize this module  */
 var storageManager = {};
 
 /* this is the data for trail user */
 var trialUserData = {
-  uid: "trial",
-  name: "Trial User",
-  email: "",
-  password: "",
-  eventList: require("../misc/preloadedEvents.js")
+  uid: 'trial',
+  name: 'Trial User',
+  email: '',
+  password: '',
+  eventList: require('../misc/preloadedEvents.js')
 };
 
 /* this is the template for user data */
 var templateUserData = {
-  uid: "",
-  name: "",
-  email: "",
-  password: "",
+  uid: '',
+  name: '',
+  email: '',
+  password: '',
   eventList: []
 };
 
@@ -68,7 +68,7 @@ storageManager.getUserData = function(uid) {
 /* initalize the application data on the local storage */
 storageManager.init = function(preloadedEvents) {
   storageManager.setUserData(trialUserData);
-  storageManager.setUserData({uid: "root", password: "1111"});
+  storageManager.setUserData({uid: 'root', password: '1111'});
 };
 
 /* export the module */

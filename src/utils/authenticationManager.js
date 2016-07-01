@@ -4,7 +4,7 @@
  * storage.
  */
 
-var storageManager = require("./storageManager.js");
+var storageManager = require('./storageManager.js');
 
 /* module initialization */
 var authenticationManager = {};
@@ -23,9 +23,9 @@ authenticationManager.authenticate = function(uid, password) {
 
 /* they are the interpretations of the returned value */
 authenticationManager.messages = [
-  "Passed the authentication.",
-  "Bad user name.",
-  "Bad password."
+  'Passed the authentication.',
+  'Bad user name.',
+  'Bad password.'
 ];
 
 /* we export this module */

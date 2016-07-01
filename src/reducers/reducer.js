@@ -1,6 +1,6 @@
-var Redux = require("redux");
-var reducerUI = require("./reducerUI.js")
-var reducerSession = require("./reducerSession.js")
+var Redux = require('redux');
+var reducerUI = require('./reducerUI.js')
+var reducerSession = require('./reducerSession.js')
 
 /*
  * Layout of the store (for a reference)
@@ -30,15 +30,15 @@ var reducerSession = require("./reducerSession.js")
 
 /* this is required by the middleware */
 var reducerKey = function(state) {
-  return "meet-up-event-planner-key";
+  return 'meet-up-event-planner-key';
 }
 
 /* generate the combined reducer */
 var reducer = Redux.combineReducers({
-    ui: reducerUI,
-    session: reducerSession,
-    key: reducerKey,
-  });
+  ui: reducerUI,
+  session: reducerSession,
+  key: reducerKey,
+});
 
 /* export the resultant reducer */
 module.exports = reducer;
