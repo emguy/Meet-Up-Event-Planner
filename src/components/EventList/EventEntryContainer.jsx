@@ -1,9 +1,8 @@
 var React = require('react');
 var actionsSession = require('../../actions/actionsSession.js');
+var actionsUI = require('../../actions/actionsUI.js');
 var ReactRedux = require('react-redux');
 var EventCard = require('./EventCard.jsx');
-var setActiveEvent = require('../../actions/actionsUI.js').setActiveEvent;
-var unsetActiveEvent = require('../../actions/actionsUI.js').unsetActiveEvent;
 
 
 
@@ -18,6 +17,9 @@ var EventEntry = React.createClass({
   /* it accepts three props */
   propTypes: {
     event: React.PropTypes.object.isRequired,
+    showDeleteConfirmation: React.PropTypes.bool.isRequired,
+    hideDeleteConfirmation: React.PropTypes.func.isRequired,
+    unhideDeleteConfirmation: React.PropTypes.func.isRequired,
     unhideEventCard: React.PropTypes.func.isRequired,
     hideEventCard: React.PropTypes.func.isRequired,
     doDeleteEvent: React.PropTypes.func.isRequired
@@ -35,6 +37,9 @@ var EventEntry = React.createClass({
           {new Date(this.props.event.startTime).toLocaleString()} 
         </p>
         <EventCard visible={this.props.EventCardIsVisible} event={this.props.event} 
+          showDeleteConfirmation={this.props.showDeleteConfirmation}
+          hideDeleteConfirmation={this.props.hideDeleteConfirmation}
+          unhideDeleteConfirmation={this.props.unhideDeleteConfirmation}
           closeMe={this.props.hideEventCard} doDeleteEvent={this.props.doDeleteEvent.bind(null, this.props.index)} />
       </li>
     );
@@ -53,6 +58,7 @@ var EventEntry = React.createClass({
 var mapStateToProps = function(state, ownProps) {
   return {
     EventCardIsVisible: state.session.activeEvent === ownProps.event.key,
+    showDeleteConfirmation: state.ui.showDeleteConfirmation
   };
 };
 var mapDispatchToProps = function(dispatch, ownProps) {
@@ -60,13 +66,19 @@ var mapDispatchToProps = function(dispatch, ownProps) {
     doDeleteEvent: function(index) {
       return dispatch(actionsSession.doDeleteEvent(index));
     },
+    unhideDeleteConfirmation: function() {
+      return dispatch(actionsUI.unhideDeleteConfirmation());
+    },
+    hideDeleteConfirmation: function() {
+      return dispatch(actionsUI.hideDeleteConfirmation());
+    },
     unhideEventCard: function(e) {
       e.stopPropagation();
-      return dispatch(setActiveEvent(ownProps.event.key));
+      return dispatch(actionsUI.setActiveEvent(ownProps.event.key));
     },
     hideEventCard: function(e) {
       e.stopPropagation();
-      return dispatch(unsetActiveEvent());
+      return dispatch(actionsUI.unsetActiveEvent());
     }
   };
 };

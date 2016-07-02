@@ -14,6 +14,9 @@ var Button = require('../../ui/Button.jsx');
 var EventCard = React.createClass({
   /* it accepts three props */
   propTypes: {
+    showDeleteConfirmation: React.PropTypes.bool.isRequired,
+    hideDeleteConfirmation: React.PropTypes.func.isRequired,
+    unhideDeleteConfirmation: React.PropTypes.func.isRequired,
     visible: React.PropTypes.bool.isRequired,
     event: React.PropTypes.object.isRequired,
     closeMe: React.PropTypes.func.isRequired,
@@ -25,13 +28,26 @@ var EventCard = React.createClass({
     if (!this.props.visible) {
       return false;
     }
+    var content = (<ModalContent event={this.props.event} />);
+    if (this.props.showDeleteConfirmation) {
+      content = (
+        <div>
+          <p>
+            Are you sure that you want to delete this event card ?
+          </p>
+        </div>
+      );
+    }
     return (
       <Modal className={'event-card'} visible={this.props.visible} 
         closeMe={this.props.closeMe}>
         <ModalHeader eventName={this.props.event.name} 
           eventTime={this.props.event.startTime} />
-        <ModalContent event={this.props.event} />
-        <ModalFooter  doDeleteEvent={this.props.doDeleteEvent}/>
+          {content}
+          <ModalFooter showDeleteConfirmation={this.props.showDeleteConfirmation} 
+            doDeleteEvent={this.props.doDeleteEvent}
+            closeMe={this.props.closeMe}
+            unhideDeleteConfirmation={this.props.unhideDeleteConfirmation}/>
       </Modal>
     );
   }
@@ -75,19 +91,36 @@ var ModalHeader = React.createClass({
 var ModalFooter = React.createClass({
   // it does not accept arguments
   propTypes: {
-    doDeleteEvent: React.PropTypes.func.isRequired
+    closeMe: React.PropTypes.func.isRequired,
+    showDeleteConfirmation: React.PropTypes.bool.isRequired,
+    unhideDeleteConfirmation: React.PropTypes.func.isRequired
   },
   render: function() {
-    return (
-      <div className='event-footer'>
+    var controlButtons = (
+      <ul>
+        <Button tooltip='Delete' action={this.props.unhideDeleteConfirmation}> 
+          <i className='fa fa-trash-o'></i> 
+        </Button>
+        <Button tooltip='Edit' action='#'> 
+          <i className='fa fa-pencil'></i> 
+        </Button>
+      </ul>
+    );
+    if (this.props.showDeleteConfirmation) {
+      controlButtons = {
         <ul>
           <Button tooltip='Delete' action={this.props.doDeleteEvent}> 
             <i className='fa fa-trash-o'></i> 
           </Button>
-          <Button tooltip='Edit' action='#'> 
+          <Button tooltip='Cancel' action={this.props.closeMe}> 
             <i className='fa fa-pencil'></i> 
           </Button>
         </ul>
+      }
+    }
+    return (
+      <div className='event-footer'>
+        {controlButtons}
       </div>
     );
   }

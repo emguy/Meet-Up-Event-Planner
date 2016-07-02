@@ -6,6 +6,7 @@ var objectAssign = require("../utils/utils.js").objectAssign;
 
 var defaultState = {
   showNavMenu: false,
+  showDeleteConfirmation: false,
   showAdvancedEventForm: false,
 };
 
@@ -26,13 +27,19 @@ var reducerUI = function(state, action) {
       }
       return state;
 
-    /* toggle the advanced event form  */
-    case "TOGGLE_ADVANCED_EVENT_FORM":
-      if (state.showAdvancedEventForm) {
-        return objectAssign({}, state, {showAdvancedEventForm: false});
-      } else {
-        return objectAssign({}, state, {showAdvancedEventForm: true});
+    /* show delete confirmation  */
+    case "UNHIDE_DELETE_CONFIRMATION":
+      if (!state.showDeleteConfirmation) {
+        return objectAssign({}, state, {showDeleteConfirmation: true});
       }
+      return state;
+
+    /* hide delete confirmation  */
+    case "HIDE_DELETE_CONFIRMATION":
+      if (state.showDeleteConfirmation) {
+        return objectAssign({}, state, {showDeleteConfirmation: false});
+      }
+      return state;
 
     default: 
       return state || defaultState;

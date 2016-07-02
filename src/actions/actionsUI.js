@@ -31,6 +31,20 @@ var hideNavMenu = function() {
 };
 
 /** 
+ * show the delete confirmation
+ */
+var unhideDeleteConfirmation = function() {
+  return { type: "UNHIDE_DELETE_CONFIRMATION", operand: undefined };
+};
+
+/** 
+ * hide the delete confirmation
+ */
+var hideDeleteConfirmation = function() {
+  return { type: "HIDE_DELETE_CONFIRMATION", operand: undefined };
+};
+
+/** 
  * set the page number of the form
  */
 var setFormPageNumber = function(pageNumber) {
@@ -56,6 +70,8 @@ module.exports.setActiveEvent = setActiveEvent;
 module.exports.unsetActiveEvent = unsetActiveEvent;
 module.exports.unhideNavMenu = unhideNavMenu;
 module.exports.hideNavMenu = hideNavMenu;
+module.exports.unhideDeleteConfirmation = unhideDeleteConfirmation;
+module.exports.hideDeleteConfirmation = hideDeleteConfirmation;
 module.exports.setFormPageNumber = setFormPageNumber;
 module.exports.incFormPageNumber = incFormPageNumber;
 module.exports.decFormPageNumber = decFormPageNumber;
