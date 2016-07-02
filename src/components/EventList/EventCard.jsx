@@ -16,7 +16,8 @@ var EventCard = React.createClass({
   propTypes: {
     visible: React.PropTypes.bool.isRequired,
     event: React.PropTypes.object.isRequired,
-    closeMe: React.PropTypes.func.isRequired
+    closeMe: React.PropTypes.func.isRequired,
+    doDeleteEvent: React.PropTypes.func.isRequired
   },
 
   /* the render method */
@@ -30,7 +31,7 @@ var EventCard = React.createClass({
         <ModalHeader eventName={this.props.event.name} 
           eventTime={this.props.event.startTime} />
         <ModalContent event={this.props.event} />
-        <ModalFooter />
+        <ModalFooter  doDeleteEvent={this.props.doDeleteEvent}/>
       </Modal>
     );
   }
@@ -74,12 +75,13 @@ var ModalHeader = React.createClass({
 var ModalFooter = React.createClass({
   // it does not accept arguments
   propTypes: {
+    doDeleteEvent: React.PropTypes.func.isRequired
   },
   render: function() {
     return (
       <div className='event-footer'>
         <ul>
-          <Button tooltip='Delete' action='#'> 
+          <Button tooltip='Delete' action={this.props.doDeleteEvent}> 
             <i className='fa fa-trash-o'></i> 
           </Button>
           <Button tooltip='Edit' action='#'> 

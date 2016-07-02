@@ -56,6 +56,7 @@ var defaultInputs = {
 };
 
 var defaultState = {
+  activeEvent: -1,
   loginStatus: 0, 
   userProfile: null, 
   eventList: []
@@ -165,7 +166,7 @@ var reducer = function(state, action) {
       if (state.formPageNumber === 2 && result && result < 9) { 
         return objectAssign({}, state, {inputResponse: newEventManager.messages[result]});
       }
-      return objectAssign({}, state, {formPageNumber: state.formPageNumber + 1});
+      return objectAssign({}, state, {inputResponse: '', formPageNumber: state.formPageNumber + 1});
 
     case 'DEC_FORM_PAGE_NUMBER':
       return objectAssign({}, state, {formPageNumber: state.formPageNumber - 1});
@@ -218,6 +219,7 @@ var reducer = function(state, action) {
       } catch(err) {
         throw 'Cannot retrive user data from the local storage.';
       }
+      window.location.href = '/events';
       var eventList = userData.eventList;
       eventList.push(event);
       storageManager.setUserData(userData);
@@ -230,6 +232,36 @@ var reducer = function(state, action) {
 
       Router.browserHistory.push('/new-event');
       return newState;
+
+    case 'DO_DELETE_EVENT':
+      try {
+        var userData = storageManager.getUserData(state.userProfile.uid);
+      } catch(err) {
+        throw 'Cannot retrive user data from the local storage.';
+      }
+      var eventList =  state.eventList.slice(0); //clone
+      eventList.splice(action.operand, 1);
+      userData.eventList = eventList;
+      storageManager.setUserData(userData);
+      var newState = objectAssign({}, defaultState, {loginStatus: 1, userProfile: userData, eventList: eventList});
+      /* here we uniquely index each event entry */
+      newState.eventList.forEach(function(item, index) {
+        item.key = Date.now() - index * 3;
+      });
+
+      return newState;
+
+    case "SET_ACTIVE_EVENT":
+      if (!state.activeEvent || state.activeEvent < 0) {
+        return objectAssign({}, state, {activeEvent: action.operand});
+      }
+      return state;
+
+    case "UNSET_ACTIVE_EVENT":
+      if (state.activeEvent > 0) {
+        return objectAssign({}, state, {activeEvent: -1});
+      }
+      return state;
 
     case 'DO_REGISTRATION':
       var result = registrationManager.validateUid(state.inputRegUid);

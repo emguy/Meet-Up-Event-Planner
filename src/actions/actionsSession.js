@@ -35,10 +35,18 @@ var resetSession = function(data) {
   return { type: "RESET_LOGIN", operand: data };
 };
 
+/** 
+ * delete event
+ */
+var doDeleteEvent = function(index) {
+  return { type: "DO_DELETE_EVENT", operand: index }; 
+};
+
 /* export the action creation functions */
 module.exports.loginAsTrialUser = loginAsTrialUser;
 module.exports.doLogout = doLogout;
 module.exports.doRegistration = doRegistration;
 module.exports.resetSession = resetSession;
 module.exports.doNewEvent = doNewEvent;
+module.exports.doDeleteEvent = doDeleteEvent;
 

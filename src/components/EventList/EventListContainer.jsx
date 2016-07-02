@@ -14,18 +14,17 @@ var EventList = React.createClass({
   /* it only accepts one prop */
   propTypes: {
     data: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-    isLoggedIn: React.PropTypes.bool.isRequired
+    isLoggedIn: React.PropTypes.bool.isRequired,
   },
   componentWillMount: function() {
     if (!this.props.isLoggedIn) {
-      console.log("okay->");
       Router.browserHistory.push("/");
     }
   },
   render: function() {
-    var parsedEvents = this.props.data.map(function(item) {
+    var parsedEvents = this.props.data.map(function(item, index) {
       return (
-        <EventEntryContainer key={item.key} event={item} />
+        <EventEntryContainer key={item.key} event={item} index={index} />
       );
     });
     return (
@@ -51,7 +50,11 @@ var mapStateToProps = function(state, ownProps) {
     isLoggedIn: state.session.loginStatus === 1
   };
 };
-var EventListContainer = ReactRedux.connect(mapStateToProps)(EventList);
+var mapDispatchToProps = function(dispatch, ownProps) {
+  return {
+  };
+};
+var EventListContainer = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(EventList);
 
 /* we only export the outer container */
 module.exports = EventListContainer;

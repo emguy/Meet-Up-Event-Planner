@@ -5,7 +5,6 @@
 var objectAssign = require("../utils/utils.js").objectAssign;
 
 var defaultState = {
-  activeEvent: -1,
   showNavMenu: false,
   showAdvancedEventForm: false,
 };
@@ -24,20 +23,6 @@ var reducerUI = function(state, action) {
     case "HIDE_NAVMENU":
       if (state.showNavMenu) {
         return objectAssign({}, state, {showNavMenu: false});
-      }
-      return state;
-
-    /* display the selected event card */
-    case "SET_ACTIVE_EVENT":
-      if (!state.activeEvent || state.activeEvent < 0) {
-      return objectAssign({}, state, {activeEvent: action.operand});
-      }
-      return state;
-
-    /* hide the event card  */
-    case "UNSET_ACTIVE_EVENT":
-      if (state.activeEvent > 0) {
-        return objectAssign({}, state, {activeEvent: -1});
       }
       return state;
 
