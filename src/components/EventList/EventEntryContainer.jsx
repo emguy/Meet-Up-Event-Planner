@@ -58,7 +58,7 @@ var EventEntry = React.createClass({
 var mapStateToProps = function(state, ownProps) {
   return {
     EventCardIsVisible: state.session.activeEvent === ownProps.event.key,
-    showDeleteConfirmation: state.ui.showDeleteConfirmation
+    showDeleteConfirmation: state.session.showDeleteConfirmation
   };
 };
 var mapDispatchToProps = function(dispatch, ownProps) {

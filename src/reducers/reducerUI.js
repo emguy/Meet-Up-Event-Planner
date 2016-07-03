@@ -27,20 +27,6 @@ var reducerUI = function(state, action) {
       }
       return state;
 
-    /* show delete confirmation  */
-    case "UNHIDE_DELETE_CONFIRMATION":
-      if (!state.showDeleteConfirmation) {
-        return objectAssign({}, state, {showDeleteConfirmation: true});
-      }
-      return state;
-
-    /* hide delete confirmation  */
-    case "HIDE_DELETE_CONFIRMATION":
-      if (state.showDeleteConfirmation) {
-        return objectAssign({}, state, {showDeleteConfirmation: false});
-      }
-      return state;
-
     default: 
       return state || defaultState;
   }

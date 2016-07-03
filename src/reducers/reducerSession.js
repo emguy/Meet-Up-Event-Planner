@@ -59,7 +59,8 @@ var defaultState = {
   activeEvent: -1,
   loginStatus: 0, 
   userProfile: null, 
-  eventList: []
+  eventList: [],
+  showDeleteConfirmation: false
 };
 
 defaultState = objectAssign(defaultState, defaultInputs);
@@ -259,7 +260,21 @@ var reducer = function(state, action) {
 
     case "UNSET_ACTIVE_EVENT":
       if (state.activeEvent > 0) {
-        return objectAssign({}, state, {activeEvent: -1});
+        return objectAssign({}, state, {activeEvent: -1, showDeleteConfirmation: false});
+      }
+      return state;
+
+    /* show delete confirmation  */
+    case "UNHIDE_DELETE_CONFIRMATION":
+      if (!state.showDeleteConfirmation) {
+        return objectAssign({}, state, {showDeleteConfirmation: true});
+      }
+      return state;
+
+    /* hide delete confirmation  */
+    case "HIDE_DELETE_CONFIRMATION":
+      if (state.showDeleteConfirmation) {
+        return objectAssign({}, state, {showDeleteConfirmation: false});
       }
       return state;
 

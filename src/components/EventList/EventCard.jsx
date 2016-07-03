@@ -47,6 +47,7 @@ var EventCard = React.createClass({
           <ModalFooter showDeleteConfirmation={this.props.showDeleteConfirmation} 
             doDeleteEvent={this.props.doDeleteEvent}
             closeMe={this.props.closeMe}
+            hideDeleteConfirmation={this.props.hideDeleteConfirmation}
             unhideDeleteConfirmation={this.props.unhideDeleteConfirmation}/>
       </Modal>
     );
@@ -93,6 +94,7 @@ var ModalFooter = React.createClass({
   propTypes: {
     closeMe: React.PropTypes.func.isRequired,
     showDeleteConfirmation: React.PropTypes.bool.isRequired,
+    hideDeleteConfirmation: React.PropTypes.func.isRequired,
     unhideDeleteConfirmation: React.PropTypes.func.isRequired
   },
   render: function() {
@@ -107,16 +109,16 @@ var ModalFooter = React.createClass({
       </ul>
     );
     if (this.props.showDeleteConfirmation) {
-      controlButtons = {
+      controlButtons = (
         <ul>
           <Button tooltip='Delete' action={this.props.doDeleteEvent}> 
             <i className='fa fa-trash-o'></i> 
           </Button>
-          <Button tooltip='Cancel' action={this.props.closeMe}> 
+          <Button tooltip='Cancel' action={this.props.hideDeleteConfirmation}> 
             <i className='fa fa-pencil'></i> 
           </Button>
         </ul>
-      }
+      );
     }
     return (
       <div className='event-footer'>
