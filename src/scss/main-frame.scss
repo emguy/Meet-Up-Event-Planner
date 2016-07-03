@@ -10,6 +10,8 @@ main {
 footer {
   position: absolute; // footer hack
   bottom: 0; // footer hack
+  width: 100%;
+  border: 1px red dotted;
 }
 
 #header-content {
