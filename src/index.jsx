@@ -29,13 +29,13 @@ var reducer = require('./reducers/reducer.js');
 /* this module handles all interactions between this web app and the local storage */
 var storageManager = require('./utils/storageManager.js');
 
-/* create the Redux store with middleware */
+///* create the Redux store with middleware */
+/* chrome extension for redux */
 var pushToSessionStorage = require('./middleware/pushToSessionStorage.js');
 var store = Redux.createStore(reducer, applyMiddleware(pushToSessionStorage));
 
-/* chrome extension for redux */
-var compose = require('redux').compose;
-var store = Redux.createStore(reducer, compose(applyMiddleware(pushToSessionStorage), window.devToolsExtension ? window.devToolsExtension() : function() {}));
+//var compose = Redux.compose;
+//var store = Redux.createStore(reducer, compose(applyMiddleware(pushToSessionStorage), window.devToolsExtension));
 
 /* this is the initialization script */
 var init = function() {

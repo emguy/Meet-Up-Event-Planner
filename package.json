@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server --host '192.168.1.3' --inline --history-api-fallback",
     "pack": "webpack --config ./webpack_prod.config.js",
-    "deploy": "rsync -ravzh --delete --progress --inplace ./public/* ubuntu@54.213.143.150:/var/www/nginx/meet/"
+    "deploy": "webpack --config ./webpack_prod.config.js && rsync -ravzh --delete --progress --inplace ./public/* ubuntu@54.213.143.150:/var/www/nginx/meet/"
   },
   "author": "Yu Zhang",
   "license": "ISC",
