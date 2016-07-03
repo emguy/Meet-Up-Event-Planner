@@ -31,8 +31,8 @@ var EventCard = React.createClass({
     var content = (<ModalContent event={this.props.event} />);
     if (this.props.showDeleteConfirmation) {
       content = (
-        <div>
-          <p>
+        <div className='event-content'>
+          <p className='comfirmation'>
             Are you sure that you want to delete this event card ?
           </p>
         </div>
@@ -115,7 +115,7 @@ var ModalFooter = React.createClass({
             <i className='fa fa-trash-o'></i> 
           </Button>
           <Button tooltip='Cancel' action={this.props.hideDeleteConfirmation}> 
-            <i className='fa fa-pencil'></i> 
+            <i className='fa fa-close'></i> 
           </Button>
         </ul>
       );

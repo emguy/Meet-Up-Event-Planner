@@ -16,6 +16,26 @@ form {
     height: 20px;
   }
 
+  hr {
+    margin-bottom: 15px;
+  }
+
+  .entry {
+    margin: auto;
+    color: $primary-fg;
+
+    .name {
+      display: inline-block;
+      width: 20%;
+      min-width: 120px;
+      margin-bottom: 5px;
+    }
+    .value {
+      display: inline-block;
+      margin-bottom: 15px;
+    }
+  }
+
   label {
     margin: auto;
     color: $primary-fg;

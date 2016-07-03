@@ -87,17 +87,17 @@ var EventCreator = React.createClass({
     } else {
       page[0] = (
         <div>
-          <div>
-            <span> Event name: </span>
-            <span> {this.props.inputEventName} </span>
+          <div className='entry'>
+            <span className='name'> Event name: </span>
+            <span className='value'> {this.props.inputEventName} </span>
           </div>
-          <div>
-            <span> Type: </span>
-            <span> {this.props.inputEventType} </span>
+          <div className='entry'>
+            <span className='name'> Type: </span>
+            <span className='value'> {this.props.inputEventType} </span>
           </div>
-          <div>
-            <span> Location: </span>
-            <span> {this.props.inputEventLocation} </span>
+          <div className='entry'>
+            <span className='name'> Location: </span>
+            <span className='value'> {this.props.inputEventLocation} </span>
           </div>
         </div>
       ); 
@@ -128,17 +128,17 @@ var EventCreator = React.createClass({
       page[1] = (
         <div>
           <hr />
-          <div>
-            <span> Date: </span>
+          <div className='entry'>
+            <span className='name'> Date: </span>
             <span> {this.props.inputEventDate} </span>
           </div>
-          <div>
-            <span> Start time: </span>
-            <span> {this.props.inputEventStartTime} </span>
+          <div className='entry'>
+            <span className='name'> Start time: </span>
+            <span className='value'> {this.props.inputEventStartTime} </span>
           </div>
-          <div>
-            <span> End time: </span>
-            <span> {this.props.inputEventEndTime} </span>
+          <div className='entry'>
+            <span className='name'> End time: </span>
+            <span className='value'> {this.props.inputEventEndTime} </span>
           </div>
         </div>
       );
@@ -164,13 +164,13 @@ var EventCreator = React.createClass({
       page[2] = (
         <div>
           <hr />
-          <div>
-            <span> Host: </span>
-            <span> {this.props.inputEventHost} </span>
+          <div className='entry'>
+            <span className='name'> Host: </span>
+            <span className='value'> {this.props.inputEventHost} </span>
           </div>
-          <div>
-            <span> Guest list: </span>
-            <span> {this.props.inputEventGuests} </span>
+          <div className='entry'>
+            <span className='name'> Guest list: </span>
+            <span className='value'> {this.props.inputEventGuests} </span>
           </div>
         </div>
       );
