@@ -28,7 +28,7 @@ var templateUserData = {
   name: '',
   email: '',
   password: '',
-  eventList: []
+  eventList: require('../misc/preloadedEvents.js')
 };
 
 /* this is the user data setter */

@@ -65,7 +65,6 @@ var Login = React.createClass({
           <div className='form-button-list'>
             <Button className='form-button' action={this.props.processUserInputs}> login </Button>
             <Button className='form-button' action={'/register'}> Register </Button>
-            <Button className='form-button' action={this.props.loginAsTrialUser}> Try </Button>
           </div>
 
           <p className='small-text'>
