@@ -22,6 +22,11 @@ source file.
 
 Click [here][7] to try out the demo.
 
+<img src="https://raw.githubusercontent.com/emguy/Meet-Up-Event-Planner/master/snapshots/snapshot_01.png" width="220"  />
+<img src="https://raw.githubusercontent.com/emguy/Meet-Up-Event-Planner/master/snapshots/snapshot_02.png" width="220"  />
+<img src="https://raw.githubusercontent.com/emguy/Meet-Up-Event-Planner/master/snapshots/snapshot_03.png" width="220"  />
+<img src="https://raw.githubusercontent.com/emguy/Meet-Up-Event-Planner/master/snapshots/snapshot_04.png" width="220"  />
+
 ## Development Environment Setup
 
 To start the devlopment server, excute the following in the command-line shell.
