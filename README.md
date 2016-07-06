@@ -23,7 +23,6 @@ source file.
 Click [here][7] to try out the demo.
 
 <img src="https://raw.githubusercontent.com/emguy/Meet-Up-Event-Planner/master/snapshots/snapshot_02.png" width="200" />
-
 <img src="https://raw.githubusercontent.com/emguy/Meet-Up-Event-Planner/master/snapshots/snapshot_04.png" width="200" />
 
 ## Development Environment Setup
